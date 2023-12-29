@@ -1,0 +1,29 @@
+{
+  "name": "charlotte-backend",
+  "version": "1.0.0",
+  "description": "A MERN STACK CHAT APPLICATION",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon --env-file=config.env server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/undergrSystem/Charlotte.git"
+  },
+  "author": "Tiecont",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/undergrSystem/Charlotte/issues"
+  },
+  "homepage": "https://github.com/undergrSystem/Charlotte#readme",
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "dependencies": {
+    "busboy-body-parser": "^0.3.2",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mongoose": "^8.0.3"
+  }
+}
