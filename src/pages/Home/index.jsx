@@ -1,76 +1,51 @@
 
-function Home() {
+import homeImage from '$/assets/chat-app-example-image.png';
+import { FaVideo } from "react-icons/fa";
+import { MdAccessTime } from "react-icons/md";
+import { RiChatPrivateLine } from "react-icons/ri";
+import styles from './Home.module.scss';
 
-    const signUpButton = document.getElementById('signUp');
-    const signInButton = document.getElementById('signIn');
-    const container = document.getElementById('container');
 
-    signUpButton.addEventListener('click', () => {
-        container.classList.add("right-panel-active");
-    });
-
-    signInButton.addEventListener('click', () => {
-        container.classList.remove("right-panel-active");
-    });
+const Home = () => {
     return (
-        <>
-        <h2>Weekly Coding Challenge #1: Sign in/up Form</h2>
-            <div class="container" id="container">
-                <div class="form-container sign-up-container">
-                    <form action="#">
-                        <h1>Create Account</h1>
-                        <div class="social-container">
-                            <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                            <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-                        </div>
-                        <span>or use your email for registration</span>
-                        <input type="text" placeholder="Name" />
-                        <input type="email" placeholder="Email" />
-                        <input type="password" placeholder="Password" />
-                        <button>Sign Up</button>
-                    </form>
+        <div className={styles.home} id='home'>
+            <div className={styles.home_container}>
+                <div className={styles.home_container_leftside}>
+                    <h1>Let's Create Your Society Right Now!</h1>
+                    <p>Greate software that allows you to chat from any place at any time without any interuption</p>
+                    <button>Start chating Now <i></i></button>
                 </div>
-                <div class="form-container sign-in-container">
-                    <form action="#">
-                        <h1>Sign in</h1>
-                        <div class="social-container">
-                            <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                            <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-                        </div>
-                        <span>or use your account</span>
-                        <input type="email" placeholder="Email" />
-                        <input type="password" placeholder="Password" />
-                        <a href="#">Forgot your password?</a>
-                        <button>Sign In</button>
-                    </form>
+                <div className={styles.home_container_rightside}>
+                    <img src={homeImage} />
                 </div>
-                <div class="overlay-container">
-                    <div class="overlay">
-                        <div class="overlay-panel overlay-left">
-                            <h1>Welcome Back!</h1>
-                            <p>To keep connected with us please login with your personal info</p>
-                            <button class="ghost" id="signIn">Sign In</button>
+            </div>
+            <div className={styles.home_container}>
+                <h1>Features For a Better Experience</h1>
+                <div className={styles.home_footer}>
+                    <div className={styles.home_footer_card}>
+                        <FaVideo />
+                        <div className={styles.home_footer_card_text}>
+                            <h3>Video Messaging</h3>
+                            <p>This software is very easy for you to manage. You can use it as you wish.</p>
                         </div>
-                        <div class="overlay-panel overlay-right">
-                            <h1>Hello, Friend!</h1>
-                            <p>Enter your personal details and start journey with us</p>
-                            <button class="ghost" id="signUp">Sign Up</button>
+                    </div>
+                    <div className={styles.home_footer_card}>
+                        <MdAccessTime />
+                        <div className={styles.home_footer_card_text}>
+                            <h3>Save Your Time</h3>
+                            <p>This software is very easy for you to manage. You can use it as you wish.</p>
+                        </div>
+                    </div>
+                    <div className={styles.home_footer_card}>
+                        <RiChatPrivateLine />
+                        <div className={styles.home_footer_card_text}>
+                            <h3>Keep Save & Private</h3>
+                            <p>This software is very easy for you to manage. You can use it as you wish.</p>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <footer>
-                <p>
-                    Created with <i class="fa fa-heart"></i> by
-                    <a target="_blank" href="https://florin-pop.com">Florin Pop</a>
-                    - Read how I created this and how you can join the challenge
-                    <a target="_blank" href="https://www.florin-pop.com/blog/2019/03/double-slider-sign-in-up-form/">here</a>.
-                </p>
-            </footer>
-        </>
+        </div>
     )
 }
 

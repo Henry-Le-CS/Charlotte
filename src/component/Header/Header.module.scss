@@ -1,0 +1,42 @@
+.header {
+    width: 100vw;
+    height: 80px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    transition: background-color .5s linear;
+    &_img {
+        margin-left: 10px;
+        width: 200px;
+        height: 60px;
+        position: relative;
+        left: 0;
+    }
+
+    &_links {
+        width: 400px;
+        display: flex;
+        justify-content: space-around;
+    }
+
+    &_registration {
+        height: 40px;
+        margin-right: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 200px;
+
+        & > a:last-child {
+            width: 150px;
+            height: 40px;
+            line-height: 40px;
+            background-color: var(--primary-color);
+            color: #fff;
+            border-radius: 20px;
+        }
+    }
+}

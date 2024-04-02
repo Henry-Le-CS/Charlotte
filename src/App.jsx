@@ -1,12 +1,12 @@
-import './App.css'
-import RouterLink from './routes'
-function App() {
 
-  return (
-    <div className='App'>
-      <RouterLink />
-    </div>
-  )
+import './App.css';
+import RouterController from './router';
+function App() {
+    return (
+        <div className="App">
+            <RouterController />
+        </div>
+    )
 }
 
 export default App
