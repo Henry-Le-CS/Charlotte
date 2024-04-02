@@ -19,26 +19,26 @@ const Home = () => {
                     <img src={homeImage} />
                 </div>
             </div>
-            <div className={styles.home_container}>
+            <div className={styles.home_footer}>
                 <h1>Features For a Better Experience</h1>
-                <div className={styles.home_footer}>
-                    <div className={styles.home_footer_card}>
+                <div className={styles.home_footer_content}>
+                    <div className={styles.home_footer_content_card}>
                         <FaVideo />
-                        <div className={styles.home_footer_card_text}>
+                        <div className={styles.home_footer_content_card_text}>
                             <h3>Video Messaging</h3>
                             <p>This software is very easy for you to manage. You can use it as you wish.</p>
                         </div>
                     </div>
-                    <div className={styles.home_footer_card}>
+                    <div className={styles.home_footer_content_card}>
                         <MdAccessTime />
-                        <div className={styles.home_footer_card_text}>
+                        <div className={styles.home_footer_content_card_text}>
                             <h3>Save Your Time</h3>
                             <p>This software is very easy for you to manage. You can use it as you wish.</p>
                         </div>
                     </div>
-                    <div className={styles.home_footer_card}>
+                    <div className={styles.home_footer_content_card}>
                         <RiChatPrivateLine />
-                        <div className={styles.home_footer_card_text}>
+                        <div className={styles.home_footer_content_card_text}>
                             <h3>Keep Save & Private</h3>
                             <p>This software is very easy for you to manage. You can use it as you wish.</p>
                         </div>
