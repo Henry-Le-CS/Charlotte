@@ -1,6 +1,8 @@
 import Header from '$/component/Header'
 import Chat from '$/pages/Chat'
 import Home from '$/pages/Home'
+import Login from '$/pages/User/login'
+import Register from '$/pages/User/register'
 import { Route, Routes } from 'react-router-dom'
 const RouterController = () => {
     return (
@@ -18,6 +20,22 @@ const RouterController = () => {
                 element={
                     <Header>
                         <Chat />
+                    </Header>
+                }
+            />
+            <Route
+                path='/user/login'
+                element={
+                    <Header>
+                        <Login />
+                    </Header>
+                }
+            />
+            <Route
+                path='/user/register'
+                element={
+                    <Header>
+                        <Register />
                     </Header>
                 }
             />

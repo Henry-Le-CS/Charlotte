@@ -36,8 +36,8 @@ const Header = ({ children }) => {
                     <RouterLinks to=''>Contact</RouterLinks>
                 </div>
                 <div className={styles.header_registration}>
-                    <RouterLinks to='user/login'>Login</RouterLinks>
-                    <RouterLinks to='user/register'>Get Started Free</RouterLinks>
+                    <RouterLinks to='/user/login'>Login</RouterLinks>
+                    <RouterLinks to='/user/register'>Get Started Free</RouterLinks>
                 </div>
             </div>
             {headerBackgroundChanges()}
