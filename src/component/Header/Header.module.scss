@@ -24,11 +24,10 @@
 
     &_registration {
         height: 40px;
-        margin-right: 10px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        width: 200px;
+        width: 230px;
 
         & > a:last-child {
             // width: 150px;
@@ -37,78 +36,34 @@
             // background-color: #2f8cf3;
             // color: #fff;
             // border-radius: 20px;
-            position: relative;
-            margin: auto;
             width: 100%;
-            max-width: 260px;
-            height: 52px;
             background: #fff;
-            transform: translate3d(0px, 0%, 0px);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 18px;
             letter-spacing: .05em;
-            transition-delay: .6s;
-            overflow: hidden;
-            &:before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: #3ad2d0;
-                border-radius: 50% 50% 0 0;
-                transform: translateY(100%) scaleY(.5);
-                transition: all .6s ease;
-            }
-            &:after {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: white;
-                border-radius: 0;
-                transform: translateY(0) scaleY(1);
-                transition: all .6s ease;
-            }
         }
         &_button {
             position: relative;
-            top: 16px;
-            width: 100%;
-            height: 26px;
+            display: flex;
+            border-radius: 20px;
+            width: 75%;
+            line-height: 30px;
+            height: 30px;
             text-transform: uppercase;
             overflow: hidden;
             &:hover {
+                cursor: pointer;
                 background: #3ad2d0;
                 transition: background 0.2s linear;
-                transition-delay: 0.6s;
-                &:after {
-                    border-radius: 0 0 50% 50%;
-                    transform: translateY(-100%) scaleY(0.5);
-                    transition-delay: 0;
-                }
-                &:before {
-                    border-radius: 0;
-                    transform: translateY(0) scaleY(1);
-                    transition-delay: 0;
-                }
-                & > span:first-child {
+                & > a:first-child {
                     transform: translateY(0);
                 }
-                & > span:last-child {
+                & > a:last-child {
                     transform: translateY(-24px);
                 }
             }
-            & > span {
+            & > a {
                 position: absolute;
-                z-index: 1;
                 top: 0;
                 width: 100%;
-                text-align: center;
                 transition: transform 0.5s ease;
                 &:first-child {
                     color: #fff;
