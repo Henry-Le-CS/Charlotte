@@ -25,6 +25,34 @@
             }
         }
     }
+    &_start_button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 200px;
+        height: 40px;
+        line-height: 40px;
+        border-radius: 20px;
+        background-color: var(--primary-color);
+        text-align: center;
+        transition: all .5s linear;
+        & > a {
+            margin-right: 10px;
+            color: #fff;
+            transition: all .5s linear;
+            &:hover {
+                color: #000;
+            }
+        }
+        & > svg {
+            position: relative;
+        }
+        &:hover {
+            cursor: pointer;
+            background-color: rgb(143,199,247);
+            color: #1483e3;
+        }
+    }
     &_footer {
         padding-top: 50px;
         background-color: #f2f2f2;

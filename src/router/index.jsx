@@ -1,4 +1,4 @@
-import Header from '$/component/Header'
+import Header from '$/components/Header'
 import Chat from '$/pages/Chat'
 import Home from '$/pages/Home'
 import Login from '$/pages/User/login'

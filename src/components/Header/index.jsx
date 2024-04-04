@@ -1,6 +1,6 @@
 import logo from '$/assets/Logo.png';
 import { useState } from 'react';
-import { RouterLinks } from '../RouterLinks';
+import RouterLinks from '../RouterLinks';
 import styles from './Header.module.scss';
 const Header = ({ children }) => {
     const [background, setBackground ] = useState('none')
