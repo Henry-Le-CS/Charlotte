@@ -21,6 +21,7 @@
         display: flex;
         justify-content: space-around;
         position: relative;
+        transition: all 0.2s ease;
         & > a {
             min-width: 110px;
             padding: 16px 20px 11px 20px;
@@ -38,12 +39,9 @@
                 background-color: rgba(47, 140, 243, 0.05);
                 border-color: rgba(47, 140, 243, 0.1);
             }
-            &.active {
-                opacity: 1;
-            }
         }
     }
-
+    
     &_line {
         position: absolute;
         left: 0;

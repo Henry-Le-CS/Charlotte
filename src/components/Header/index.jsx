@@ -3,7 +3,10 @@ import { useState } from 'react';
 import RouterLinks from '../RouterLinks';
 import styles from './Header.module.scss';
 const Header = ({ children }) => {
-    const [background, setBackground ] = useState('none')
+    const [background, setBackground ] = useState('unset')
+    const [lineLeft, setLineLeft] = useState('none')
+    const [lineWidth, setLineWidth] = useState('none')
+    
     const headerBackgroundChanges = () => {
         const header = document.querySelector(`.${styles.header}`)
         if (header !== null ) {
@@ -11,13 +14,28 @@ const Header = ({ children }) => {
         } 
         
         window.addEventListener('scroll', () => {
-            console.log(window.scrollY)
             if (window.scrollY > 60) {
                 setBackground('var(--primary-header-color)')
             } else {
                 setBackground('unset')
             }
         })
+    }
+    const lineActive = () => {
+        const linkActive = document.querySelector('.active')
+        const aElements = document.getElementsByTagName('a')
+        const line = document.querySelector(`.${styles.header_line}`)
+        for (const element of aElements) {
+            console.log(element.outerText === linkActive.outerText)
+            if (element.outerText === linkActive.outerText) {
+                setLineLeft(linkActive.offsetLeft + 'px')
+                setLineWidth(linkActive.offsetWidth + 'px')
+            }
+        }
+        if (line != null) {
+            line.style.width = lineWidth
+            line.style.left = lineLeft
+        }
     }
     return (
         <>
@@ -27,14 +45,14 @@ const Header = ({ children }) => {
                         <img className={styles.header_img} src={logo} alt="" />
                     </RouterLinks>
                 </div>
-                {/* Developing... */}
                 <div className={styles.header_links}>
-                    <RouterLinks to=''>App</RouterLinks>
-                    <RouterLinks to=''>About</RouterLinks>
-                    <RouterLinks to=''>Blog</RouterLinks>
-                    <RouterLinks to=''>Pages</RouterLinks>
-                    <RouterLinks to=''>Contact</RouterLinks>
+                    <RouterLinks to='/'>Home</RouterLinks>
+                    <RouterLinks to='/about'>About</RouterLinks>
+                    <RouterLinks to='/blog'>Blog</RouterLinks>
+                    <RouterLinks to='/pages'>Pages</RouterLinks>
+                    <RouterLinks to='/contact'>Contact</RouterLinks>
                     <div className={styles.header_line}></div>
+                    {lineActive()}
                 </div>
                 <div className={styles.header_registration}>
                     <RouterLinks to='/user/login'>Login</RouterLinks>

@@ -39,6 +39,42 @@ const RouterController = () => {
                     </Header>
                 }
             />
+            <Route
+                path='/about'
+                element={
+                    <Header>
+                        
+                    </Header>
+                }
+            />
+            <Route
+                path='/blog'
+                element={
+                    <Header>
+                        
+                    </Header>
+                }
+            />
+            <Route
+                path='/pages'
+                element={
+                    <Header>
+                        
+                    </Header>
+                }
+            />
+            <Route
+                path='/contact'
+                element={
+                    <Header>
+                        
+                    </Header>
+                }
+            />
+            
+            
+            
+            
         </Routes>
     )
 }

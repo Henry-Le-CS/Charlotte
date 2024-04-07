@@ -1,3 +1,4 @@
+import '$/components/RouterLinks/RouterLinks.scss'
 import './Global.scss'
 
 const MainStyles = ({ children }) => {
