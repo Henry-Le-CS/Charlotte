@@ -34,6 +34,7 @@ const Header = ({ children }) => {
                     <RouterLinks to=''>Blog</RouterLinks>
                     <RouterLinks to=''>Pages</RouterLinks>
                     <RouterLinks to=''>Contact</RouterLinks>
+                    <div className={styles.header_line}></div>
                 </div>
                 <div className={styles.header_registration}>
                     <RouterLinks to='/user/login'>Login</RouterLinks>

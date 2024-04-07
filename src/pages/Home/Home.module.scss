@@ -15,6 +15,7 @@
                 font-size: 6rem;
             }
             & > p {
+                margin-top: 20px;
                 font-size: 2rem;
             }
         }
@@ -26,22 +27,23 @@
         }
     }
     &_start_button {
+        margin-top: 30px;
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 200px;
-        height: 40px;
+        width: 250px;
+        height: 50px;
         line-height: 40px;
-        border-radius: 20px;
+        border-radius: 30px;
         background-color: var(--primary-color);
         text-align: center;
         transition: all .5s linear;
         & > a {
             margin-right: 10px;
             color: #fff;
-            transition: all .5s linear;
+            transition: all .2s linear;
             &:hover {
-                color: #000;
+                // color: #000;
             }
         }
         & > svg {
@@ -49,8 +51,13 @@
         }
         &:hover {
             cursor: pointer;
-            background-color: rgb(143,199,247);
-            color: #1483e3;
+            box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+            // background-color: rgb(143,199,247);
+            color: #91bee4;
+            & > svg {
+                transform: translateX(5px);
+                transition: all .2s linear;
+            }
         }
     }
     &_footer {
@@ -87,7 +94,7 @@
                     height: 50px;
                     padding: 15px;
                     background-color: var(--primary-color);
-                    color: #1483e3;
+                    color: #91cbfc;
                     border-radius: 50%;
                 }
                 &:nth-child(2) {
