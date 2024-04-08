@@ -1,0 +1,37 @@
+.header_links {
+    width: auto;
+        display: flex;
+        justify-content: space-around;
+        position: relative;
+        transition: all 0.2s ease;
+        & > a {
+            min-width: 110px;
+            padding: 16px 20px 11px 20px;
+            font-size: 20px;
+            text-align: center;
+            color: #000;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            border-bottom: 5px solid transparent;
+            opacity: 0.6;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            &:hover {
+                opacity: 1;
+                background-color: rgba(47, 140, 243, 0.05);
+                border-color: rgba(47, 140, 243, 0.1);
+            }
+        }
+        &_line {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 6px;
+            border-radius: 15px;
+            background-color: var(--primary-header-color);
+            transition: all 0.2s ease;
+        }
+    
+    
+}
