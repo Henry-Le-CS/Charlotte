@@ -1,4 +1,4 @@
-import ChatMoel from '../models/Chat.js'
+import ChatMoel from '../models/Conversations.js'
 
 const CreateChat = async (req, res) => {
     const newChat = new ChatMoel({
@@ -26,3 +26,4 @@ export {
     CreateChat,
     FindChat
 }
+

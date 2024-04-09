@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
 
 const Messages = mongoose.Schema({
-    chatID: {type: String, required: true},
-    senderID: {type: String, required: true},
-    text: {type: String, required: true}
+    messageID: {type: Number, required: true},
+    conversationID: {type: Number, required: true},
+    senderID: {type: Number, required: true},
+    content: {type: String, required: true}
 }, {timestamps: true})
 
 const MessageModel = mongoose.model('Messages', Messages)
