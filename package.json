@@ -18,6 +18,9 @@
   },
   "homepage": "https://github.com/undergrSystem/Charlotte#readme",
   "devDependencies": {
+    "compression": "^1.7.4",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
     "nodemon": "^3.0.2"
   },
   "dependencies": {
