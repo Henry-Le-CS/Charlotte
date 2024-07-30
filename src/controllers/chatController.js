@@ -1,4 +1,4 @@
-import ChatMoel from '../models/Conversations.js'
+import ChatMoel from '../src/models/Conversations.js'
 
 const CreateChat = async (req, res) => {
     const newChat = new ChatMoel({

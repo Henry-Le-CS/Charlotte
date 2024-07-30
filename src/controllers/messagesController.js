@@ -1,4 +1,4 @@
-import MessageModel from "../models/Messages.js";
+import MessageModel from "../src/models/Messages.js";
 
 const SendMessage = async (req, res) => {
     const message = new MessageModel({

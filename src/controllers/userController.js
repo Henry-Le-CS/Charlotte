@@ -1,4 +1,4 @@
-import UserModel from "../models/User.js"
+import UserModel from "../src/models/User.js"
 
 const Register = async (req, res) => {
     const user = new UserModel({
@@ -21,3 +21,4 @@ const Register = async (req, res) => {
 export {
     Register
 }
+

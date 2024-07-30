@@ -14,8 +14,8 @@ app.use(express.urlencoded({ extended: true }))
 app.use('/api', router)
 
 // init mongodb
-import './config/mongooseConnection.js';
-import CheckConnection from './helper/check.connect.js';
+import './src/configs/mongooseConnection.js';
+import CheckConnection from './src/helpers/check.connect.js';
 CheckConnection.checkOverLoads()
 const port = process.env.PORT
 app.listen(port, () => {

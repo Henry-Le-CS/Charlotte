@@ -1,13 +1,18 @@
 import mongoose from "mongoose";
 
+const DOCUMENT_NAME = 'User'
+const COLLECTION_NAME = 'Users'
 const User = mongoose.Schema({
-    userID: { type: Number, required: true },
+    userId: { type: Number, required: true },
     name: { type: String, required: true},
     phoneNumber: { type: Number, required: true},
     email: { type: String, required: true},
     password: { type: String, required: true},
     avatar: { type: String, required: false}
+}, {
+    timestamps: true,
+    collection: COLLECTION_NAME
 })
 
-const UserModel = mongoose.model('User', User)
+const UserModel = mongoose.model(DOCUMENT_NAME, User)
 export default UserModel
