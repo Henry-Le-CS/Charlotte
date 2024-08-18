@@ -1,18 +1,15 @@
-import mongoose from "mongoose";
+// user.model.js
+import mongoose from 'mongoose';
 
-const DOCUMENT_NAME = 'User'
-const COLLECTION_NAME = 'Users'
-const User = mongoose.Schema({
-    userId: { type: Number, required: true },
-    name: { type: String, required: true},
-    phoneNumber: { type: Number, required: true},
-    email: { type: String, required: true},
-    password: { type: String, required: true},
-    avatar: { type: String, required: false}
-}, {
-    timestamps: true,
-    collection: COLLECTION_NAME
-})
+const UserSchema = new mongoose.Schema({
+    username: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
+    password_hash: { type: String, required: true },
+    status: { type: String, default: 'offline' },  // online, offline, busy, etc.
+    friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    avatar: { type: String },
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now }
+});
 
-const UserModel = mongoose.model(DOCUMENT_NAME, User)
-export default UserModel
+export default mongoose.model('User', UserSchema);
