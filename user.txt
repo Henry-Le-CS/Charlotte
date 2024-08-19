@@ -1,0 +1,7 @@
+1. Tính năng chính của UserService:
+Đăng ký người dùng: Tạo tài khoản người dùng mới.
+Xác thực: Xác thực người dùng qua email/mật khẩu hoặc OAuth.
+Quản lý trạng thái người dùng: Quản lý trạng thái trực tuyến/ngoại tuyến.
+Cập nhật thông tin người dùng: Thay đổi thông tin cá nhân như tên, ảnh đại diện, v.v.
+Quản lý kết bạn: Kết bạn, chấp nhận hoặc từ chối yêu cầu kết bạn.
+Xử lý tin nhắn: Lưu trữ và truy vấn tin nhắn giữa người dùng.
