@@ -1,26 +1,9 @@
-import compression from 'compression';
-import 'dotenv/config';
-import express from 'express';
-import helmet from 'helmet';
-import morgan from 'morgan';
-import router from './routes/index.js';
-
-const app = express()
-app.use(morgan('dev'))
-app.use(helmet())
-app.use(compression())
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-app.use('/api', router)
-
-// init mongodb
-import './src/configs/mongooseConnection.js';
-import CheckConnection from './src/helpers/check.connect.js';
-CheckConnection.checkOverLoads()
-const port = process.env.PORT
-app.listen(port, () => {
-    console.log(`Charlotte is running on ${port}`)
+import app from './src/app.js';
+const port = process.env.DEV_APP_PORT
+const server = app.listen(port, () => {
+    console.log(`server stated on port ${port}`)
 })
 
-
-
+// process.on('SIGNIN', () => {
+//     server.close(() => console.log(`server closed`))
+// })
