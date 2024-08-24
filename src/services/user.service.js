@@ -1,9 +1,11 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import crypto from 'node:crypto';
-import TokenRepository from '../repositories/token.repo.js';
+import PermissionRepository from '../repositories/permission.repo.js';
 import UserRepository from '../repositories/user.repo.js';
+import ApikeyService from '../services/apiKey.service.js';
 import { AuthFailureError, BadRequestError, NotFoundError } from './../core/error.response.js';
+import KeyTokenService from './keytoken.service.js';
 
 class UserService {
     constructor() {
@@ -33,19 +35,44 @@ class UserService {
         }
     }
 
-    async registerUser(userDetails) {
-        const existingUser = await UserRepository.findUserByEmail(userDetails.email);
-        if (existingUser) {
-            throw new BadRequestError('Email is already registered');
+    async registerUser({ userDetails, permissions }) {
+        const session = await mongoose.startSession();
+        session.startTransaction();
+    
+        try {
+            let apiKey;
+            const existingUser = await UserRepository.findUserByEmail(userDetails.email);
+            if (existingUser) {
+                throw new BadRequestError('Email is already registered');
+            }
+            const hashedPassword = await bcrypt.hash(userDetails.password, 10);
+            const user = await UserRepository.createUser({
+                ...userDetails,
+                password_hash: hashedPassword
+            }, { session });
+    
+            const userId = user._id;
+            const { resource, actions } = permissions;
+            const permission = await PermissionRepository.createPermission({ resource, actions, userId }, { session });
+    
+            if (user && permission) {
+                apiKey = await ApikeyService.createApiKey(userId, { session });
+            }
+            if (!apiKey || !permission) {
+                await UserRepository.deleteUserByUserId(userId)
+            }
+            await session.commitTransaction();
+            return {
+                code: '201',
+                user,
+                apiKey
+            };
+        } catch (error) {
+            await session.abortTransaction();
+            throw error;
+        } finally {
+            session.endSession();
         }
-
-        const hashedPassword = await bcrypt.hash(userDetails.password, 10);
-        const user = await UserRepository.createUser({
-            ...userDetails,
-            password_hash: hashedPassword
-        });
-
-        return user;
     }
 
     async loginUser({ email, password }) {
@@ -58,7 +85,7 @@ class UserService {
         const tokens = this.generateTokenPair({ id: user._id });
 
         // Save tokens
-        await TokenRepository.saveToken(user._id, tokens.refreshToken, tokens.privateKey, tokens.publicKey);
+        await KeyTokenService.saveToken(user._id, tokens.refreshToken, tokens.privateKey, tokens.publicKey);
 
         // Update user status
         user.status = 'online';
@@ -68,7 +95,7 @@ class UserService {
     }
 
     async logoutUser(userId) {
-        await TokenRepository.removeToken(userId);
+        await KeyTokenService.removeTokensByUserId(userId);
         await UserRepository.updateUserStatus(userId, 'offline');
     }
 
@@ -84,7 +111,7 @@ class UserService {
         const newTokens = this.generateTokenPair({ id: payload.id });
 
         // Update the refresh token in the database
-        await TokenRepository.updateRefreshToken(tokenRecord.userId, newTokens.refreshToken, newTokens.privateKey, newTokens.publicKey);
+        await KeyTokenService.createOrUpdateToken(tokenRecord.userId, newTokens.refreshToken, newTokens.privateKey, newTokens.publicKey);
 
         return { accessToken: newTokens.accessToken, refreshToken: newTokens.refreshToken };
     }
