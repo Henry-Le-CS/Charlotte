@@ -1,9 +1,7 @@
-'use strict'
+import mongoose, { Schema } from 'mongoose';
 
-import mongoose, { Schema } from 'mongoose'
-
-const DOCUMENT_NAME = 'Apikey'
-const COLLECTION_NAME = 'Apikeys'
+const DOCUMENT_NAME = 'Apikey';
+const COLLECTION_NAME = 'Apikeys';
 
 const apiKeySchema = new Schema({
     key: {
@@ -15,14 +13,14 @@ const apiKeySchema = new Schema({
         type: Boolean,
         default: true,
     },
-    permissions: {
-        type: [String],
-        required: true,
-        enum: ['0000', '1111', '2222']
-    },
+    permissions: { type: Schema.Types.ObjectId, ref: 'Permission'},
+    userId: { 
+        type: Schema.Types.ObjectId, 
+        ref: 'User'
+    }
 }, {
     timestamps: true,
     collection: COLLECTION_NAME,
-})
+});
 
-export default mongoose.model(DOCUMENT_NAME, apiKeySchema)
+export default mongoose.model(DOCUMENT_NAME, apiKeySchema);
