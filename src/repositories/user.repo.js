@@ -11,7 +11,7 @@ class UserRepository {
     }
 
     async findUserByEmail(email) {
-        return await UserModel.findOne({ email });
+        return await UserModel.findOne({ email }).lean();
     }
 
     async updateUser(id, updateData) {
@@ -20,6 +20,9 @@ class UserRepository {
 
     async updateUserStatus(id, status) {
         return await UserModel.findByIdAndUpdate(id, { status }, { new: true });
+    }
+    async deleteUserByUserId(userId) {
+        return await UserModel.deleteOne({ userId })
     }
 }
 

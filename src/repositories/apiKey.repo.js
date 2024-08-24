@@ -4,8 +4,8 @@ import ApikeyModel from '../models/apiKey.model.js';
 
 class ApiKeyRepository {
     // Tạo một API key mới
-    static async createApiKey({ key, permissions }) {
-        const apiKey = new ApikeyModel({ key, permissions });
+    static async createApiKey({ key, _id }) {
+        const apiKey = new ApikeyModel({ key, permissions: _id, userId: _id });
         return await apiKey.save();
     }
 
