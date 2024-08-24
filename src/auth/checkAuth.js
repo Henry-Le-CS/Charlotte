@@ -1,7 +1,5 @@
 'use strict'
-
-import findById from "../services/apiKey.service.js"
-
+import ApiKeyService from './../services/apiKey.service.js';
 const HEADER = {
     API_KEY: 'x-api-key',
     AUTHORIZATION: 'authorization'
@@ -17,7 +15,7 @@ export default new class Check {
                 })
             }
             // check objKey
-            const objKey = await findById(key)
+            const objKey = await ApiKeyService.findByKey(key)
             if (!objKey) {
                 return res.status(403).json({
                     message: 'Forbidden Error'
