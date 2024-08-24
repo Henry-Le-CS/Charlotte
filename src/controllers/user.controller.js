@@ -1,13 +1,21 @@
 'use strict'
 import userService from '../services/user.service.js';
-import { SuccessResponse } from './../core/success.response.js';
+import { CREATED, SuccessResponse } from './../core/success.response.js';
 
 export default new class UserController { 
     register = async (req, res, next) => {
-        new SuccessResponse({
-            message: 'User registration successful',
-            metadata: await userService.registerUser(req.body)
-        }).send(res)
+        try {
+            new CREATED({
+                message: 'User registration successful!!',
+                metadata: await userService.registerUser(req.body)
+            }).send(res)
+        } catch (error) {
+            res.status(403).json({
+                code: '403',
+                status: 'Error Registration',
+                message: error.message
+            });
+        }
     }
     loginUser = async (req, res, next) => {
         new SuccessResponse({
