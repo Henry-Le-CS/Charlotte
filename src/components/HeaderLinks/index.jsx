@@ -1,53 +1,60 @@
-import React, { useState } from 'react'
-import RouterLinks from '../RouterLinks'
-import styles from './HeaderLinks.module.scss'
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import RouterLinks from '../RouterLinks';
+import styles from './HeaderLinks.module.scss';
+
 export default function HeaderLinks() {
-    const [lineLeft, setLineLeft] = useState('0')
-    const [lineWidth, setLineWidth] = useState('0')
-    const [reRender, setReRender] = useState(false)
-    React.useEffect(() => {
-        lineActive()
-        if (reRender) {
-            setReRender(false)
-        }
-    }, [reRender])
-    const lineActive = () => {
-        const headerLinks = document.querySelector(`.${styles.header_links}`)
-        if (headerLinks) {
-            const children = headerLinks.children
-            for (const child of children) {
-                child.addEventListener('click', () => {
-                    setLineLeft(child.offsetLeft + 'px')
-                    setLineWidth(child.offsetWidth + 'px')
-                    setReRender(true)
-                })
-            }
-        }
-        const logoActive = document.querySelector('#logo')
-        if (logoActive) {
-            logoActive.addEventListener('click', () => {
-                if (logoActive.className === 'active') {
-                    setLineLeft(0)
-                    setReRender(true)
+    const [lineLeft, setLineLeft] = useState('0');
+    const [lineWidth, setLineWidth] = useState('0');
+    const location = useLocation();
+
+    useEffect(() => {
+        const headerLinks = document.querySelector(`.${styles.header_links}`);
+
+        const updateLinePosition = (element) => {
+            setLineLeft(element.offsetLeft + 'px');
+            setLineWidth(element.offsetWidth + 'px');
+        };
+
+        const setActiveLink = () => {
+            const currentPath = location.pathname;
+            if (headerLinks) {
+                const children = Array.from(headerLinks.children);
+                const activeChild = children.find((child) => child.getAttribute('href') === currentPath);
+
+                if (activeChild) {
+                    updateLinePosition(activeChild);
                 }
-            })
+            }
+        };
+
+        if (headerLinks) {
+            const children = Array.from(headerLinks.children);
+            children.forEach((child) => {
+                child.addEventListener('click', () => updateLinePosition(child));
+            });
         }
-        const line = document.querySelector(`.${styles.header_links_line}`)
-        if (line) {
-            line.style.width = lineWidth
-            line.style.left = lineLeft
-        }
-    }
-  return (
-    <div className={styles.header_links}>
-        <RouterLinks to='/'>Home</RouterLinks>
-        <RouterLinks to='/about'>About</RouterLinks>
-        <RouterLinks to='/blog'>Blog</RouterLinks>
-        <RouterLinks to='/pages'>Pages</RouterLinks>
-        <RouterLinks to='/contact'>Contact</RouterLinks>
-        <div className={styles.header_links_line}></div>
-        {lineActive()}
-    </div>
-    
-  )
+
+        setActiveLink(); // Kích hoạt khi lần đầu tải trang
+
+        return () => {
+            if (headerLinks) {
+                const children = Array.from(headerLinks.children);
+                children.forEach((child) => {
+                    child.removeEventListener('click', () => updateLinePosition(child));
+                });
+            }
+        };
+    }, [location, lineLeft, lineWidth]);
+
+    return (
+        <div className={styles.header_links}>
+            <RouterLinks to='/'>Trang Chủ</RouterLinks>
+            <RouterLinks to='/about'>Giới Thiệu</RouterLinks>
+            <RouterLinks to='/blog'>Blog</RouterLinks>
+            <RouterLinks to='/pages'>Trang</RouterLinks>
+            <RouterLinks to='/contact'>Liên Hệ</RouterLinks>
+            <div className={styles.header_links_line} style={{ left: lineLeft, width: lineWidth }}></div>
+        </div>
+    );
 }

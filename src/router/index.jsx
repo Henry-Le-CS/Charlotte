@@ -1,9 +1,10 @@
-import Header from '$/components/Header'
-import Chat from '$/pages/Chat'
-import Home from '$/pages/Home'
-import Login from '$/pages/User/login'
-import Register from '$/pages/User/register'
-import { Route, Routes } from 'react-router-dom'
+import Header from '$/components/Header';
+import Chat from '$/pages/Chat';
+import Home from '$/pages/Home';
+import { lazy } from 'react';
+import { Route, Routes } from 'react-router-dom';
+const Login  = lazy(() => import('$/pages/Login'));
+
 const RouterController = () => {
     return (
         <Routes>
@@ -31,46 +32,38 @@ const RouterController = () => {
                     </Header>
                 }
             />
-            <Route
-                path='/user/register'
-                element={
-                    <Header>
-                        <Register />
-                    </Header>
-                }
-            />
-            <Route
+            {/* <Route
                 path='/about'
                 element={
                     <Header>
                         
                     </Header>
                 }
-            />
-            <Route
+            /> */}
+            {/* <Route
                 path='/blog'
                 element={
                     <Header>
                         
                     </Header>
                 }
-            />
-            <Route
+            /> */}
+            {/* <Route
                 path='/pages'
                 element={
                     <Header>
                         
                     </Header>
                 }
-            />
-            <Route
+            /> */}
+            {/* <Route
                 path='/contact'
                 element={
                     <Header>
                         
                     </Header>
                 }
-            />
+            /> */}
             
             
             
