@@ -1,5 +1,6 @@
 // components
 // import Logo from '$/components/Logo';
+import Logo from '$/components/Logo';
 import PasswordInput from '$/components/PasswordInput';
 import Spring from '$/components/Spring';
 import { toast } from 'react-toastify';
@@ -50,6 +51,15 @@ const AuthLayout = () => {
                 //     <img className="max-w-[780px]" src={media} alt="media"/>
                 // </div>
             }
+            <div className="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-lg flex items-center space-x-4">
+                <div className="shrink-0">
+                    <img className="size-12" src={Logo} alt="ChitChat Logo" />
+                </div>
+                <div>
+                    <div className="text-xl font-medium text-black">ChitChat</div>
+                    <p className="text-slate-500">You have a new message!</p>
+                </div>
+            </div>
             <div className="bg-widget flex items-center justify-center w-full py-10 px-4 lg:p-[60px]">
                 <Spring className="max-w-[460px] w-full" type="slideUp" duration={400} delay={300}>
                     <div className="flex flex-col gap-2.5 text-center">

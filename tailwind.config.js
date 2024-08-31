@@ -1,8 +1,11 @@
+import flowbite from 'flowbite-react/tailwind';
+
 /** @type {import('tailwindcss').Config} */
 exports = {
   darkMode: 'class',
   content: [
     "./index.html",
+    flowbite.content(),
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
@@ -56,5 +59,7 @@ exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    flowbite.plugin(),
+  ],
 }
