@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 import crypto from 'node:crypto';
 import PermissionRepository from '../repositories/permission.repo.js';
 import UserRepository from '../repositories/user.repo.js';
@@ -56,9 +57,11 @@ class UserService {
             const permission = await PermissionRepository.createPermission({ resource, actions, userId }, { session });
     
             if (user && permission) {
-                apiKey = await ApikeyService.createApiKey(userId, { session });
+                const pmsId = permission._id
+                apiKey = await ApikeyService.createApiKey({userId, pmsId}, { session });
             }
             if (!apiKey || !permission) {
+                console.log('delete user success!')
                 await UserRepository.deleteUserByUserId(userId)
             }
             await session.commitTransaction();
@@ -83,12 +86,10 @@ class UserService {
 
         // Generate JWT token pair
         const tokens = this.generateTokenPair({ id: user._id });
-
         // Save tokens
         await KeyTokenService.saveToken(user._id, tokens.refreshToken, tokens.privateKey, tokens.publicKey);
 
         // Update user status
-        user.status = 'online';
         await UserRepository.updateUserStatus(user._id, 'online');
 
         return { user, tokens: { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken } };
@@ -134,6 +135,10 @@ class UserService {
         await friend.save();
 
         return user;
+    }
+    
+    async updateUserStatus(userId, status) {
+        return await UserRepository.updateUserStatus(userId, status);
     }
 }
 

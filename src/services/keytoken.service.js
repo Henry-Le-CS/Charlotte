@@ -3,9 +3,9 @@ import { BadRequestError, NotFoundError } from '../core/error.response.js';
 import TokenRepository from '../repositories/keytoken.repo.js';
 
 export default class KeyTokenService {
-    static async saveToken({  userId, publicKey, privateKey, refreshToken }) {
+    static async saveToken(userId, refreshToken, publicKey, privateKey) {
         try {
-            return await TokenRepository.saveToken({ userId, publicKey, privateKey, refreshToken })
+            return await TokenRepository.saveToken({ userId, refreshToken, publicKey, privateKey })
         } catch (error) {
             throw new BadRequestError('Error saving token')
         }

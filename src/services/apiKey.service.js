@@ -14,9 +14,9 @@ export default class ApiKeyService {
     }
 
     // Tạo một API key mới
-    static async createApiKey(_id) {
+    static async createApiKey({ userId, pmsId}) {
         const key = crypto.randomBytes(64).toString('hex');
-        return await ApiKeyRepository.createApiKey({ key, _id });
+        return await ApiKeyRepository.createApiKey({ key, userId, pmsId });
     }
 
     // Cập nhật trạng thái của API key
