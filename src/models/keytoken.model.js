@@ -5,7 +5,7 @@ const DOCUMENT_NAME = 'Token'
 const COLLECTION_NAME = 'Tokens'
 const TokenSchema = new Schema({
     userId: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         required: true,
         ref: 'User',
     },
