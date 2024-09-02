@@ -18,10 +18,18 @@ export default new class UserController {
         }
     }
     loginUser = async (req, res, next) => {
-        new SuccessResponse({
-            message: 'User login successful',
-            metadata: await userService.loginUser(req.body)
-        }).send(res)
+        try {
+            new SuccessResponse({
+                message: 'User login successful',
+                metadata: await userService.loginUser(req.body)
+            }).send(res)
+        } catch (error) {
+            res.status(403).json({
+                code: '403',
+                status: 'Error Login',
+                message: error.message
+            });
+        }
     }
     logoutUser = async (req, res, next) => {
         new SuccessResponse({
