@@ -8,8 +8,8 @@ const { port, host, name} = configENV.db
 // const uri = `mongodb://${host}:${port}/${name}`;
 const uri = process.env.MONGODB_URI
 const options = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+    // useNewUrlParser: true,
+    // useUnifiedTopology: true,
     serverSelectionTimeoutMS: 5000,
     autoIndex: false, // Don't build indexes
     maxPoolSize: 10, // Maintain up to 10 socket connections
