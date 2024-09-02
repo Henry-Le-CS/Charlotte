@@ -18,8 +18,9 @@ class UserRepository {
         return await UserModel.findByIdAndUpdate(id, updateData, { new: true });
     }
 
-    async updateUserStatus(id, status) {
-        return await UserModel.findByIdAndUpdate(id, { status }, { new: true });
+    async updateUserStatus(userId, status) {
+        const updatedStatus = !status
+        return await UserModel.findByIdAndUpdate(userId, { updatedStatus }, { new: true });
     }
     async deleteUserByUserId(userId) {
         return await UserModel.deleteOne({ userId })

@@ -2,21 +2,20 @@
 
 import { Types } from 'mongoose';
 import keyTokenModel from '../models/keytoken.model.js';
-
+const select = ['userId', 'publicKey', 'privateKey']
 class TokenRepository {
-    static async saveToken({ userId, publicKey, privateKey, refreshToken }) {
-        const token = new keyTokenModel({
-            user: userId,
+    static async saveToken({ userId, refreshToken, publicKey, privateKey }) {
+        return await keyTokenModel.create({
+            userId,
             publicKey,
             privateKey,
             refreshTokenUsed: [],
             refreshToken
         });
-        return await token.save();
     }
 
     static async findByUserId(userId) {
-        return await keyTokenModel.findOne({ user: new Types.ObjectId(userId) });
+        return await keyTokenModel.findOne({ userId }).lean()
     }
 
     static async findById(id) {
