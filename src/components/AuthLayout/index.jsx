@@ -1,10 +1,10 @@
 // components
 // import Logo from '$/components/Logo';
-import Logo from '$/components/Logo';
 import PasswordInput from '$/components/PasswordInput';
 import Spring from '$/components/Spring';
 import { toast } from 'react-toastify';
 import { LoginSocialFacebook, LoginSocialGoogle } from 'reactjs-social-login';
+import RouterLinks from '../RouterLinks/index';
 
 // hooks
 import { Controller, useForm } from 'react-hook-form';
@@ -51,21 +51,12 @@ const AuthLayout = () => {
                 //     <img className="max-w-[780px]" src={media} alt="media"/>
                 // </div>
             }
-            <div className="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-lg flex items-center space-x-4">
-                <div className="shrink-0">
-                    <img className="size-12" src={Logo} alt="ChitChat Logo" />
-                </div>
-                <div>
-                    <div className="text-xl font-medium text-black">ChitChat</div>
-                    <p className="text-slate-500">You have a new message!</p>
-                </div>
-            </div>
             <div className="bg-widget flex items-center justify-center w-full py-10 px-4 lg:p-[60px]">
                 <Spring className="max-w-[460px] w-full" type="slideUp" duration={400} delay={300}>
                     <div className="flex flex-col gap-2.5 text-center">
-                        <h1>Welcome back!</h1>
+                        <h1>Chào mừng trở lại!</h1>
                         <p className="lg:max-w-[300px] m-auto 4xl:max-w-[unset]">
-                            Etiam quis quam urna. Aliquam odio erat, accumsan eu nulla in
+                            Hãy đăng nhập để tiếp tục sử dụng!
                         </p>
                     </div>
                     <form className="mt-5" onSubmit={handleSubmit(onSubmit)}>
@@ -75,7 +66,7 @@ const AuthLayout = () => {
                                 <input className={classNames('field-input', {'field-input--error': errors.email})}
                                        id="email"
                                        type="text"
-                                       placeholder="Your E-mail address"
+                                       placeholder="Nhập E-Mail"
                                        {...register('email', {required: true, pattern: /^\S+@\S+$/i})}
                                        />
                             </div>
@@ -84,7 +75,7 @@ const AuthLayout = () => {
                                         rules={{required: true}}
                                         render={({field}) => (
                                             <PasswordInput id="password"
-                                                           placeholder="Your password"
+                                                           placeholder="Nhập mật khẩu"
                                                            error={errors.password}
                                                            innerRef={field.ref}
                                                            isInvalid={errors.password}
@@ -94,16 +85,16 @@ const AuthLayout = () => {
                         </div>
                         <div className="flex flex-col items-center gap-6 mt-4 mb-10">
                             <button className="text-btn" onClick={handlePasswordReminder}>
-                                Forgot Password?
+                                <RouterLinks to='/user/forgot-password'>Quên mật khẩu?</RouterLinks>
                             </button>
-                            <button className="btn btn--primary w-full">Log In</button>
+                            <button className="btn btn--primary w-full">Đăng nhập</button>
                         </div>
                     </form>
                     <div>
                         <div className="relative">
                             <span className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-[1px] bg-border"/>
                             <span className="flex items-center justify-center relative z-10 w-11 h-[23px] m-auto bg-widget">
-                                or
+                                hay
                             </span>
                         </div>
                         <div className="grid grid-cols-1 gap-4 2xs:grid-cols-2 xs:gap-[30px] mt-[30px] mb-9">
@@ -116,15 +107,18 @@ const AuthLayout = () => {
                             </LoginSocialGoogle>
                             <LoginSocialFacebook className="btn btn--social"
                                                  appId={import.meta.env.VITE_FB_APP_ID}
-                                                 onReject={onReject}
+                                                 onRejec={onReject}
+
                                                  onResolve={onSubmit}>
                                 <img className="icon" src={facebook} alt="Facebook"/>
                                 Facebook
                             </LoginSocialFacebook>
                         </div>
                         <div className="flex justify-center gap-2.5 leading-none">
-                            <p>Don’t have an account?</p>
-                            <button className="text-btn">Sign Up</button>
+                            <p>Bạn chưa có tài khoản?</p>
+                            <button className="text-btn">
+                                <RouterLinks to='/user/register'>Đăng ký</RouterLinks>
+                            </button>
                         </div>
                     </div>
                 </Spring>

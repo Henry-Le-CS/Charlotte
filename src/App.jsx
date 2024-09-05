@@ -11,8 +11,6 @@ import '$/styles/index.scss';
 import ThemeStyles from '$/styles/theme';
 import 'react-toastify/dist/ReactToastify.min.css';
 
-// fonts
-import '$/fonts/icomoon/icomoon.woff';
 
 // contexts
 import { SidebarProvider } from '$/contexts/sidebarContext';

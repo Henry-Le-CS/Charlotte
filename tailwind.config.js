@@ -1,7 +1,7 @@
 import flowbite from 'flowbite-react/tailwind';
 
 /** @type {import('tailwindcss').Config} */
-exports = {
+export default {
   darkMode: 'class',
   content: [
     "./index.html",

@@ -13,7 +13,7 @@ const Home = () => {
                     <h1>Cùng Xây Dựng Cộng Đồng Của Bạn Ngay Hôm Nay!</h1>
                     <p>Phần mềm tuyệt vời giúp bạn trò chuyện mọi lúc, mọi nơi mà không lo bị gián đoạn.</p>
                     <div className={styles.home_start_button}>
-                        <RouterLinks to='/user/register'>Bắt Đầu Trò Chuyện Ngay</RouterLinks>
+                        <RouterLinks to='/user/login'>Bắt Đầu Trò Chuyện Ngay</RouterLinks>
                         <FaArrowRight />
                     </div>
                 </div>
