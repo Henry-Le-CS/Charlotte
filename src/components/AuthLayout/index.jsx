@@ -7,6 +7,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { LoginSocialFacebook, LoginSocialGoogle } from 'reactjs-social-login';
+import loginImg from '../../../design/1558355117500.jfif';
 import RouterLinks from '../RouterLinks/index';
 
 const AuthLayout = () => {
@@ -27,33 +28,30 @@ const AuthLayout = () => {
     }
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50">
-            <div className="flex flex-col lg:flex-row lg:w-[80%] shadow-xl rounded-xl overflow-hidden">
-                <div className="hidden lg:flex lg:flex-col justify-center items-center bg-gradient-to-r from-blue-500 to-purple-600 text-white lg:p-[60px]">
-                    <h2 className="text-3xl font-bold mb-6">Chào mừng trở lại!</h2>
-                    <p className="text-lg font-medium text-center max-w-sm">Quản lý tổ chức thông minh và hiệu quả với các công cụ chuyên sâu</p>
-                    {/* <img className="max-w-[450px] mt-10" src={media} alt="media" /> */}
-                </div>
-                <div className="bg-white w-full p-8 lg:p-[60px] flex items-center justify-center">
-                    <Spring className="max-w-[460px] w-full" type="slideUp" duration={400} delay={300}>
+            <div className="flex lg:flex-row lg:w-[80%] shadow-lg rounded-xl min-h-[60vh]">
+                <img className='max-w-[450px] rounded-l-lg' src={loginImg} alt="" />
+                <div className="bg-white w-full flex items-center justify-center">
+                    <Spring className="max-w-[50%] w-full" type="slideUp" duration={400} delay={300}>
                         <div className="text-center mb-8">
                             <h1 className="text-2xl font-semibold">Chào mừng trở lại!</h1>
                             <p className="text-gray-500">Hãy đăng nhập để tiếp tục sử dụng!</p>
                         </div>
                         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
                             <div className="space-y-4">
-                                <div className="relative">
-                                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">E-mail</label>
-                                    <input
-                                        className={classNames('mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500', {
-                                            'border-red-500': errors.email
-                                        })}
-                                        id="email"
-                                        type="email"
-                                        placeholder="Nhập E-Mail"
-                                        {...register('email', { required: true, pattern: /^\S+@\S+$/i })}
-                                    />
-                                    {errors.email && <span className="text-red-500 text-sm">E-mail không hợp lệ</span>}
-                                </div>
+                            <div className="relative">
+                                <label htmlFor="email" className="block text-sm font-medium text-left text-gray-700 mb-2 field-label">E-mail</label>
+                                <input
+                                    className={classNames('border-none mt-1 block w-full px-3 py-2 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500', {
+                                        'ring-2 ring-red-500': errors.email,
+                                    })}
+                                    id="email"
+                                    type="email"
+                                    placeholder="Nhập E-Mail"
+                                    {...register('email', { required: true, pattern: /^\S+@\S+$/i })}
+                                />
+                                {errors.email && <span className="text-red-500 text-sm">E-mail không hợp lệ</span>}
+                            </div>
+
 
                                 <Controller
                                     name="password"
@@ -86,7 +84,7 @@ const AuthLayout = () => {
                             </div>
                             <div className="mt-6 grid grid-cols-2 gap-4">
                                 <LoginSocialGoogle
-                                    className="flex items-center justify-center gap-2 bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 hover:bg-gray-200 transition-all"
+                                    className="border-none flex items-center justify-center gap-2 bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 hover:bg-gray-200 transition-all"
                                     client_id={import.meta.env.VITE_GOOGLE_APP_ID}
                                     onReject={onReject}
                                     onResolve={onSubmit}
@@ -96,7 +94,7 @@ const AuthLayout = () => {
                                 </LoginSocialGoogle>
 
                                 <LoginSocialFacebook
-                                    className="flex items-center justify-center gap-2 bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 hover:bg-gray-200 transition-all"
+                                    className="border-none flex items-center justify-center gap-2 bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 hover:bg-gray-200 transition-all"
                                     appId={import.meta.env.VITE_FB_APP_ID}
                                     onReject={onReject}
                                     onResolve={onSubmit}
