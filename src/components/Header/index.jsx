@@ -1,4 +1,4 @@
-import logo from '$/assets/Logo.png';
+import logo from '$/assets/banner-logo.svg';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import HeaderLinks from '../HeaderLinks';
@@ -11,7 +11,7 @@ const Header = ({ children }) => {
     useEffect(() => {
         const handleScroll = () => {
             if (window.scrollY > 60) {
-                setBackground('var(--primary-header-color)');
+                setBackground('#a6ddf7');
             } else {
                 setBackground('unset');
             }
