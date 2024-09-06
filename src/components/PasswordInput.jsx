@@ -23,7 +23,7 @@ const PasswordInput = ({innerRef, id, label = 'Password', isInvalid, ...props}) 
                 {label}
             </label>
             <div className="relative">
-                <input className={classNames('border-none mt-1 w-full px-3 py-2 rounded-lg shadow-sm', {'field-input--error': isInvalid})}
+                <input className={classNames('text-3xl border-none mt-1 w-full px-3 py-2 rounded-lg shadow-sm', {'field-input--error': isInvalid})}
                        id={id}
                        type={isPasswordVisible ? 'text' : 'password'}
                        ref={innerRef}
