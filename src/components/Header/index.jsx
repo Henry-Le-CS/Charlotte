@@ -6,14 +6,14 @@ import RouterLinks from '../RouterLinks';
 import styles from './Header.module.scss';
 
 const Header = ({ children }) => {
-    const [background, setBackground] = useState('unset');
+    const [background, setBackground] = useState('bg-transparent');
 
     useEffect(() => {
         const handleScroll = () => {
             if (window.scrollY > 60) {
-                setBackground('#a6ddf7');
+                setBackground('bg-[#a6ddf7]');
             } else {
-                setBackground('unset');
+                setBackground('bg-transparent');
             }
         };
 
@@ -26,15 +26,15 @@ const Header = ({ children }) => {
 
     return (
         <>
-            <div className={styles.header} style={{ background }}>
-                <div className={styles.header_logo}>
+            <div className={`w-screen fixed top-0 left-0 flex items-center justify-around shadow-md transition-all duration-500 ${background}`}>
+                <div className="w-[300px]">
                     <RouterLinks id='logo' to='/'>
-                        <img className={styles.header_img} src={logo} alt="Logo" />
+                        <img className="w-[200px]" src={logo} alt="Logo" />
                     </RouterLinks>
                 </div>
                 <HeaderLinks />
-                <div className={styles.header_registration}>
-                    <RouterLinks to='/user/login'>ĐĂNG NHẬP</RouterLinks>
+                <div className="h-10 flex items-center justify-between w-[300px]">
+                    <RouterLinks to='/user/login' className="w-[40%]">ĐĂNG NHẬP</RouterLinks>
                     <div className={styles.header_registration_button}>
                         <RouterLinks to='/user/register'>Đăng ký</RouterLinks>
                         <RouterLinks to='/user/register'>Đăng ký</RouterLinks>
@@ -45,6 +45,7 @@ const Header = ({ children }) => {
         </>
     );
 };
+
 Header.propTypes = {
     children: PropTypes.node.isRequired,
 };

@@ -1,17 +1,4 @@
 .header {
-    width: 100vw;
-    height: 80px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    transition: all .5s linear;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    &_img {
-        width: 300px;
-    }
     &_registration {
         height: 40px;
         display: flex;
