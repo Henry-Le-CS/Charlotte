@@ -3,7 +3,8 @@ import Chat from '$/pages/Chat';
 import Home from '$/pages/Home';
 import { lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
-const Login  = lazy(() => import('$/pages/Login'));
+const Login  = lazy(() => import('$/pages/Auth/login'));
+const SignUp = lazy(() => import('$/pages/Auth/signUp'));
 
 const RouterController = () => {
     return (
@@ -29,6 +30,14 @@ const RouterController = () => {
                 element={
                     <Header>
                         <Login />
+                    </Header>
+                }
+            />
+            <Route
+                path='/user/register'
+                element={
+                    <Header>
+                        <SignUp />
                     </Header>
                 }
             />
