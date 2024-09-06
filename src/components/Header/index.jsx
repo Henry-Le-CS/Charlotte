@@ -1,4 +1,4 @@
-import logo from '$/assets/banner-logo.svg';
+import logo from '$/assets/banner.png';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import HeaderLinks from '../HeaderLinks';
