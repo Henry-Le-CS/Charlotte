@@ -1,203 +1,119 @@
-/* global template styles */
-
-// scrollbars
+// @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+// breakpoints
+:root {
+    --swiper-navigation-size: 44px;
+    --swiper-theme-color: #1e282e;
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+    --white-text-color: #fff;
+    --black-text-color: #000;
+    --primary-header-color: #2f8cf3;
+    --primary-color: #2f8cf3;
+    --primary-chat-background-color: {
+        background: rgb(143,199,247);
+        background: linear-gradient(143deg, rgba(143,199,247,1) 41%, rgba(146,0,194,1) 67%);
+    }
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
 * {
-    &::-webkit-scrollbar {
-        @apply w-2.5;
-    }
-
-    &::-webkit-scrollbar-track {
-        @apply bg-transparent rounded-md border border-solid border-input-border;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        @apply bg-input-border rounded-md;
-    }
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+html {
+    overflow-y: auto;
+    overflow-x: hidden;
+    font-size: 62.5%;
 }
 
 body {
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    line-height: 1.4;
+    scroll-behavior: smooth;
+    width: 100vw;
+    text-align: center;
 }
 
-html {
-    user-select: none;
-    font-family: 'Archivo', sans-serif;
-    background: var(--body);
-    color: var(--text);
-    font-size: 16px;
-    line-height: 1.5;
-    height: -webkit-fill-available;
+// breakpoints
+$mobile: 576px;
+$tablet: 768px;
+$desktop: 992px;
+$large-desktop: 1200px;
 
-    &.no-transition * {
-        transition: none !important;
-    }
-
-    &.no-scroll {
-        overflow: hidden;
-    }
-
-    // better fit for a big screens
-    @media screen and (min-width: 2560px) {
-        &[data-ratio="1"] {
-            zoom: 1.25;
-        }
+@mixin respond-to($breakpoints) {
+    @media only screen and (max-width: $breakpoints) {
+        @content;
     }
 }
 
-html, body {
-    &::-webkit-scrollbar {
+/******************************/
+/* Set for scrollbar - thanh cuộn */
+::-webkit-scrollbar {
+    width: 10px;
+    border-radius: 10px;
+    @include respond-to($mobile) {
         width: 0;
+        height: 0;
     }
 }
 
-img {
-    display: block;
-    width: 100%;
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.logo {
+    height: 6em;
+    padding: 1.5em;
+    will-change: filter;
+    transition: filter 300ms;
+}
+.logo:hover {
+    filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+    filter: drop-shadow(0 0 2em #61dafbaa);
+}
+@keyframes logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    a:nth-of-type(2) .logo {
+        animation: logo-spin infinite 20s linear;
+    }
+}
+
+.App {
     height: auto;
-    object-fit: cover;
 }
 
-svg:focus,
-svg *:focus {
-    outline: none !important;
+a {
+    text-decoration: none;
+    color: #000;
 }
-
-// iOS fix
-input[type="search"] {
-    -webkit-appearance: none;
-}
-
-textarea {
-    resize: none;
-    white-space: unset !important;
-}
-
-label {
-    cursor: pointer;
-}
-
-.headroom {
-    padding: 15px 15px 0;
-    z-index: 1000;
-    transition: background-color var(--transition), padding var(--transition);
-
-    &--pinned {
-        padding: 10px 15px;
-        background-color: var(--widget);
-        box-shadow: var(--shadow);
-    }
-
-    @screen xl {
-        padding: 15px 0 0;
-    }
-}
-
-.app {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-
-    &.fluid {
-        display: flex;
-
-        .app_content {
-            padding: 0;
-            flex-grow: 1;
-            display: flex;
-            height: auto;
-
-            .main {
-                margin: 0;
-            }
-        }
-    }
-
-    &_content {
-        padding: 0 15px 15px;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-
-        .main {
-            flex-grow: 1;
-            margin: 26px 0 22px;
-            display: flex;
-            flex-direction: column;
-
-            .widgets-grid {
-                display: grid;
-                gap: 20px;
-
-                @screen md {
-                    gap: 26px;
-                }
-            }
-        }
-    }
-}
-
-// desktop
-@media screen and (min-width: 1366px) {
-    .headroom {
-        padding: 0;
-        position: static !important;
-        transform: none !important;
-        background: transparent !important;
-        box-shadow: none !important;
-    }
-
-    .app .app_content {
-        padding: 26px;
-    }
-}
-
-// desktop large
-@media screen and (min-width: 1920px) {
-    .app {
-        display: grid;
-        grid-template-columns: minmax(0, 374px) minmax(0, 1fr);
-
-        .app_content {
-            padding: 30px 60px 15px 45px;
-        }
-    }
-}
-
-// hide input clear button
-input[type=search]::-ms-clear {
-    display: none;
-    width: 0;
-    height: 0;
-}
-
-input[type=search]::-ms-reveal {
-    display: none;
-    width: 0;
-    height: 0;
-}
-
-input[type="search"]::-webkit-search-decoration,
-input[type="search"]::-webkit-search-cancel-button,
-input[type="search"]::-webkit-search-results-button,
-input[type="search"]::-webkit-search-results-decoration {
-    display: none;
-}
-
-// hide Google Maps footer
-a[href^="http://maps.google.com/maps"] {
-    display: none !important
-}
-
-a[href^="https://maps.google.com/maps"] {
-    display: none !important
-}
-
-.gmnoprint a, .gmnoprint span, .gm-style-cc {
-    display: none;
-}
-
-.gmnoprint div {
-    background: none !important;
+.active {
+    opacity: 1 !important;
 }
