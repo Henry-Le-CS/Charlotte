@@ -14,11 +14,11 @@ class UserRepository {
         return await UserModel.findOne({ email }).lean();
     }
 
-    async updateUser(id, updateData) {
+    async updateUser({ id, updateData }) {
         return await UserModel.findByIdAndUpdate(id, updateData, { new: true });
     }
 
-    async updateUserStatus(userId, status) {
+    async updateUserStatus({ userId, status }) {
         const updatedStatus = !status
         return await UserModel.findByIdAndUpdate(userId, { updatedStatus }, { new: true });
     }
