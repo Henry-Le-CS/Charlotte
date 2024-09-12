@@ -36,10 +36,11 @@ class UserService {
         }
     }
 
-    async registerUser({ userDetails, permissions }) {
+    async registerUser(data) {
+        const { userDetails, permissions } = data
         const session = await mongoose.startSession();
         session.startTransaction();
-    
+        console.log(data)
         try {
             let apiKey;
             const existingUser = await UserRepository.findUserByEmail(userDetails.email);
@@ -117,8 +118,8 @@ class UserService {
         return { accessToken: newTokens.accessToken, refreshToken: newTokens.refreshToken };
     }
 
-    async updateUserProfile(userId, updateData) {
-        return await UserRepository.updateUser(userId, updateData);
+    async updateUserProfile({ userId, updateData }) {
+        return await UserRepository.updateUser({ userId, updateData });
     }
 
     async addFriend(userId, friendId) {
@@ -137,8 +138,8 @@ class UserService {
         return user;
     }
     
-    async updateUserStatus(userId, status) {
-        return await UserRepository.updateUserStatus(userId, status);
+    async updateUserStatus({ userId, status }) {
+        return await UserRepository.updateUserStatus({ userId, status });
     }
 }
 
