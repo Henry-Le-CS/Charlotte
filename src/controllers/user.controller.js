@@ -49,5 +49,11 @@ export default new class UserController {
             metadata: await userService.updateUserProfile(req.body)
         }).send(res)
     }
+    updateStatus = async (req, res, next) => {
+        new SuccessResponse({
+            message: 'Status updated successfully',
+            metadata: await userService.updateUserStatus(req.body)
+        }).send(res)
+    }
 }
 
