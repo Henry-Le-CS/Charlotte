@@ -1,44 +1,64 @@
-
 import compression from 'compression';
+import cors from 'cors';
 import 'dotenv/config';
 import express from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
-const app = express()
-// init middleware
-app.use(morgan())
-// compile - common - short - tiny
-app.use(helmet())
-app.use(compression())
-app.use(express.json())
+import multer from 'multer';
+const app = express();
+
+// CORS configuration
+var corsOptions = {
+    origin: 'http://localhost:3000', 
+    credentials: true,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    allowedHeaders: ['Content-Type', 'Authorization', 'ngrok-skip-browser-warning'] 
+};
+// Apply CORS middleware
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
+const upload = multer();
+app.use(upload.none());
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, ngrok-skip-browser-warning');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    next();
+});
+
+// Init other middleware
+app.use(morgan('common'));
+app.use(helmet());
+app.use(compression());
+app.use(express.json());
 app.use(express.urlencoded({
     extended: true
-}))
+}));
 
-// init db
+// Init database
 import './dps/init.mongodb.js';
-// import checkConnect from './helpers/check.connect.js';
-import router from './routes/index.js';
-// checkConnect.checkOverLoad()
-// init routes
-app.use('/', router)
 
-// handling errors
+// Import and init routes
+import router from './routes/index.js';
+app.use('/', router);
+
+// Handling errors for 404
 app.use((req, res, next) => {
-    // middleware
-    const error = new Error('Not Found')
-    error.status = 404
-    next(error)
-})
+    const error = new Error('Not Found');
+    error.status = 404;
+    next(error);
+});
+
+// Global error handler
 app.use((error, req, res, next) => {
-    const statusCode = error.status || 500
+    const statusCode = error.status || 500;
     return res.status(statusCode).json({
         status: 'error',
         code: statusCode,
         stack: error.stack,
         message: error.message || 'Internal Server Error'
-    })
+    });
+});
 
-})
-
-export default app
+export default app;
