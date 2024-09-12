@@ -2,6 +2,7 @@ import facebook from '$/assets/icons/facebook.png';
 import google from '$/assets/icons/google.png';
 import PasswordInput from '$/components/PasswordInput';
 import Spring from '$/components/Spring';
+import { signup } from '$/services/user';
 import classNames from 'classnames';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -10,13 +11,12 @@ import { toast } from 'react-toastify';
 import { LoginSocialFacebook, LoginSocialGoogle } from 'reactjs-social-login';
 import loginImg from '../../../design/1558355117500.jfif';
 import RouterLinks from '../RouterLinks/index';
-
 const AuthLayout = () => {
     const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors }, control, watch, setValue } = useForm({
         defaultValues: {
             userDetails: {
-                name: '',
+                username: '',
                 phoneNumber: '',
                 email: '',
                 password: ''
@@ -28,7 +28,6 @@ const AuthLayout = () => {
         }
     });
 
-    // Watch for changes in certain fields, if needed
     const password = watch('userDetails.password');
 
     const onSubmit = async (data) => {
@@ -38,20 +37,19 @@ const AuthLayout = () => {
             if (typeof data[key] === 'object' && data[key] !== null) {
                 Object.keys(data[key]).forEach(subKey => {
                     if (data[key][subKey] !== '') {
-                        // Using setValue to programmatically set field value before appending
                         setValue(`${key}.${subKey}`, data[key][subKey]);
                         formData.append(`${key}[${subKey}]`, data[key][subKey]);
                     }
                 });
             } else if (data[key] !== '') {
-                setValue(key, data[key]); // Set the form field value
+                setValue(key, data[key]); 
                 formData.append(key, data[key]);
             }
         });
 
         try {
-            const result = await register(formData); // Assuming register is a function that handles form submission
-            console.log(result);
+            const results = await signup(formData);
+            console.log(results);
             navigate('/user/login');
         } catch (error) {
             console.error('Register Error: ', error.response || error.message || error);
@@ -59,9 +57,7 @@ const AuthLayout = () => {
         }
     };
 
-    // Example: Programmatically setting values (this can be used as per your needs)
     useEffect(() => {
-        // Set an initial value programmatically if needed
         setValue('userDetails.phoneNumber', '');
     }, [setValue]);
 
@@ -85,14 +81,14 @@ const AuthLayout = () => {
                                     <label htmlFor="name" className="block text-2xl font-medium text-left text-gray field-label">Tên</label>
                                     <input
                                         className={classNames('text-3xl border-none mt-2 block w-full h-50 px-4 py-3 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500', {
-                                            'ring-2 ring-red-500': errors?.userDetails?.name,
+                                            'ring-2 ring-red-500': errors?.userDetails?.username,
                                         })}
                                         id="name"
                                         type="text"
                                         placeholder="Nhập Tên"
-                                        {...register('userDetails.name', { required: 'Tên không được để trống' })}
+                                        {...register('userDetails.username', { required: 'Tên không được để trống' })}
                                     />
-                                    {errors?.userDetails?.name && <span className="text-red-500 text-md">{errors.userDetails.name.message}</span>}
+                                    {errors?.userDetails?.username && <span className="text-red-500 text-md">{errors.userDetails.name.message}</span>}
                                 </div>
 
                                 <div className="relative">

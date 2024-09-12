@@ -2,6 +2,7 @@ import facebook from '$/assets/icons/facebook.png';
 import google from '$/assets/icons/google.png';
 import PasswordInput from '$/components/PasswordInput';
 import Spring from '$/components/Spring';
+import { login } from '$/services/user';
 import classNames from 'classnames';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -12,16 +13,39 @@ import RouterLinks from '../RouterLinks/index';
 
 const AuthLayout = () => {
     const navigate = useNavigate();
-    const { register, handleSubmit, formState: { errors }, control } = useForm({
+    const { register, handleSubmit, formState: { errors }, control, setValue } = useForm({
         defaultValues: {
             email: '',
             password: ''
         }
     });
 
-    const onSubmit = () => {
-        navigate('/');
-    }
+    const onSubmit = async (data) => {
+        const formData = new FormData();
+
+        Object.keys(data).forEach(key => {
+            if (typeof data[key] === 'object' && data[key] !== null) {
+                Object.keys(data[key]).forEach(subKey => {
+                    if (data[key][subKey] !== '') {
+                        setValue(`${key}.${subKey}`, data[key][subKey]);
+                        formData.append(`${key}[${subKey}]`, data[key][subKey]);
+                    }
+                });
+            } else if (data[key] !== '') {
+                setValue(key, data[key]); 
+                formData.append(key, data[key]);
+            }
+        });
+
+        try {
+            const results = await login(formData);
+            console.log(results);
+            navigate('/chat');
+        } catch (error) {
+            console.error('Register Error: ', error.response || error.message || error);
+            toast.error('Registration failed. Please try again.');
+        }
+    };
 
     const onReject = (err) => {
         toast.error(err);
