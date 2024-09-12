@@ -5,11 +5,9 @@ const axiosInstance = (options = {}) => {
     const headers = {
         'ngrok-skip-browser-warning': 'true'
     }
-
     headers['Content-Type'] = formData ? 'multipart/form-data' : 'application/json' ;
-
     const instance = axios.create({
-        baseURL: import.meta.env.REACT_APP_API_ENDPOINT,
+        baseURL: import.meta.env.VITE_APP_API_ENDPOINT,
         timeout: 10000,
         headers
     })
