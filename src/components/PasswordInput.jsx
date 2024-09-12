@@ -1,11 +1,11 @@
 // hooks
-import { useEffect, useState } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 
 // utils
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
-const PasswordInput = ({innerRef, id, label = 'Password', isInvalid, ...props}) => {
+const PasswordInput = forwardRef(({ id, label = 'Password', isInvalid, ...props }, ref) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     const togglePasswordVisibility = e => {
@@ -23,27 +23,34 @@ const PasswordInput = ({innerRef, id, label = 'Password', isInvalid, ...props}) 
                 {label}
             </label>
             <div className="relative">
-                <input className={classNames('text-3xl border-none mt-1 w-full px-3 py-2 rounded-lg shadow-sm', {'field-input--error': isInvalid})}
-                       id={id}
-                       type={isPasswordVisible ? 'text' : 'password'}
-                       ref={innerRef}
-                       {...props}/>
-                <button className="field-btn"
-                        onClick={togglePasswordVisibility}
-                        aria-label="Toggle password visibility">
+                <input
+                    className={classNames('text-3xl border-none mt-1 w-full px-3 py-2 rounded-lg shadow-sm', {
+                        'field-input--error': !!isInvalid // Ensure this is always a boolean
+                    })}
+                    id={id}
+                    type={isPasswordVisible ? 'text' : 'password'}
+                    ref={ref} // Use ref here instead of innerRef
+                    {...props}
+                />
+                <button
+                    className="field-btn"
+                    onClick={togglePasswordVisibility}
+                    aria-label="Toggle password visibility">
                     <i className={`icon icon-eye${isPasswordVisible ? '-slash-regular' : '-regular' }`}/>
                 </button>
             </div>
         </div>
-    )
-}
+    );
+});
+
+// Set the display name for better debugging and to fix the eslint error
+PasswordInput.displayName = 'PasswordInput';
 
 PasswordInput.propTypes = {
-    innerRef: PropTypes.func,
     id: PropTypes.string.isRequired,
     label: PropTypes.string,
     isInvalid: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
     value: PropTypes.string
-}
+};
 
-export default PasswordInput
+export default PasswordInput;
