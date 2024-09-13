@@ -7,6 +7,7 @@ const axiosInstance = (options = {}) => {
     }
     headers['Content-Type'] = formData ? 'multipart/form-data' : 'application/json' ;
     const instance = axios.create({
+        withCredentials: true,
         baseURL: import.meta.env.VITE_APP_API_ENDPOINT,
         timeout: 10000,
         headers
