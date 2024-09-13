@@ -81,7 +81,6 @@ export const authenticationV2 = asyncHandler( async (req, res, next) => {
 
    // 2
    const keyStore = await KeyTokenService.findByUserId(userId)
-   console.log(keyStore)
    if (!keyStore) throw new NotFoundError('Not Found KeyStore')
 
    // 3

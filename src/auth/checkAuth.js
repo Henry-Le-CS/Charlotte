@@ -1,15 +1,18 @@
 'use strict'
 import PermissionRepository from '../repositories/permission.repo.js';
 import ApiKeyService from './../services/apiKey.service.js';
+const pmsSelect = ['actions']
+const permission = ['admin', 'create', 'read', 'write', 'delete']
 const HEADER = {
     API_KEY: 'x-api-key',
-    AUTHORIZATION: 'authorization'
+    // AUTHORIZATION: 'authorization'
 }
 
 export default new class Check {
     apiKey = async (req, res, next) => {
         try {
             const key = req.headers[HEADER.API_KEY]?.toString()
+            console.log('Checking Headers:: ', req.headers)
             if (!key) {
                 return res.status(403).json({
                     message: 'Forbidden Error'
@@ -28,7 +31,7 @@ export default new class Check {
             console.error(error)
         }
     }
-    permission = ({permission, pmsSelect}) => {
+    permission = () => {
         return async (req, res, next) => {
             if (!req.objKey.permissions) {
                 return res.status(403).json({
@@ -37,7 +40,7 @@ export default new class Check {
             }
             const pmsId = req.objKey.permissions
             const permissions = await PermissionRepository.findPermissionById({ pmsId, pmsSelect})
-            const validPermission = permissions.actions.includes(permission)
+            const validPermission = permission.some(pms => permissions.actions.includes(pms))
             if (!validPermission) {
                 return res.status(403).json({
                     message: 'Permission Denied'
