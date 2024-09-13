@@ -22,5 +22,6 @@ const apiKeySchema = new Schema({
     timestamps: true,
     collection: COLLECTION_NAME,
 });
+apiKeySchema.index({ _id: 1, permissions: 1, userId: 1 });
 
 export default mongoose.model(DOCUMENT_NAME, apiKeySchema);
