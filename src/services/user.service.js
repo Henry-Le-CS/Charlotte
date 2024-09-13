@@ -7,7 +7,7 @@ import UserRepository from '../repositories/user.repo.js';
 import ApikeyService from '../services/apiKey.service.js';
 import { AuthFailureError, BadRequestError, NotFoundError } from './../core/error.response.js';
 import KeyTokenService from './keytoken.service.js';
-export const apiKeyStore = new Map();
+// export const apiKeyStore = new Map();
 
 class UserService {
     constructor() {
@@ -61,7 +61,7 @@ class UserService {
             if (user && permission) {
                 const pmsId = permission._id;
                 apiKey = await ApikeyService.createApiKey({ userId, pmsId }, { session });
-                apiKeyStore.set(userId.toString(), apiKey)
+                // apiKeyStore.set(userId.toString(), apiKey)
             }
     
             if (!apiKey || !permission) {
@@ -72,7 +72,8 @@ class UserService {
             
             return {
                 code: '201',
-                user
+                user,
+                apiKey
             };
         } catch (error) {
             await session.abortTransaction();

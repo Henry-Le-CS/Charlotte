@@ -5,9 +5,11 @@ import { CREATED, SuccessResponse } from './../core/success.response.js';
 export default new class UserController { 
     register = async (req, res, next) => {
         try {
+            const results = await userService.registerUser(req.body)
+            res.cookie('x-api-key', results.apiKey, { expired: 1, httpOnly: true })
             new CREATED({
                 message: 'User registration successful!!',
-                metadata: await userService.registerUser(req.body)
+                metadata: results.user
             }).send(res);
         } catch (error) {
             res.status(403).json({

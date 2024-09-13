@@ -13,7 +13,7 @@ var corsOptions = {
     origin: 'http://localhost:3000', 
     credentials: true,
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    allowedHeaders: ['Content-Type', 'Authorization', 'ngrok-skip-browser-warning'] 
+    allowedHeaders: ['Content-Type', 'authorization', 'ngrok-skip-browser-warning', 'x-api-key', 'x-client-id', 'x-rtoken-id'] 
 };
 // Apply CORS middleware
 app.use(cors(corsOptions));
@@ -22,7 +22,7 @@ const upload = multer();
 app.use(upload.none());
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, ngrok-skip-browser-warning');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, authorization, ngrok-skip-browser-warning');
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.header('Access-Control-Allow-Credentials', 'true');
     next();
