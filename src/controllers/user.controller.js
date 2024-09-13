@@ -8,7 +8,7 @@ export default new class UserController {
             new CREATED({
                 message: 'User registration successful!!',
                 metadata: await userService.registerUser(req.body)
-            }).send(res)
+            }).send(res);
         } catch (error) {
             res.status(403).json({
                 code: '403',
@@ -17,6 +17,7 @@ export default new class UserController {
             });
         }
     }
+    
     loginUser = async (req, res, next) => {
         try {
             new SuccessResponse({
