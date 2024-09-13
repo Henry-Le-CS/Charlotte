@@ -7,6 +7,7 @@ import UserRepository from '../repositories/user.repo.js';
 import ApikeyService from '../services/apiKey.service.js';
 import { AuthFailureError, BadRequestError, NotFoundError } from './../core/error.response.js';
 import KeyTokenService from './keytoken.service.js';
+export const apiKeyStore = new Map();
 
 class UserService {
     constructor() {
@@ -37,16 +38,17 @@ class UserService {
     }
 
     async registerUser(data) {
-        const { userDetails, permissions } = data
+        const { userDetails, permissions } = data;
         const session = await mongoose.startSession();
         session.startTransaction();
-        console.log(data)
+    
         try {
             let apiKey;
             const existingUser = await UserRepository.findUserByEmail(userDetails.email);
             if (existingUser) {
                 throw new BadRequestError('Email is already registered');
             }
+    
             const hashedPassword = await bcrypt.hash(userDetails.password, 10);
             const user = await UserRepository.createUser({
                 ...userDetails,
@@ -58,18 +60,20 @@ class UserService {
             const permission = await PermissionRepository.createPermission({ resource, actions, userId }, { session });
     
             if (user && permission) {
-                const pmsId = permission._id
-                apiKey = await ApikeyService.createApiKey({userId, pmsId}, { session });
+                const pmsId = permission._id;
+                apiKey = await ApikeyService.createApiKey({ userId, pmsId }, { session });
+                apiKeyStore.set(userId.toString(), apiKey)
             }
+    
             if (!apiKey || !permission) {
-                console.log('delete user success!')
-                await UserRepository.deleteUserByUserId(userId)
+                await UserRepository.deleteUserByUserId(userId);
             }
+    
             await session.commitTransaction();
+            
             return {
                 code: '201',
-                user,
-                apiKey
+                user
             };
         } catch (error) {
             await session.abortTransaction();
@@ -78,6 +82,7 @@ class UserService {
             session.endSession();
         }
     }
+    
 
     async loginUser({ email, password }) {
         const user = await UserRepository.findUserByEmail(email);
