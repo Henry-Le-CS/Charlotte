@@ -17,13 +17,20 @@ export default new class ProxyService {
         if (!API_KEY) {
             return next(new NotFoundError('API key not found'));
         }
-        const proxy = createProxyMiddleware({
-            target: 'http://localhost:2055',
-            changeOrigin: true,
-            onProxyReq: (proxyReq, req, res) => {
-                proxyReq.setHeader('x-api-key', API_KEY);
-            }
-        });
-        proxy(req, res, next);
+        try {
+            const proxy = createProxyMiddleware({
+                target: 'http://localhost:2055',
+                changeOrigin: true,
+                onProxyReq: (proxyReq, req, res) => {
+                    proxyReq.setHeader('x-api-key', API_KEY);
+                }
+            });
+            return proxy;
+        } catch (error) {
+            return res.status(500).json({
+                code: 500,
+                message: error.message
+            })
+        }
     }
 }

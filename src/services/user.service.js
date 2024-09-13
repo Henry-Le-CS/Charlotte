@@ -17,7 +17,6 @@ class UserService {
         return UserService.instance;
     }
 
-    // Helper method to generate JWT tokens
     generateTokenPair(payload) {
         const privateKey = crypto.randomBytes(64).toString('hex');
         const publicKey = crypto.randomBytes(64).toString('hex');
