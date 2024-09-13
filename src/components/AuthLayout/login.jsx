@@ -40,9 +40,10 @@ const AuthLayout = () => {
         try {
             const results = await login(formData);
             console.log(results);
+            toast.success(results.message);
             setTimeout(() => navigate('/chat'), 3000)
         } catch (error) {
-            console.error('Register Error: ', error.response || error.message || error);
+            console.error('Login Error: ', error.response || error.message || error);
             toast.error('Registration failed. Please try again.');
         }
     };

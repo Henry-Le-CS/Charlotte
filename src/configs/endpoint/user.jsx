@@ -1,6 +1,6 @@
 const userEnpoint = {
     // SIGN IN
-    logining: (user) => `/${user}/logining`,
+    login: (user) => `/${user}/login`,
     // REGISTER
     register: (user) => `/${user}/register`,
 
