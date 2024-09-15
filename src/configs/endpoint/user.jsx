@@ -6,6 +6,7 @@ const userEnpoint = {
 
     // UPDATE INFOMATION
     updateInfomation: (id) => `/user/${id}/updating`,
+    search: (value) => `/user/${value}`
 }
 
 export default userEnpoint

@@ -1,84 +1,50 @@
 import Header from '$/components/Header';
-import Chat from '$/pages/Chat';
+import Loader from '$/components/Loader';
 import Home from '$/pages/Home';
-import { lazy } from 'react';
+import { Suspense, lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
-const Login  = lazy(() => import('$/pages/Auth/login'));
-const SignUp = lazy(() => import('$/pages/Auth/signUp'));
+
+const Login = lazy(() => import('$/components/AuthLayout/login.jsx'));
+const SignUp = lazy(() => import('$/components/AuthLayout/signUp.jsx'));
+const Chat = lazy(() => import ('$/pages/Chat'));
 
 const RouterController = () => {
     return (
-        <Routes>
-            <Route
-                path="/"
-                element={
-                    <Header>
-                        <Home />
-                    </Header>
-                }
-            />
-            <Route
-                path="/chat"
-                element={
-                    <Header>
+        <Suspense fallback={<Loader />}>
+            <Routes>
+                <Route
+                    path="/"
+                    element={
+                        <Header>
+                            <Home />
+                        </Header>
+                    }
+                />
+                <Route
+                    path="/user/login"
+                    element={
+                        <Header>
+                            <Login />
+                        </Header>
+                    }
+                />
+                <Route
+                    path="/user/register"
+                    element={
+                        <Header>
+                            <SignUp />
+                        </Header>
+                    }
+                />
+                <Route
+                    path="/chat"
+                    element={
                         <Chat />
-                    </Header>
-                }
-            />
-            <Route
-                path='/user/login'
-                element={
-                    <Header>
-                        <Login />
-                    </Header>
-                }
-            />
-            <Route
-                path='/user/register'
-                element={
-                    <Header>
-                        <SignUp />
-                    </Header>
-                }
-            />
-            {/* <Route
-                path='/about'
-                element={
-                    <Header>
-                        
-                    </Header>
-                }
-            /> */}
-            {/* <Route
-                path='/blog'
-                element={
-                    <Header>
-                        
-                    </Header>
-                }
-            /> */}
-            {/* <Route
-                path='/pages'
-                element={
-                    <Header>
-                        
-                    </Header>
-                }
-            /> */}
-            {/* <Route
-                path='/contact'
-                element={
-                    <Header>
-                        
-                    </Header>
-                }
-            /> */}
-            
-            
-            
-            
-        </Routes>
-    )
-}
+                    }
+                />
+            </Routes>
+        </Suspense>
+    );
+};
 
-export default RouterController
+export default RouterController;

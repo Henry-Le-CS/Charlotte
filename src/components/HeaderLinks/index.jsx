@@ -35,8 +35,7 @@ export default function HeaderLinks() {
             });
         }
 
-        setActiveLink(); // Kích hoạt khi lần đầu tải trang
-
+        setActiveLink(); 
         return () => {
             if (headerLinks) {
                 const children = Array.from(headerLinks.children);

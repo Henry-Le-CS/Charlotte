@@ -50,21 +50,9 @@ const AuthLayout = () => {
         try {
             const results = await signup(formData);
             toast.success(results.message);
-            // if (results.metadata.user._id) {
-            //     try {
-            //         Cookies.set('x-client-id', results.metadata.user._id, {
-            //             expires: 3,
-            //             sameSite: 'Lax',
-            //             secure: false
-            //         })
-            //     } catch (error) {
-            //         console.log('Cookies Error:: ', error);
-            //     }
-            // }
             setTimeout(() => navigate('/user/login'), 3000)
         } catch (error) {
-            console.error('Register Error: ', error.response || error.message || error);
-            toast.error('Registration failed. Please try again.');
+            toast.error('Registration failed: '+ error.response.data.message || error.message);
         }
     };
 
