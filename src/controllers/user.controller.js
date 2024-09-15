@@ -6,7 +6,7 @@ export default new class UserController {
     register = async (req, res, next) => {
         try {
             const results = await userService.registerUser(req.body)
-            res.cookie('x-api-key', results.apiKey, { expired: 1, httpOnly: true })
+            res.cookie('x-api-key', results.apiKey, { httpOnly: true })
             new CREATED({
                 message: 'User registration successful!!',
                 metadata: results.user
@@ -22,9 +22,13 @@ export default new class UserController {
     
     loginUser = async (req, res, next) => {
         try {
+            const results = await userService.loginUser(req.body)
+            res.cookie('x-rtoken-id', results.tokens.refreshToken, { httpOnly: true })
+            res.cookie('authorization', results.tokens.accessToken, { httpOnly: true })
+            res.cookie('x-client-id', results.user._id, { httpOnly: true })
             new SuccessResponse({
-                message: 'User login successful',
-                metadata: await userService.loginUser(req.body)
+                message: 'You have been logged successfully',
+                metadata: results.user
             }).send(res)
         } catch (error) {
             res.status(403).json({

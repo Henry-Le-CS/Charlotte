@@ -8,8 +8,8 @@ const router = express.Router();
 
 router.post('/api/user/register', userController.register);
 
-router.use('/api', proxyService.createProxyByHttpProxy);
-
+router.use('/api/user/login', proxyService.createProxyByHttpProxy());
+router.use('/api', proxyService.accessRelease())
 router.use(check.apiKey);
 router.use(check.permission());
 
