@@ -40,7 +40,7 @@ export default defineConfig({
             }
         }
     },
-    base: process.env.VITE_APP_API_ENDPOINT,
+    base: '/',
     server: {
         port: 3000,
     },
