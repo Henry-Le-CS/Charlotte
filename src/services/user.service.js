@@ -8,6 +8,10 @@ import ApikeyService from '../services/apiKey.service.js';
 import { AuthFailureError, BadRequestError, NotFoundError } from './../core/error.response.js';
 import KeyTokenService from './keytoken.service.js';
 // export const apiKeyStore = new Map();
+import nodemailer from 'nodemailer';
+import emailVerifyModel from '../models/emailVerify.model.js';
+
+
 
 class UserService {
     constructor() {
@@ -38,11 +42,19 @@ class UserService {
 
     async registerUser(data) {
         const { userDetails, permissions } = data;
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true,
+            auth: {
+                user: process.env.GOOGLE_ACCOUNT_EMAIL,
+                pass: process.env.GOOGLE_APP_PASSWORD
+            }
+        })
         const session = await mongoose.startSession();
         session.startTransaction();
     
         try {
-            let apiKey;
             const existingUser = await UserRepository.findUserByEmail(userDetails.email);
             if (existingUser) {
                 throw new BadRequestError('Email is already registered');
@@ -51,37 +63,65 @@ class UserService {
             const hashedPassword = await bcrypt.hash(userDetails.password, 10);
             const user = await UserRepository.createUser({
                 ...userDetails,
-                password_hash: hashedPassword
+                password_hash: hashedPassword,
+                isVerified: false,
             }, { session });
     
             const userId = user._id;
             const { resource, actions } = permissions;
             const permission = await PermissionRepository.createPermission({ resource, actions, userId }, { session });
     
+            let apiKey;
             if (user && permission) {
                 const pmsId = permission._id;
                 apiKey = await ApikeyService.createApiKey({ userId, pmsId }, { session });
-                // apiKeyStore.set(userId.toString(), apiKey)
             }
     
             if (!apiKey || !permission) {
                 await UserRepository.deleteUserByUserId(userId);
+                throw new Error('User creation failed. Rolling back...');
             }
     
             await session.commitTransaction();
-            
+    
+            const verificationToken = crypto.randomBytes(32).toString('hex');
+            await emailVerifyModel.create({
+                verificationToken,
+                verificationExpires: Date.now() + 3600000,
+                type: 'registration',
+                userId
+            });
+    
+            const verificationLink = `http://localhost:2055/signup-verify-email?email=${userDetails.email}&token=${verificationToken}`;
+            const mailOptions = ({
+                from: '"Charlotte" <charlotte.webapp@gmail.com>',
+                to: userDetails.email,
+                subject: 'Email Verification',
+                html: `<p>Click <a href="${verificationLink}">here</a> to verify your email.</p>`
+            });
+            transporter.sendMail(mailOptions, (err, info) => {
+                if (err) {
+                    console.log('Error: ', err);
+                } else {
+                    console.log('Email sent: ', info.response);
+                }
+            });
+    
             return {
                 code: '201',
                 user,
-                apiKey
+                apiKey,
             };
         } catch (error) {
-            await session.abortTransaction();
+            if (session.inTransaction()) {
+                await session.abortTransaction();
+            }
             throw error;
         } finally {
             session.endSession();
         }
     }
+    
     
 
     async loginUser({ email, password }) {

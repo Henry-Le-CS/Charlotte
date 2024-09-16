@@ -9,6 +9,7 @@ const UserSchema = new Schema({
     status: { type: String, default: 'offline' },  // online, offline, busy, etc.
     friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', default: [] }],
     avatar: { type: String, default: ''},
+    isVerified: { type: Boolean, default: false},
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
 }, {

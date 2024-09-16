@@ -10,8 +10,8 @@ class UserRepository {
         return await UserModel.findById(id).populate('friends');
     }
 
-    async findUserByEmail(email) {
-        return await UserModel.findOne({ email }).lean();
+    async findUserByEmail({ email, select = []}) {
+        return await UserModel.findOne({ email }).select(select).lean();
     }
 
     async updateUser({ id, updateData }) {
@@ -21,6 +21,9 @@ class UserRepository {
     async updateUserStatus({ userId, status }) {
         const updatedStatus = !status
         return await UserModel.findByIdAndUpdate(userId, { updatedStatus }, { new: true });
+    }
+    async verified({ userId, isVerified }) {
+        return await UserModel.findByIdAndUpdate(userId, { isVerified }, { new: true });
     }
     async deleteUserByUserId(userId) {
         return await UserModel.deleteOne({ userId })

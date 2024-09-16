@@ -8,7 +8,7 @@ export default new class UserController {
             const results = await userService.registerUser(req.body)
             res.cookie('x-api-key', results.apiKey, { httpOnly: true })
             new CREATED({
-                message: 'User registration successful!!',
+                message: 'User registered, verification email sent',
                 metadata: results.user
             }).send(res);
         } catch (error) {
