@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { FaBars } from "react-icons/fa6";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
-import styles from "./index.scss";
+import styles from "./index.module.scss";
 const ChatSideBar = () => {
     const [lineLeft, setLineLeft] = useState('0');
     const [lineWidth, setLineWidth] = useState('0');
