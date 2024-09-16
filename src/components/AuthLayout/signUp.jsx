@@ -52,7 +52,7 @@ const AuthLayout = () => {
             toast.success(results.message);
             setTimeout(() => navigate('/user/login'), 3000)
         } catch (error) {
-            toast.error('Registration failed: '+ error.response.data.message || error.message);
+            toast.error('Registration failed: '+ error.message);
         }
     };
 
