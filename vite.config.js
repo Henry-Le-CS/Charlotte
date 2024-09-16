@@ -16,6 +16,7 @@ export default defineConfig({
     ],
     build: {
         outDir: 'build',
+        envDir: './buildConfig/environments',
         rollupOptions: {
             treeshake: 'recommended',
             output: {
@@ -39,6 +40,7 @@ export default defineConfig({
             }
         }
     },
+    base: import.meta.env,
     server: {
         port: 3000,
     },
@@ -48,6 +50,6 @@ export default defineConfig({
         },
     },
     define: {
-        'process.env': process.env
+        'process.env': import.meta.env
     }
 })
