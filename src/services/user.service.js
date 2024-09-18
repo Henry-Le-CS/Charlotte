@@ -8,8 +8,6 @@ import ApikeyService from '../services/apiKey.service.js';
 import { AuthFailureError, BadRequestError, NotFoundError } from './../core/error.response.js';
 import KeyTokenService from './keytoken.service.js';
 // export const apiKeyStore = new Map();
-import nodemailer from 'nodemailer';
-import emailVerifyModel from '../models/emailVerify.model.js';
 
 
 
@@ -42,20 +40,12 @@ class UserService {
 
     async registerUser(data) {
         const { userDetails, permissions } = data;
-        const transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 465,
-            secure: true,
-            auth: {
-                user: process.env.GOOGLE_ACCOUNT_EMAIL,
-                pass: process.env.GOOGLE_APP_PASSWORD
-            }
-        })
+        const email = userDetails.email
         const session = await mongoose.startSession();
         session.startTransaction();
     
         try {
-            const existingUser = await UserRepository.findUserByEmail(userDetails.email);
+            const existingUser = await UserRepository.findUserByEmail({ email, select: ['_id']});
             if (existingUser) {
                 throw new BadRequestError('Email is already registered');
             }
@@ -79,55 +69,10 @@ class UserService {
     
             if (!apiKey || !permission) {
                 await UserRepository.deleteUserByUserId(userId);
-                throw new Error('User creation failed. Rolling back...');
+                throw new BadRequestError('User creation failed. Rolling back...');
             }
     
             await session.commitTransaction();
-    
-            const verificationToken = crypto.randomBytes(32).toString('hex');
-            await emailVerifyModel.create({
-                verificationToken,
-                verificationExpires: Date.now() + 3600000,
-                type: 'registration',
-                userId
-            });
-    
-            const verificationLink = `${process.env.SERVER_URI}/signup-verify-email?email=${userDetails.email}&token=${verificationToken}`;
-            const mailOptions = ({
-                from: '"Charlotte" <charlotte.webapp@gmail.com>',
-                to: userDetails.email,
-                subject: 'Email Verification',
-                html: `
-                    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f4f4f4; padding: 20px;">
-                        <tr>
-                            <td align="center">
-                            <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; padding: 40px; border-radius: 8px;">
-                                <tr>
-                                <td align="center" style="font-family: Arial, sans-serif; color: #333333; font-size: 18px;">
-                                    <p style="margin-bottom: 24px;">Vui lòng nhấn nút bên dưới để xác minh địa chỉ email của bạn và hoàn tất đăng ký.</p>
-                                    <a href="${verificationLink}" style="background-color: #4CAF50; color: white; padding: 14px 24px; text-decoration: none; border-radius: 4px; font-size: 16px;">Xác Minh Email</a>
-                                </td>
-                                </tr>
-                                <tr>
-                                <td align="center" style="padding-top: 20px; font-family: Arial, sans-serif; font-size: 14px; color: #999999;">
-                                    <p>Nếu bạn không yêu cầu điều này, vui lòng bỏ qua email này.</p>
-                                </td>
-                                </tr>
-                            </table>
-                            </td>
-                        </tr>
-                        </table>
-
-                `
-            });
-            transporter.sendMail(mailOptions, (err, info) => {
-                if (err) {
-                    console.log('Error: ', err);
-                } else {
-                    console.log('Email sent: ', info.response);
-                }
-            });
-    
             return {
                 code: '201',
                 user,
