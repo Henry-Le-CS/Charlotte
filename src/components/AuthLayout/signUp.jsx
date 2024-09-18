@@ -50,10 +50,10 @@ const AuthLayout = () => {
         try {
             const results = await signup(formData);
             toast.success(results.message);
-            setTimeout(() => navigate('/user/login'), 3000)
+            setTimeout(() => navigate('/email-sent', { state: { email: results.metadata?.email, userId: results.metadata?._id } }), 3000);
         } catch (error) {
-            toast.error('Registration failed: '+ error.message);
-        }
+            toast.error('Registration failed: ' + error.message);
+        }        
     };
 
     useEffect(() => {
