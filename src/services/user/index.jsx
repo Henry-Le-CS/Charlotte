@@ -4,5 +4,6 @@ import { axiosInstance } from '$/http/axios-client.jsx';
 const login = formData => axiosInstance({ formData: true }).post(userEnpoint.login('user'), formData)
 const signup = formData => axiosInstance({ formData: true }).post(userEnpoint.register('user'), formData)
 const search = value => axiosInstance({ formData: true }).post(userEnpoint.search(value))
-export { login, search, signup };
+const sendEmail = ({ email, userId }) => axiosInstance({ formData: true }).post(userEnpoint.sendEmail({ email, userId }), { email, userId });
+export { login, search, sendEmail, signup };
 
