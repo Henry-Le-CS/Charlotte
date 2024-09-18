@@ -92,7 +92,7 @@ class UserService {
                 userId
             });
     
-            const verificationLink = `http://localhost:2055/signup-verify-email?email=${userDetails.email}&token=${verificationToken}`;
+            const verificationLink = `${process.env.SERVER_URI}/signup-verify-email?email=${userDetails.email}&token=${verificationToken}`;
             const mailOptions = ({
                 from: '"Charlotte" <charlotte.webapp@gmail.com>',
                 to: userDetails.email,
