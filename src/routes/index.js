@@ -7,7 +7,7 @@ import user from './user.router.js';
 const router = express.Router();
 
 router.post('/api/user/register', userController.register);
-router.use('/', emailRouter)
+router.use('/api/email', emailRouter)
 
 router.use('/api/user/login', proxyService.createProxyByHttpProxy());
 router.use('/api', proxyService.accessRelease())
