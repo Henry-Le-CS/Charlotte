@@ -69,17 +69,17 @@ export async function emailVerifyForRegistration(req, res, next) {
         const token = req.query.token;
         
         if (!email || !token) {
-            return res.redirect(`${process.env.FRONTEND_URI}/email-verification/success?success=false&message=Missing email or token&status=404`);
+            return res.redirect(`${process.env.FRONTEND_URI}/page-not-found?success=false&message=Missing email or token&status=404`);
         }
 
         const userId = await userRepo.findUserByEmail({ email, select: ['_id'] });
         if (!userId) {
-            return res.redirect(`${process.env.FRONTEND_URI}/email-verification/success?success=false&message=User Not Found&status=404`);
+            return res.redirect(`${process.env.FRONTEND_URI}/page-not-found?success=false&message=User Not Found&status=404`);
         }
 
         const emailVerify = await emailVerifyModel.findOne({ verificationToken: token });
         if (!emailVerify) {
-            return res.redirect(`${process.env.FRONTEND_URI}/email-verification/success?success=false&message=Invalid token&status=404`);
+            return res.redirect(`${process.env.FRONTEND_URI}/page-not-found?success=false&message=Invalid token&status=404`);
         }
 
         await userRepo.verified({ userId, isVerified: true });
@@ -89,7 +89,7 @@ export async function emailVerifyForRegistration(req, res, next) {
 
         return res.redirect(`${process.env.FRONTEND_URI}/email-verification/success?success=true&message=Email verification successful&status=200`);
     } catch (error) {
-        res.redirect(`${process.env.FRONTEND_URI}/email-verification/success?success=false&message=Error verifying email&status=500`);
+        res.redirect(`${process.env.FRONTEND_URI}/page-not-found?success=false&message=Error verifying email&status=500`);
         throw new BadRequestError(error.message);
     }
 }
