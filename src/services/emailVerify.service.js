@@ -59,28 +59,43 @@ export async function sendEmail(req, res){
         }
     });
 }
-
 export async function emailVerifyForRegistration(req, res, next) {
     try {
         const email = req.query.email;
         const token = req.query.token;
+        
+        // Ensure that email and token are provided
+        if (!email || !token) {
+            return res.status(400).json({ success: false, message: "Missing email or token" });
+        }
+
         const userId = await userRepo.findUserByEmail({ email, select: ['_id']});
-        const emailVerify = await emailVerifyModel.findOne({ verificationToken: token})
         if (!userId) {
-            return res.status(400).send('User not found');
+            return res.status(400).json({ success: false, message: 'User not found' });
         }
+
+        const emailVerify = await emailVerifyModel.findOne({ verificationToken: token });
         if (!emailVerify) {
-            return res.status(400).send('Invalid or expired token');
+            return res.status(400).json({ success: false, message: 'Invalid or expired token' });
         }
-        await userRepo.verified({ userId, isVerified: true})
+
+        const isAlreadyVerified = await userRepo.isUserVerified({ userId });
+        if (isAlreadyVerified) {
+            return res.status(200).json({ success: true, message: "Email already verified" });
+        }
+
+        await userRepo.verified({ userId, isVerified: true });
         emailVerify.verificationToken = undefined;
         emailVerify.verificationExpired = Date.now();
-        await emailVerify.save()
-        return res.redirect(`${process.env.FRONTEND_URI}/email-verification/success`);
+        await emailVerify.save();
+
+        return res.status(200).json({ success: true, message: "Email verified successfully" });
     } catch (error) {
-        return res.redirect(`${process.env.FRONTEND_URI}/page-not-found`);
+        console.error("Error in email verification:", error);
+        return res.status(500).json({ success: false, message: 'Verification failed or token expired' });
     }
 }
+
     export async function emailVerifyForLogin(req, res, next) {
         try {
             const email = req.query.email;
@@ -100,5 +115,5 @@ export async function emailVerifyForRegistration(req, res, next) {
             return res.redirect(`${process.env.FRONTEND_URI}/email-verification/success`);
         } catch (error) {
             return res.redirect(`${process.env.FRONTEND_URI}/page-not-found`);
-        }
     }
+}
