@@ -1,36 +1,26 @@
-import { sendEmail } from "$/services/user";
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { sendEmail } from '$/services/email';
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { toast } from 'react-toastify';
-
 const EmailSent = () => {
     const location = useLocation();
     const email = location.state?.email;
     const userId = location.state?.userId;
-    const navigate = useNavigate();
-    const [isVerifying, setIsVerifying] = useState(false);
-
     useEffect(() => {
-        if (email && userId && !isVerifying) {
-            setIsVerifying(true);
+        if (email && userId) {
             sendEmail({ email, userId })
                 .then((response) => {
-                    setIsVerifying(false)
-                    if (response.data.success) {
-                        toast.success('Email verified successfully. Redirect to login...')
-                        setTimeout(() => navigate('/user/login'), 2000)
+                    if (response.message) {
+                        toast.success(response.message);
                     } else {
-                        console.error("Verification failed: ", response.data.message);
+                        toast.error(`Email sending failed: ${response.message}`);
                     }
                 })
                 .catch((error) => {
-                    setIsVerifying(false)
-                    console.error("Failed to send email: ", error.message);
+                    toast.error(`Failed to send email: ${error.message || error}`);
                 });
         }
     }, [email, userId]);
-
-
     return (
         <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden py-6 sm:py-12 bg-white">
             <div className="max-w-xl px-5 text-center">
