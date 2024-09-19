@@ -6,14 +6,14 @@ import emailRouter from './email.router.js';
 import user from './user.router.js';
 const router = express.Router();
 
-router.post('/api/user/register', userController.register);
-router.use('/api/email', emailRouter)
+router.post('/user/register', userController.register);
+router.use('/email', emailRouter)
 
-router.use('/api/user/login', proxyService.createProxyByHttpProxy());
-router.use('/api', proxyService.accessRelease())
+router.use('/user/login', proxyService.createProxyByHttpProxy());
+router.use('/', proxyService.accessRelease())
 router.use(check.apiKey);
 router.use(check.permission());
 
-router.use('/api/user', user);
+router.use('/user', user);
 
 export default router;
