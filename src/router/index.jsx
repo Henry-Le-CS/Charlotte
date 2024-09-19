@@ -18,10 +18,10 @@ const RouterController = () => {
                 <Route path="/user/login" element={<Header><Login /></Header> }/>
                 <Route path="/user/register" element={<Header><SignUp /></Header> }/>
                 <Route path="/chat" element={<Chat /> }/>
+                <Route path="/email-sent" element={<Header><EmailSent /></Header> }/>
                 <Route path="/email-verification/success" element={<Header><Success /></Header> }/>
                 <Route path="/page-not-found" element={<PageNotFound />}/>
                 <Route path="/server-error" element={<ServerError />}/>
-                <Route path="/email-sent" element={<Header><EmailSent /></Header> }/>
             </Routes>
         </Suspense>
     );
