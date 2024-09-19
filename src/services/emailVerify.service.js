@@ -1,6 +1,7 @@
 'use strict'
 import crypto from 'node:crypto';
 import nodemailer from 'nodemailer';
+import { BadRequestError } from '../core/error.response.js';
 import emailVerifyModel from '../models/emailVerify.model.js';
 import userRepo from '../repositories/user.repo.js';
 import { convertToObjectIdMongodb } from './../utils/index.js';
@@ -24,7 +25,7 @@ export async function sendEmail(req, res){
         userId: convertToObjectIdMongodb(userId)
     });
 
-    const verificationLink = `${process.env.SERVER_URI}/signup-verify-email?email=${email}&token=${verificationToken}`;
+    const verificationLink = `${process.env.SERVER_URI}/api/email/signup-verify-email?email=${email}&token=${verificationToken}`;
     const mailOptions = ({
         from: '"Charlotte" <charlotte.webapp@gmail.com>',
         to: email,
@@ -51,11 +52,14 @@ export async function sendEmail(req, res){
                 </table>
         `
     });
-    transporter.sendMail(mailOptions, (err, info) => {
+     transporter.sendMail(mailOptions, (err, info) => {
         if (err) {
-            console.log('Error: ', err);
+            throw new BadRequestError(err.message)
         } else {
-            console.log('Email sent: ', info.response);
+            return res.status(202).json({
+                code: 202,
+                message: 'Email has been sent successfully, waiting for confirmation'
+            })
         }
     });
 }
@@ -64,24 +68,18 @@ export async function emailVerifyForRegistration(req, res, next) {
         const email = req.query.email;
         const token = req.query.token;
         
-        // Ensure that email and token are provided
         if (!email || !token) {
-            return res.status(400).json({ success: false, message: "Missing email or token" });
+            return res.redirect(`${process.env.FRONTEND_URI}/email-verification/success?success=false&message=Missing email or token&status=404`);
         }
 
-        const userId = await userRepo.findUserByEmail({ email, select: ['_id']});
+        const userId = await userRepo.findUserByEmail({ email, select: ['_id'] });
         if (!userId) {
-            return res.status(400).json({ success: false, message: 'User not found' });
+            return res.redirect(`${process.env.FRONTEND_URI}/email-verification/success?success=false&message=User Not Found&status=404`);
         }
 
         const emailVerify = await emailVerifyModel.findOne({ verificationToken: token });
         if (!emailVerify) {
-            return res.status(400).json({ success: false, message: 'Invalid or expired token' });
-        }
-
-        const isAlreadyVerified = await userRepo.isUserVerified({ userId });
-        if (isAlreadyVerified) {
-            return res.status(200).json({ success: true, message: "Email already verified" });
+            return res.redirect(`${process.env.FRONTEND_URI}/email-verification/success?success=false&message=Invalid token&status=404`);
         }
 
         await userRepo.verified({ userId, isVerified: true });
@@ -89,31 +87,9 @@ export async function emailVerifyForRegistration(req, res, next) {
         emailVerify.verificationExpired = Date.now();
         await emailVerify.save();
 
-        return res.status(200).json({ success: true, message: "Email verified successfully" });
+        return res.redirect(`${process.env.FRONTEND_URI}/email-verification/success?success=true&message=Email verification successful&status=200`);
     } catch (error) {
-        console.error("Error in email verification:", error);
-        return res.status(500).json({ success: false, message: 'Verification failed or token expired' });
-    }
-}
-
-    export async function emailVerifyForLogin(req, res, next) {
-        try {
-            const email = req.query.email;
-            const token = req.query.token;
-            const userId = await userRepo.findUserByEmail({ email, select: ['_id']});
-            const emailVerify = await emailVerifyModel.findOne({ verificationToken: token})
-            if (!userId) {
-                return res.status(400).send('User not found');
-            }
-            if (!emailVerify) {
-                return res.status(400).send('Invalid or expired token');
-            }
-            await userRepo.verified({ userId, isVerified: true})
-            emailVerify.verificationToken = undefined;
-            emailVerify.verificationExpired = Date.now();
-            await emailVerify.save()
-            return res.redirect(`${process.env.FRONTEND_URI}/email-verification/success`);
-        } catch (error) {
-            return res.redirect(`${process.env.FRONTEND_URI}/page-not-found`);
+        res.redirect(`${process.env.FRONTEND_URI}/email-verification/success?success=false&message=Error verifying email&status=500`);
+        throw new BadRequestError(error.message);
     }
 }
