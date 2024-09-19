@@ -1,9 +1,31 @@
+// breakpoints
+$mobile: 576px;
+$tablet: 768px;
+$desktop: 992px;
+$large-desktop: 1200px;
+
+@mixin respond-to($breakpoints) {
+    @media only screen and (max-width: $breakpoints) {
+        @content;
+    }
+}
+
 .header_links {
-    width: auto;
+        width: auto;
         display: flex;
         justify-content: space-around;
         position: relative;
         transition: all 0.2s ease;
+        @include respond-to($mobile) {
+            padding-top: 20px;
+            border-radius: 5px;
+            background-color: #a6ddf7;
+            top: 0;
+            position: absolute;
+            left: 0;
+            flex-direction: column;
+            box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+        }
         & > a {
             min-width: 110px;
             padding: 16px 20px 11px 20px;
@@ -16,6 +38,13 @@
             opacity: 0.6;
             cursor: pointer;
             transition: all 0.5s ease;
+                
+            &:first-child {
+                @include respond-to($mobile) {
+                    border-bottom: 1px solid #000;
+                    
+                }
+            }
             &:hover {
                 opacity: 1;
                 background-color: rgba(47, 140, 243, 0.05);
@@ -31,6 +60,9 @@
             border-radius: 15px;
             background-color: var(--primary-header-color);
             transition: all 0.2s ease;
+            @include respond-to($mobile) {
+                display: none;
+            }
         }
     
     

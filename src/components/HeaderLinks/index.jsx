@@ -45,15 +45,16 @@ export default function HeaderLinks() {
             }
         };
     }, [location, lineLeft, lineWidth]);
-
     return (
-        <div className={styles.header_links}>
-            <RouterLinks to='/'>Trang Chủ</RouterLinks>
-            <RouterLinks to='/about'>Giới Thiệu</RouterLinks>
-            <RouterLinks to='/blog'>Blog</RouterLinks>
-            <RouterLinks to='/pages'>Trang</RouterLinks>
-            <RouterLinks to='/contact'>Liên Hệ</RouterLinks>
-            <div className={styles.header_links_line} style={{ left: lineLeft, width: lineWidth }}></div>
-        </div>
+        <>
+            <div className={styles.header_links}>
+                <RouterLinks to='/'>Trang Chủ</RouterLinks>
+                <RouterLinks to='/about'>Giới Thiệu</RouterLinks>
+                <RouterLinks to='/blog'>Blog</RouterLinks>
+                <RouterLinks to='/pages'>Trang</RouterLinks>
+                <RouterLinks to='/contact'>Liên Hệ</RouterLinks>
+                <div className={styles.header_links_line} style={{ left: lineLeft, width: lineWidth }}></div>
+            </div>
+        </>
     );
 }
