@@ -17,7 +17,7 @@ const EmailSent = () => {
                     console.error("Failed to send email: ", error.message);
                 });
         }
-    }, []);
+    }, [email, userId]);
 
     return (
         <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden py-6 sm:py-12 bg-white">
