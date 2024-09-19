@@ -47,7 +47,7 @@ import './dps/init.mongodb.js';
 
 // Import and init routes
 import router from './routes/index.js';
-app.use('/', router);
+app.use('/api', router);
 
 // Handling errors for 404
 app.use((req, res, next) => {
