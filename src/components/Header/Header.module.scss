@@ -24,6 +24,7 @@ $large-desktop: 1200px;
             width: 30px;
             margin-top: 20px;
         }
+
     }
     &_logo {
         @include respond-to($mobile) {
