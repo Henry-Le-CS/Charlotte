@@ -25,11 +25,11 @@ const PasswordInput = forwardRef(({ id, label = 'Password', isInvalid, ...props 
             <div className="relative">
                 <input
                     className={classNames('text-3xl border-none mt-1 w-full px-3 py-2 rounded-lg shadow-sm', {
-                        'field-input--error': !!isInvalid // Ensure this is always a boolean
+                        'field-input--error': !!isInvalid
                     })}
                     id={id}
                     type={isPasswordVisible ? 'text' : 'password'}
-                    ref={ref} // Use ref here instead of innerRef
+                    ref={ref}
                     {...props}
                 />
                 <button
@@ -43,7 +43,6 @@ const PasswordInput = forwardRef(({ id, label = 'Password', isInvalid, ...props 
     );
 });
 
-// Set the display name for better debugging and to fix the eslint error
 PasswordInput.displayName = 'PasswordInput';
 
 PasswordInput.propTypes = {
