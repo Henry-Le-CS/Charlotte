@@ -156,7 +156,7 @@ const AuthLayout = () => {
                         <div className="my-10">
                             <div className="relative text-center">
                                 <span className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-px bg-gray-300"></span>
-                                <span className="text-3xl relative bg-white px-4 text-lg text-gray-500">hoặc</span>
+                                <span className="text-3xl relative bg-white px-4text-gray-500">hoặc</span>
                             </div>
                             <div className="mt-8 grid grid-cols-2 gap-6">
                                 <LoginSocialGoogle

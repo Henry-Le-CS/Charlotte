@@ -1,62 +1,69 @@
-
-
 const ChatContent = () => {
     return (
-        <div className="max-w-md mx-auto p-4">
-            <div className="bg-white rounded-lg shadow-md p-4">
-                <div className="flex items-center mb-4">
-                <div className="ml-3">
-                    <p className="text-xl font-medium">Your AI Assistant</p>
-                    <p className="text-gray-500">Online</p>
-                </div>
-                </div>
-
-                <div className="space-y-4">
-                <div className="flex items-start">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 100 100"
-                        width="100"
-                        height="100"
-                        fill="#009688"
-                        className="w-8 h-8 rounded-full"
-                        >
-
-                        <circle cx="50" cy="50" r="20" fill="#009688" />
-                        <circle cx="50" cy="40" r="2" fill="#fff" />
-                        <rect x="47" y="45" width="6" height="10" fill="#fff" />
-                        <circle cx="50" cy="65" r="3" fill="#009688" />
-                        <circle cx="45" cy="45" r="3" fill="#fff" />
-                        <circle cx="55" cy="45" r="3" fill="#fff" />
-                        <circle cx="45" cy="45" r="1" fill="#000" />
-                        <circle cx="55" cy="45" r="1" fill="#000" />
-
-                        <line x1="50" y1="30" x2="40" y2="20" stroke="#009688" strokeWidth="2" />
-                        <line x1="50" y1="30" x2="60" y2="20" stroke="#009688" strokeWidth="2" />
-                        </svg>
-                    <div className="ml-3 bg-gray-100 p-3 rounded-lg">
-                    <p className="text-sm text-gray-800">Hello! How can I help you today?</p>
-                    </div>
-                </div>
-
-                <div className="flex items-end justify-end">
-                    <div className="bg-blue-500 p-3 rounded-lg">
-                    <p className="text-sm text-white">Sure, I have a question.</p>
-                    </div>
-                    <img src="https://pbs.twimg.com/profile_images/1707101905111990272/Z66vixO-_normal.jpg" alt="Other User Avatar" className="w-8 h-8 rounded-full ml-3" />
-                </div>
-                </div>
-                <div className="mt-4 flex items-center">
-                <input
-                    type="text"
-                    placeholder="Type your message..."
-                    className="flex-1 py-2 px-3 rounded-full bg-gray-100 focus:outline-none"
+      <div className="w-[1670px] h-[90vh] mb-[10vh] px-[5rem] pt-10 font-medium ml-[250px]">
+        <div className="chat chat-start flex">
+            <div className="chat-image avatar flex flex-col">
+                <div className="w-10 rounded-full">
+                <img
+                    alt=""
+                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
                 />
-                <button className="bg-blue-500 text-white px-4 py-2 rounded-full ml-3 hover:bg-blue-600">Send</button>
                 </div>
+                <time className="text-xs opacity-50 bottom-0">12:45</time>
+            </div>
+            <div className="flex flex-col items-start">
+            <div className="chat-bubble max-w-[600px] break-words">
+                        .
+                    </div>
+                <div className="chat-footer opacity-50">Delivered</div>
             </div>
         </div>
-    )
-}
+  
+        <div className="chat chat-end">
+          <div className="chat-image avatar">
+            <div className="w-10 rounded-full">
+              <img
+                alt=""
+                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+              />
+            </div>
+          </div>
+          <div className="chat-bubble max-w-xs break-words">I hate you!</div>
+          <div className="chat-footer opacity-50">Seen at 12:46</div>
+          <time className="text-xs opacity-50">12:46</time>
+        </div>
 
-export default ChatContent
+        <form className="w-[1670px] h-[10vh] px-[5rem] pt-10 font-medium ml-[250px] flex fixed bottom-0 left-0">
+            <label htmlFor="chat" className="sr-only">Your message</label>
+            <div className="flex items-center px-3 py-2 rounded-lg bg-gray-50 dark:bg-gray-700">
+                <button type="button" className="inline-flex justify-center p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
+                    <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 18">
+                        <path fill="currentColor" d="M13 5.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM7.565 7.423 4.5 14h11.518l-2.516-3.71L11 13 7.565 7.423Z"/>
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 1H2a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z"/>
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 5.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM7.565 7.423 4.5 14h11.518l-2.516-3.71L11 13 7.565 7.423Z"/>
+                    </svg>
+                    <span className="sr-only">Upload image</span>
+                </button>
+                <button type="button" className="p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
+                    <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.408 7.5h.01m-6.876 0h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM4.6 11a5.5 5.5 0 0 0 10.81 0H4.6Z"/>
+                    </svg>
+                    <span className="sr-only">Add emoji</span>
+                </button>
+                <textarea id="chat" rows="1" className="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Your message..."></textarea>
+                <button type="submit" className="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600">
+                    <svg className="w-5 h-5 rotate-90 rtl:-rotate-90" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+                        <path d="m17.914 18.594-8-18a1 1 0 0 0-1.828 0l-8 18a1 1 0 0 0 1.157 1.376L8 18.281V9a1 1 0 0 1 2 0v9.281l6.758 1.689a1 1 0 0 0 1.156-1.376Z"/>
+                    </svg>
+                    <span className="sr-only">Send message</span>
+                </button>
+            </div>
+        </form>
+
+
+      </div>
+    );
+  };
+  
+  export default ChatContent;
+  
