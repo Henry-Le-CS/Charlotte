@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import { LoginSocialFacebook, LoginSocialGoogle } from 'reactjs-social-login';
 import loginImg from '../../../design/1558355117500.jfif';
 import RouterLinks from '../RouterLinks/index';
-
+import styles from './index.module.scss';
 const AuthLayout = () => {
     const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors }, control, setValue } = useForm({
@@ -50,7 +50,7 @@ const AuthLayout = () => {
         toast.error(err);
     }
     return (
-        <div className="p-10 min-h-screen flex items-center justify-center bg-gray-50">
+        <div className={`p-10 min-h-screen flex items-center justify-center bg-gray-50 ${styles.container}`}>
             <div className="flex lg:flex-row lg:w-[80%] shadow-lg rounded-xl min-h-[60vh]">
                 <img className='max-w-[450px] rounded-l-lg' src={loginImg} alt="" />
                 <div className="bg-white w-full flex items-center justify-center">
