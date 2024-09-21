@@ -11,14 +11,14 @@
     --black-text-color: #000;
     --primary-header-color: #a6ddf7;
     --primary-color: #a6ddf7;
-    --primary-chat-background-color: {
-        background: rgb(143,199,247);
-        background: linear-gradient(143deg, rgba(143,199,247,1) 41%, rgba(146,0,194,1) 67%);
-    }
+    --chat-sidebar-color: #e0e1ff;
+    --chat-sidebar-dark-color: #1f1f22;
+    --chat-content-dark-color: #1a1a1e;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    --chat-my-message-color: 'bg-gradient-to-r from-cyan-500 to-blue-500';
 }
 * {
     box-sizing: border-box;
@@ -105,7 +105,6 @@ $large-desktop: 1200px;
         animation: logo-spin infinite 20s linear;
     }
 }
-
 .App {
     height: auto;
 }
@@ -197,4 +196,67 @@ a {
 } 
 .Toastify__toast > button>  svg {
     display: none;
+}
+
+textarea {
+    resize: none;
+    &.auto {
+        overflow-y: hidden;
+    }
+}
+
+// Some styles
+
+textarea {
+    -webkit-appearance: none;
+    box-sizing: border-box;
+    outline: none;
+    width: 100%;
+    font-size: 14px;
+    font-family: 'Inter';
+    line-height: 30px;
+    min-height: 40px;
+    border-radius: 5px;
+    color: #404660;
+    background: #fff;
+    transition: box-shadow .25s;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    resize: none;
+    bottom: 0;
+    left: 0;
+    &:focus {
+       --focus-color: #ECEFFC;
+    }
+    &:focus,
+    &:hover {
+        --border-color: #BBC1E1;
+    }
+}
+
+
+pre {
+    margin: 60px 0 0 0;
+    padding: 20px 24px;
+    border-radius: 15px;
+    background: #171827;
+    code {
+        font-family: 'Fira Mono';
+        color: #BBC1E1;
+        line-height: 1.4;
+        font-size: 12px;
+        .token {
+            &.function {
+                color: #5C86FF;
+            }
+            &.string {
+                color: #F0B849;
+            }
+            &.parameter {
+                color: #CB7DD0;
+            }
+            &.punctuation {
+                color: #8A91B4;
+            }
+        }    
+    }
 }

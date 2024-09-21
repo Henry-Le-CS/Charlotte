@@ -28,6 +28,7 @@ export default {
         'yellow': 'var(--yellow)',
         'gray': 'var(--gray)',
         'gray-red': 'var(--text-dark)',
+        'chat-my-message-color': 'var(--chat-my-message-color)',
       },
       fontFamily: {
         'body': 'var(--body-font)',
