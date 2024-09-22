@@ -47,12 +47,12 @@ export default new class ProxyService {
             changeOrigin: true,
         });
 
-        return (req, res, next) => {
+        return async (req, res, next) => {
             try {
                 const email = req.body.email
-                const userId = userRepo.findUserByEmail({ email, select: ['_id'] })
+                const userId = await userRepo.findUserByEmail({ email, select: ['_id'] })
                 if (!userId) throw new NotFoundError('User not found');
-                const key = ApiKeyRepository.findByUserId(userId)
+                const key = await ApiKeyRepository.findByUserId(userId)
                 const apiKey = req.cookies[COOKIES.API_KEY] || key;
                 if (!apiKey) throw new NotFoundError('API key not found');
                 req.headers['x-api-key'] = apiKey;

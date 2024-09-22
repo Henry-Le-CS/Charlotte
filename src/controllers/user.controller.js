@@ -6,7 +6,7 @@ export default new class UserController {
     register = async (req, res, next) => {
         try {
             const results = await userService.registerUser(req.body)
-            res.cookie('x-api-key', results.apiKey, { httpOnly: true })
+            res.cookie('x-api-key', results.apiKey, { httpOnly: true, secure: true, sameSite: 'None' })
             new CREATED({
                 message: 'User registered, verification email sent',
                 metadata: results.user
@@ -23,9 +23,9 @@ export default new class UserController {
     loginUser = async (req, res, next) => {
         try {
             const results = await userService.loginUser(req.body)
-            res.cookie('x-rtoken-id', results.tokens.refreshToken, { httpOnly: true })
-            res.cookie('authorization', results.tokens.accessToken, { httpOnly: true })
-            res.cookie('x-client-id', results.user._id, { httpOnly: true })
+            res.cookie('x-rtoken-id', results.tokens.refreshToken, { httpOnly: true, secure: true, sameSite: 'None' })
+            res.cookie('authorization', results.tokens.accessToken, { httpOnly: true, secure: true, sameSite: 'None' })
+            res.cookie('x-client-id', results.user._id, { httpOnly: true, secure: true, sameSite: 'None' })
             new SuccessResponse({
                 message: 'You have been logged successfully',
                 metadata: results.user

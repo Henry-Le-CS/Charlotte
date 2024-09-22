@@ -91,25 +91,25 @@ class UserService {
     
 
     async loginUser({ email, password }) {
-        const user = await UserRepository.findUserByEmail(email);
+        const user = await UserRepository.findUserByEmail({email});
         if (!user || !await bcrypt.compare(password, user.password_hash)) {
             throw new BadRequestError('Invalid credentials');
         }
-
+        const userId = user._id
         // Generate JWT token pair
-        const tokens = this.generateTokenPair({ id: user._id });
+        const tokens = this.generateTokenPair({ id: userId });
         // Save tokens
-        await KeyTokenService.saveToken(user._id, tokens.refreshToken, tokens.privateKey, tokens.publicKey);
+        await KeyTokenService.saveToken(userId, tokens.refreshToken, tokens.privateKey, tokens.publicKey);
 
         // Update user status
-        await UserRepository.updateUserStatus(user._id, 'online');
+        await UserRepository.updateUserStatus({userId, status: 'online'});
 
         return { user, tokens: { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken } };
     }
 
     async logoutUser(userId) {
         await KeyTokenService.removeTokensByUserId(userId);
-        await UserRepository.updateUserStatus(userId, 'offline');
+        await UserRepository.updateUserStatus({ userId, status: 'offline'});
     }
 
     async refreshAccessToken(refreshToken) {

@@ -12,7 +12,6 @@ export default new class Check {
     apiKey = async (req, res, next) => {
         try {
             const key = req.headers[HEADER.API_KEY]?.key.toString()
-            console.log(key)
             if (!key) {
                 return res.status(403).json({
                     message: 'Forbidden Error'
