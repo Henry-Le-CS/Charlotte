@@ -3,6 +3,9 @@ $color: #b2c9e4;
 
 .container {
     padding-bottom: 0 !important;
+    @include respond-to($mobile) {
+        display: none;
+    }
     ul li {
         width: 250px;
         height: 100%;
