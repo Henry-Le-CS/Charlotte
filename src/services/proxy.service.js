@@ -2,6 +2,8 @@
 import httpProxy from 'http-proxy';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { NotFoundError } from '../core/error.response.js';
+import ApiKeyRepository from '../repositories/apiKey.repo.js';
+import userRepo from '../repositories/user.repo.js';
 const COOKIES = {
     CLIENT_ID: 'x-client-id',
     API_KEY: 'x-api-key',
@@ -47,7 +49,11 @@ export default new class ProxyService {
 
         return (req, res, next) => {
             try {
-                const apiKey = req.cookies[COOKIES.API_KEY];
+                const email = req.body.email
+                const userId = userRepo.findUserByEmail({ email, select: ['_id'] })
+                if (!userId) throw new NotFoundError('User not found');
+                const key = ApiKeyRepository.findByUserId(userId)
+                const apiKey = req.cookies[COOKIES.API_KEY] || key;
                 if (!apiKey) throw new NotFoundError('API key not found');
                 req.headers['x-api-key'] = apiKey;
                 proxy.web(req, res, {

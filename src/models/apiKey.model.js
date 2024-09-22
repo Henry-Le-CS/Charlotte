@@ -14,7 +14,7 @@ const apiKeySchema = new Schema({
         default: true,
     },
     permissions: { type: Schema.Types.ObjectId, ref: 'Permission'},
-    userId: { 
+    userId: {
         type: Schema.Types.ObjectId, 
         ref: 'User'
     }

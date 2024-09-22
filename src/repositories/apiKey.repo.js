@@ -13,6 +13,10 @@ class ApiKeyRepository {
         return await ApikeyModel.findOne({ key, status: true }).lean();
     }
 
+    // Tìm API Key bằng Email
+    static async findByUserId(userId) {
+        return await ApikeyModel.findOne({ userId, status: true }).select('key').lean();
+    }
     // Cập nhật trạng thái của API key
     static async updateStatus(key, status) {
         return await ApikeyModel.findOneAndUpdate({ key }, { status }, { new: true });
