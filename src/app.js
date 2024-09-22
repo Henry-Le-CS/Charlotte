@@ -10,7 +10,7 @@ const app = express();
 
 // CORS configuration
 var corsOptions = {
-    origin: ['http://localhost:3000', 'https://charlotte-webapp.vercel.app', 'https://charlotte-git-master-undergrsystems-projects.vercel.app'],
+    origin: ['http://localhost:3000', 'https://charlotte-webapp.vercel.app', 'https://charlotte-git-master-undergrsystems-projects.vercel.app', 'https://charlotte.io.vn'],
     credentials: true,
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     allowedHeaders: ['Content-Type', 'authorization', 'ngrok-skip-browser-warning', 'x-api-key', 'x-client-id', 'x-rtoken-id'] 
@@ -21,7 +21,7 @@ app.options('*', cors(corsOptions));
 const upload = multer();
 app.use(upload.none());
 app.use((req, res, next) => {
-    const allowedOrigins = ['http://localhost:3000', 'https://charlotte-webapp.vercel.app', 'https://charlotte-git-master-undergrsystems-projects.vercel.app'];
+    const allowedOrigins = ['http://localhost:3000', 'https://charlotte-webapp.vercel.app', 'https://charlotte-git-master-undergrsystems-projects.vercel.app', 'https://charlotte.io.vn'];
     const origin = req.headers.origin;
     if (allowedOrigins.includes(origin)) {
         res.header('Access-Control-Allow-Origin', origin);
