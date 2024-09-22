@@ -1,15 +1,160 @@
-.chat_sidebar_heading {
-    width: auto;
+
+$color: #b2c9e4;
+
+.container {
+    padding-bottom: 0 !important;
+    ul li {
+        width: 250px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        margin: 1.5em;
+        cursor: pointer;
+        padding: 10px;
+        background: rgb(43, 43, 43);
+        position: relative;
+        color: white;
+        border-radius: 5px;
+    }
+    ul li::before,
+    ul li::after {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        border-radius: 5px;
+        width: 105%;
+        transition: all 0.4s;
+    }
+    ul li::before {
+        left: 0%;
+        height: 130%;
+        background: linear-gradient(to right, #021B79, #0575E6);
+    }
+    ul li::after {
+        left: -10%;
+        height: 120%;
+        background: #ffffff56;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.164);
+    }
+    ul li:hover::before {
+        transform: translateX(-2.5%);
+    }
+    ul li:hover::after {
+        transform: translateX(15%);
+    }
+    
+    svg {
+        margin-left: 10px;
+        color: $color;
+        width: 20px;
+        height: 20px;
+        &:hover {
+            cursor: pointer;
+            color: #0575E6;
+            transition: color 1s ease;
+            fill: none;
+            
+            stroke-width: 1.5px;
+            stroke-dashoffset: 212.908 + 59;
+            stroke-dasharray: 59 212.908;
+        }
+    }
+
+    
+}
+
+.search {
+    display: table;
+    input {
+        background: none;
+        border: none;
+        outline: none !important;
+        width: 30px;
+        min-width: 0;
+        padding: 0;
+        z-index: 1;
+        position: relative;
+        line-height: 20px;
+        margin: 5px 0;
+        font-size: 20px;
+        -webkit-appearance: none;
+        font-family: 'Mukta Malar';
+        transition: all .6s ease;
+        cursor: pointer;
+        color: $color;
+        
+        &:focus {
+            box-shadow: none !important;
+        }
+    
+        & + div {
+            position: relative;
+            height: 30px;
+            width: 100%;
+            margin: -28px 0 0 0;
+            svg {
+                display: block;
+                position: absolute;
+                height: 28px;
+                width: 160px;
+                right: 0;
+                top: 0;
+                fill: none;
+                stroke: $color;
+                stroke-width: 1.5px;
+                stroke-dashoffset: 212.908 + 59;
+                stroke-dasharray: 59 212.908;
+                transition: all .6s ease;
+            }
+        }
+        &:not(:placeholder-shown),
+        &:focus {
+            width: 160px;
+            padding: 0 4px;
+            cursor: text;
+            &+ div {
+                svg {
+                    stroke-dasharray: 150 212.908;
+                    stroke-dashoffset: 300;
+                }
+            }
+        }
+    }
+}
+
+::selection {
+    background: rgba(#fff, .2);
+}
+::-moz-selection {
+    background: rgba(#fff, .2);
+}
+
+
+// breakpoints
+$mobile: 576px;
+$tablet: 768px;
+$desktop: 992px;
+$large-desktop: 1200px;
+
+@mixin respond-to($breakpoints) {
+    @media only screen and (max-width: $breakpoints) {
+        @content;
+    }
+}
+
+.header_links {
+        margin-top: 15px;
+        width: auto;
         display: flex;
         justify-content: space-around;
         position: relative;
         transition: all 0.2s ease;
-        & > a {
-            min-width: 110px;
-            padding: 16px 20px 11px 20px;
-            font-size: 20px;
+        & > span {
+            padding-bottom: 3px;
+            height: 100%;
             text-align: center;
-            color: #000;
+            color: $color;
             border-top-left-radius: 5px;
             border-top-right-radius: 5px;
             border-bottom: 5px solid transparent;
@@ -18,6 +163,7 @@
             transition: all 0.5s ease;
             &:hover {
                 opacity: 1;
+                cursor: pointer;
                 background-color: rgba(47, 140, 243, 0.05);
                 border-color: rgba(47, 140, 243, 0.1);
             }
@@ -25,10 +171,11 @@
         &_line {
             position: absolute;
             left: 0;
+            bottom: 0;
             width: 0;
             height: 6px;
             border-radius: 15px;
-            background-color: var(--primary-header-color);
+            background-color: $color;
             transition: all 0.2s ease;
         }
     

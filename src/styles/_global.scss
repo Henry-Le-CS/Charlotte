@@ -9,16 +9,22 @@
     font-weight: 400;
     --white-text-color: #fff;
     --black-text-color: #000;
-    --primary-header-color: #a6ddf7;
-    --primary-color: #a6ddf7;
     --chat-sidebar-color: #e0e1ff;
     --chat-sidebar-dark-color: #1f1f22;
     --chat-content-dark-color: #1a1a1e;
+    --primary-header-color: #2f8cf3;
+    --primary-color: #2f8cf3;
+    --navbar-width: 256px;
+    --navbar-width-min: 80px;
+    --navbar-dark-primary: #18283b;
+    --navbar-dark-secondary: #2c3e50;
+    --navbar-light-primary: #f5f6fa;
+    --navbar-light-secondary: #8392a5;
+    --icon-color: #b2c9e4;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    --chat-my-message-color: 'bg-gradient-to-r from-cyan-500 to-blue-500';
 }
 * {
     box-sizing: border-box;
@@ -56,12 +62,8 @@ $large-desktop: 1200px;
 /******************************/
 /* Set for scrollbar - thanh cuộn */
 ::-webkit-scrollbar {
-    width: 10px;
-    border-radius: 10px;
-    @include respond-to($mobile) {
-        width: 0;
-        height: 0;
-    }
+    width: 0;
+    height: 0;
 }
 
 /* Track */
@@ -226,6 +228,7 @@ textarea {
     left: 0;
     &:focus {
        --focus-color: #ECEFFC;
+       box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px !important; 
     }
     &:focus,
     &:hover {
@@ -259,4 +262,35 @@ pre {
             }
         }    
     }
+}
+
+.bubble {
+	// layout
+	position: relative;
+	max-width: 30em;
+	
+	// looks
+	background-color: #fff;
+	padding: 1.125em 1.5em;
+	font-size: 1.25em;
+	border-radius: 1rem;
+    box-shadow:	0 0.125rem 0.5rem rgba(0, 0, 0, .3), 0 0.0625rem 0.125rem rgba(0, 0, 0, .2);
+    &::before {
+        // layout
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 0;
+        bottom: 100%;
+        left: 1.5em; // offset should move with padding of parent
+        border: .75rem solid transparent;
+        border-top: none;
+
+        // looks
+        border-bottom-color: #fff;
+        filter: drop-shadow(0 -0.0625rem 0.0625rem rgba(0, 0, 0, .1));
+    }
+}
+.bubble-shadow {
+    box-shadow:	0 0.125rem 0.5rem rgba(0, 0, 0, .3), 0 0.0625rem 0.125rem rgba(0, 0, 0, .2);
 }

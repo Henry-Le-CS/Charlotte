@@ -1,131 +1,158 @@
 
-// import { search } from "$/services/user";
-// import classNameNames from "classNamenames";
-// import { useEffect, useState } from "react";
-// import { useForm } from "react-hook-form";
-// import { FaBars } from "react-icons/fa6";
-// import { useLocation } from "react-router-dom";
-// import { toast } from "react-toastify";
-// import styles from "./index.module.scss";
+import ririka from '$/assets/profile.jpg';
+import { search } from "$/services/user";
+import { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { BiBell } from "react-icons/bi";
+import { IoEllipsisHorizontal } from "react-icons/io5";
+import { TbUserPlus, TbUsersPlus } from "react-icons/tb";
+import { toast } from "react-toastify";
+import UserStatus from '../UserStatus';
+import styles from "./index.module.scss";
 const ChatSideBar = () => {
-    // const { handleSubmit, formState: setValue } = useForm({
-    //     defaultValues: {
-    //         searchValue: ''
-    //     }
-    // });
+    const inputRef = useRef(null);
+    const [lineLeft, setLineLeft] = useState('0');
+    const [lineWidth, setLineWidth] = useState('0');
+    useEffect(() => {
+        const headerLinks = document.querySelector(`.${styles.header_links}`);
+
+        const updateLinePosition = (element) => {
+            setLineLeft(element.offsetLeft + 'px');
+            setLineWidth(element.offsetWidth + 'px');
+        };
+
+        const setActiveLink = () => {
+            const currentPath = location.pathname;
+            if (headerLinks) {
+                const children = Array.from(headerLinks.children);
+                const activeChild = children.find((child) => child.getAttribute('href') === currentPath);
+
+                if (activeChild) {
+                    updateLinePosition(activeChild);
+                }
+            }
+        };
+
+        if (headerLinks) {
+            const children = Array.from(headerLinks.children);
+            children.forEach((child) => {
+                child.addEventListener('click', () => updateLinePosition(child));
+            });
+        }
+
+        setActiveLink(); 
+        return () => {
+            if (headerLinks) {
+                const children = Array.from(headerLinks.children);
+                children.forEach((child) => {
+                    child.removeEventListener('click', () => updateLinePosition(child));
+                });
+            }
+        };
+    }, [location, lineLeft, lineWidth]);
+    const { handleSubmit, register, setValue } = useForm({
+        defaultValues: {
+          searchValue: ''
+        }
+      });
     
-    // const onSearch = async (data) => {
-    //     const value = new FormData();
-
-    //     Object.keys(data).forEach(key => {
-    //         if (typeof data[key] === 'object' && data[key] !== null) {
-    //             Object.keys(data[key]).forEach(subKey => {
-    //                 if (data[key][subKey] !== '') {
-    //                     setValue(`${key}.${subKey}`, data[key][subKey]);
-    //                     value.append(`${key}[${subKey}]`, data[key][subKey]);
-    //                 }
-    //             });
-    //         } else if (data[key] !== '') {
-    //             setValue(key, data[key]); 
-    //             value.append(key, data[key]);
-    //         }
-    //     });
-
-    //     try {
-    //         const results = await search(value);
-    //         if(!results.data.length) toast.error('Không tìm thấy kết quả')
-    //         toast.success(results.message);
-    //     } catch (error) {
-    //         toast.error('Lỗi tìm kiếm: ' + error.response.data.message || error.message || error);
-    //     }
-    // };
+      const onSearch = async (data) => {
+        const formData = new FormData();
+    
+        Object.keys(data).forEach((key) => {
+          if (data[key] !== '') {
+            setValue(key, data[key]);
+            formData.append(key, data[key]);
+          }
+        });
+    
+        try {
+          const results = await search(formData);
+          if (!results.data.length) {
+            toast.error('Không tìm thấy kết quả');
+          } else {
+            toast.success(results.message);
+          }
+        } catch (error) {
+          toast.error('Lỗi tìm kiếm: ' + (error.response?.data?.message || error.message || error));
+        }
+      };
+      const handleFocusInput = () => {
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
+      };
     return (
-        <nav className="bg-[var(--chat-sidebar-color)] shadow-lg h-screen fixed top-0 left-0 min-w-[250px] py-6 px-4 flex-col text-[var(--black-text-color)]">
-            <div className="flex flex-wrap items-center cursor-pointer text-5xl">
-                <div className="relative">
-                    <img src='https://readymadeui.com/profile_2.webp' className="w-12 h-12 p-1 rounded-full border-2 border-gray-300" />
-                    <span className="h-3 w-3 rounded-full bg-green-600 block absolute bottom-1 right-0"></span>
+        <div className={`${styles.container}`}>
+                {/* Sidebar Header */}
+                <div className="w-full h-[150px] bubble-shadow p-3">
+                    {/* Top Sidebar Header: Profile */}
+                    <div className="flex h-[60px] justify-between items-center">
+                        <div className="flex items-center">
+                            <div className='relative size-[50px] pt-[5px]'>
+                                <img src={ririka} alt="" className="size-[40px] rounded-full object-cover" />
+                                <UserStatus status='active' />
+                            </div>
+                            <h5 className="text-white font-mono">Shibayama Ririka</h5>
+                        </div>
+                        <div className="flex items-center">
+                            <BiBell />
+                            <IoEllipsisHorizontal />
+                        </div>
+                    </div>
+                    {/* Middle Sidebar Header: Tools */}
+                    <div className="flex justify-center items-center">
+                        <div>
+                            <form onSubmit={handleSubmit(onSearch)} className={styles.search}>
+                                <input
+                                    type="text"
+                                    placeholder=" "
+                                    {...register('searchValue')}
+                                    ref={inputRef}
+                                />
+                                <div>
+                                    <svg>
+                                    <use xlinkHref="#path" />
+                                    </svg>
+                                </div>
+                            </form>
+                                    
+                            <svg xmlns="http://www.w3.org/2000/svg" style={{ display: 'none' }}>
+                                <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 28" id="path">
+                                    <path d="M32.9418651,-20.6880772 C37.9418651,-20.6880772 40.9418651,-16.6880772 40.9418651,-12.6880772 C40.9418651,-8.68807717 37.9418651,-4.68807717 32.9418651,-4.68807717 C27.9418651,-4.68807717 24.9418651,-8.68807717 24.9418651,-12.6880772 C24.9418651,-16.6880772 27.9418651,-20.6880772 32.9418651,-20.6880772 L32.9418651,-29.870624 C32.9418651,-30.3676803 33.3448089,-30.770624 33.8418651,-30.770624 C34.08056,-30.770624 34.3094785,-30.6758029 34.4782612,-30.5070201 L141.371843,76.386562" transform="translate(83.156854, 22.171573) rotate(-225.000000) translate(-83.156854, -22.171573)"></path>
+                                </symbol>
+                            </svg>
+                        </div>
+                        <TbUserPlus onClick={handleFocusInput}/>
+                        <TbUsersPlus />
+                    </div>
+                        {/* Bottom Sidebar Header: Options */}
+                    <div className={styles.header_links}>
+                        <span>Đang hoạt động</span>
+                        <span>Yêu thích</span>
+                        <span>Tất cả</span>
+                        <div className={styles.header_links_line} style={{ left: lineLeft, width: lineWidth }}></div>
+                    </div>
                 </div>
-
-                <div className="ml-6">
-                    <p className="text-sm">Hello</p>
-                    <h6 className="text-lg">John Doe</h6> {/* Updated size */}
+                <div className="h-full w-[305px] bubble-shadow overflow-scroll">
+                    <ul className="">
+                        <li className="w-[60px] flex justify-center items-center">
+                            <div className='relative size-[60px] pt-[10px]'>
+                                <img src="https://wallpaperaccess.com/full/5665706.jpg" alt="" className="size-[40px] rounded-full object-cover" />
+                                <UserStatus status='active' />
+                            </div>
+                            <div className="w-full flex items-center justify-center flex-col px-4">
+                                <div className="w-full flex items-center justify-between">
+                                    <h6>Thầy Lỏ</h6>
+                                    <time dateTime="">9:00</time>
+                                </div>
+                                <p className="max-h-[20px] pr-[10px] overflow-hidden text-ellipsis">Trong quá trình học, nếu có nội dung nào không rõ, các bạn đặt câu hỏi để tui giải thích. Hoặc sau buổi học, có thể hỏi qua tin nhắn hoặc gọi điện thoại</p>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
-
-            <hr className="border-gray-500 mt-8" />
-
-            <div className="my-8 flex-1">
-                <h6 className="text-xl inline-block">Teams</h6> {/* Updated size */}
-                <svg xmlns="http://www.w3.org/2000/svg" fill="" className="w-[15px] h-[15px] float-right cursor-pointer ml-auto" viewBox="0 0 118.783 118.783">
-                    <path d="M115.97 101.597 88.661 74.286a47.75 47.75 0 0 0 7.333-25.488c0-26.509-21.49-47.996-47.998-47.996S0 22.289 0 48.798c0 26.51 21.487 47.995 47.996 47.995a47.776 47.776 0 0 0 27.414-8.605l26.984 26.986a9.574 9.574 0 0 0 6.788 2.806 9.58 9.58 0 0 0 6.791-2.806 9.602 9.602 0 0 0-.003-13.577zM47.996 81.243c-17.917 0-32.443-14.525-32.443-32.443s14.526-32.444 32.443-32.444c17.918 0 32.443 14.526 32.443 32.444S65.914 81.243 47.996 81.243z"
-                        data-original="#000000"></path>
-                </svg>
-
-                <ul className="mt-6 space-y-6">
-                    <li className="flex items-center text-lg cursor-pointer"> {/* Updated size */}
-                        <span className="relative inline-block mr-4">
-                            <img src='https://readymadeui.com/profile_3.webp' className="w-10 h-10 p-1 rounded-full border-2 border-gray-300" />
-                            <span className="h-3 w-3 rounded-full bg-green-600 block absolute bottom-1 right-0"></span>
-                        </span>
-                        Peter Taylor
-                        <span className="bg-red-500 min-w-[20px] min-h-[20px] px-1 flex items-center justify-center font-bold rounded-full ml-auto">1</span>
-                    </li>
-                    <li className="flex items-center text-lg cursor-pointer"> {/* Updated size */}
-                        <span className="relative inline-block mr-4">
-                            <img src='https://readymadeui.com/profile_4.webp' className="w-10 h-10 p-1 rounded-full border-2 border-gray-300" />
-                            <span className="h-3 w-3 rounded-full bg-green-600 block absolute bottom-1 right-0"></span>
-                        </span>
-                        Johne Words
-                        <span className="bg-red-500 min-w-[20px] min-h-[20px] px-1 flex items-center justify-center font-bold rounded-full ml-auto">5</span>
-                    </li>
-                    <li className="flex items-center text-lg cursor-pointer"> {/* Updated size */}
-                        <span className="relative inline-block mr-4">
-                            <img src='https://readymadeui.com/profile_5.webp' className="w-10 h-10 p-1 rounded-full border-2 border-gray-300" />
-                            <span className="h-3 w-3 rounded-full bg-yellow-500 block absolute bottom-1 right-0"></span>
-                        </span>
-                        Alen Walwa
-                    </li>
-                    <li className="flex items-center text-lg cursor-pointer"> {/* Updated size */}
-                        <span className="relative inline-block mr-4">
-                            <img src='https://readymadeui.com/profile.webp' className="w-10 h-10 p-1 rounded-full border-2 border-gray-300" />
-                            <span className="h-3 w-3 rounded-full bg-green-600 block absolute bottom-1 right-0"></span>
-                        </span>
-                        Justin
-                    </li>
-                    <li className="flex items-center text-lg cursor-pointer"> {/* Updated size */}
-                        <span className="relative inline-block mr-4">
-                            <img src='https://readymadeui.com/team-1.webp' className="w-10 h-10 p-1 rounded-full border-2 border-gray-300" />
-                            <span className="h-3 w-3 rounded-full bg-yellow-500 block absolute bottom-1 right-0"></span>
-                        </span>
-                        Mark Adele
-                    </li>
-                    <li className="flex items-center text-lg cursor-pointer"> {/* Updated size */}
-                        <span className="relative inline-block mr-4">
-                            <img src='https://readymadeui.com/team-2.webp' className="w-10 h-10 p-1 rounded-full border-2 border-gray-300" />
-                            <span className="h-3 w-3 rounded-full bg-green-600 block absolute bottom-1 right-0"></span>
-                        </span>
-                        Ammie Kolhe
-                        <span className="bg-red-500 min-w-[20px] min-h-[20px] px-1 flex items-center justify-center font-bold rounded-full ml-auto">2</span>
-                    </li>
-                    <li className="flex items-center text-lg cursor-pointer"> {/* Updated size */}
-                        <span className="relative inline-block mr-4">
-                            <img src='https://readymadeui.com/team-3.webp' className="w-10 h-10 p-1 rounded-full border-2 border-gray-300" />
-                            <span className="h-3 w-3 rounded-full bg-green-600 block absolute bottom-1 right-0"></span>
-                        </span>
-                        Piterson
-                    </li>
-                    <li className="flex items-center text-lg cursor-pointer"> {/* Updated size */}
-                        <span className="relative inline-block mr-4">
-                            <img src='https://readymadeui.com/team-4.webp' className="w-10 h-10 p-1 rounded-full border-2 border-gray-300" />
-                            <span className="h-3 w-3 rounded-full bg-yellow-500 block absolute bottom-1 right-0"></span>
-                        </span>
-                        Angue Watson
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    )
-}
+  );
+};
 
 export default ChatSideBar
