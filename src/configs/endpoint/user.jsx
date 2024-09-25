@@ -1,11 +1,10 @@
 const userEnpoint = {
-    // SIGN IN
     login: (user) => `/${user}/login`,
-    // REGISTER
+    logout: (userId) => `/user/logout?userId=${userId}`,
     register: (user) => `/${user}/register`,
     // UPDATE INFOMATION
     updateInfomation: (id) => `/user/${id}/updating`,
-    search: (value) => `/user/${value}`
+    search: (value) => `/user/search?value=${value}`
 }
 
 export default userEnpoint

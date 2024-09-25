@@ -1,4 +1,3 @@
-import homeImage from '$/assets/chat-app-example-image.png';
 import RouterLinks from '$/components/RouterLinks';
 import { FaArrowRight, FaVideo } from "react-icons/fa";
 import { MdAccessTime } from "react-icons/md";
@@ -10,7 +9,7 @@ const Home = () => {
         <div className={styles.home} id='home'>
             <div className={styles.home_container}>
                 <div className={styles.home_container_leftside}>
-                    <h1>Cùng Xây Dựng Cộng Đồng Của Bạn Ngay Hôm Nay!</h1>
+                    <h1 className='font-sans'>Chat Box Thế Hệ Mới, Giao Diện Mới, Cuộc Sống Mới</h1>
                     <p>Phần mềm tuyệt vời giúp bạn trò chuyện mọi lúc, mọi nơi mà không lo bị gián đoạn.</p>
                     <div className={styles.home_start_button}>
                         <RouterLinks to='/user/login'>Bắt Đầu Trò Chuyện Ngay</RouterLinks>
@@ -18,7 +17,7 @@ const Home = () => {
                     </div>
                 </div>
                 <div className={styles.home_container_rightside}>
-                    <img src={homeImage} alt="Ứng dụng trò chuyện" />
+                    <img src='https://cdn.dribbble.com/users/948834/screenshots/4257434/1.png?resize=768x576&vertical=center' alt="Ứng dụng trò chuyện" />
                 </div>
             </div>
             <div className={styles.home_footer}>

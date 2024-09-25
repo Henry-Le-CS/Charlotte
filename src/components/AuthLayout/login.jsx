@@ -40,7 +40,7 @@ const AuthLayout = () => {
         try {
             const results = await login(formData);
             toast.success(results.message);
-            setTimeout(() => navigate('/chat'), 3000)
+            setTimeout(() => navigate('/chat', { state: { userData: results } }), 3000)
         } catch (error) {
             toast.error('Login failed: ' + error.response.data.message || error.message || error);
         }

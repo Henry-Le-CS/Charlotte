@@ -1,0 +1,15 @@
+.sidebar_container {
+    svg {
+        color: #fff;
+        width: 40px;
+        height: 40px;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        transition: background-color .5s ease;
+        &:hover {
+            cursor: pointer;
+            background-color: var(--navbar-dark-secondary);
+        }
+    }
+}

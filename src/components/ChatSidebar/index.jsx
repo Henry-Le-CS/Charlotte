@@ -15,59 +15,59 @@ const ChatSideBar = () => {
     const [lineWidth, setLineWidth] = useState('0');
     useEffect(() => {
         const headerLinks = document.querySelector(`.${styles.header_links}`);
-
+        const activeElement = document.querySelector('#active');
+        
         const updateLinePosition = (element) => {
             setLineLeft(element.offsetLeft + 'px');
             setLineWidth(element.offsetWidth + 'px');
         };
-
+    
         const setActiveLink = () => {
-            const currentPath = location.pathname;
             if (headerLinks) {
                 const children = Array.from(headerLinks.children);
-                const activeChild = children.find((child) => child.getAttribute('href') === currentPath);
-
+                const activeChild = children.find((child) => child.getAttribute('id') === activeElement.id);
+    
                 if (activeChild) {
                     updateLinePosition(activeChild);
                 }
             }
         };
-
+    
+        const handleChildClick = (child) => () => updateLinePosition(child);
+    
         if (headerLinks) {
             const children = Array.from(headerLinks.children);
             children.forEach((child) => {
-                child.addEventListener('click', () => updateLinePosition(child));
+                child.addEventListener('click', handleChildClick(child));
             });
         }
-
-        setActiveLink(); 
+    
+        setActiveLink();
+    
         return () => {
             if (headerLinks) {
                 const children = Array.from(headerLinks.children);
                 children.forEach((child) => {
-                    child.removeEventListener('click', () => updateLinePosition(child));
+                    child.removeEventListener('click', handleChildClick(child));
                 });
             }
         };
-    }, [location, lineLeft, lineWidth]);
-    const { handleSubmit, register, setValue } = useForm({
+    }, [location]);
+    const { handleSubmit, register } = useForm({
         defaultValues: {
           searchValue: ''
         }
       });
     
       const onSearch = async (data) => {
-        const formData = new FormData();
-    
-        Object.keys(data).forEach((key) => {
-          if (data[key] !== '') {
-            setValue(key, data[key]);
-            formData.append(key, data[key]);
-          }
-        });
-    
+        const query = new URLSearchParams();
+      
+        if (data.searchValue.trim()) {
+          query.append('value', data.searchValue.trim()); 
+        }
+      
         try {
-          const results = await search(formData);
+          const results = await search(`?${query.toString()}`); 
           if (!results.data.length) {
             toast.error('Không tìm thấy kết quả');
           } else {
@@ -104,6 +104,7 @@ const ChatSideBar = () => {
                     <div className="flex justify-center items-center">
                         <div>
                             <form onSubmit={handleSubmit(onSearch)} className={styles.search}>
+                                <label htmlFor="searchValue"></label>
                                 <input
                                     type="text"
                                     placeholder=" "
@@ -128,9 +129,9 @@ const ChatSideBar = () => {
                     </div>
                         {/* Bottom Sidebar Header: Options */}
                     <div className={styles.header_links}>
-                        <span>Đang hoạt động</span>
-                        <span>Yêu thích</span>
-                        <span>Tất cả</span>
+                        <span id='active'>Đang hoạt động</span>
+                        <span id='favorite'>Yêu thích</span>
+                        <span id='all'>Tất cả</span>
                         <div className={styles.header_links_line} style={{ left: lineLeft, width: lineWidth }}></div>
                     </div>
                 </div>

@@ -13,7 +13,9 @@
     --chat-sidebar-dark-color: #1f1f22;
     --chat-content-dark-color: #1a1a1e;
     --primary-header-color: #2f8cf3;
+    --primary-color-light: #f6f5ff;
     --primary-color: #2f8cf3;
+    --sidebar-color: #fff;
     --navbar-width: 256px;
     --navbar-width-min: 80px;
     --navbar-dark-primary: #18283b;
@@ -21,6 +23,11 @@
     --navbar-light-primary: #f5f6fa;
     --navbar-light-secondary: #8392a5;
     --icon-color: #b2c9e4;
+        /* ====== Transition ====== */
+    --tran-03: all 0.2s ease;
+    --tran-03: all 0.3s ease;
+    --tran-04: all 0.3s ease;
+    --tran-05: all 0.3s ease;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
