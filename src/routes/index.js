@@ -11,6 +11,7 @@ router.use('/email', emailRouter)
 
 
 // router.use('/', proxyService.getApiKey, proxyService.createHeaderForApiKey()); // DOWN DIFFICULT LEVEL
+router.get('/user/checkStatus', check.status)
 router.post('/user/login', userController.loginUser)
 router.use('/', proxyService.accessRelease())
 router.use(check.apiKey);

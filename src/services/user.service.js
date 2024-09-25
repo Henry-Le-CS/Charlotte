@@ -1,7 +1,5 @@
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
-import crypto from 'node:crypto';
 import { createTokenPair } from '../auth/authUtils.js';
 import PermissionRepository from '../repositories/permission.repo.js';
 import UserRepository from '../repositories/user.repo.js';
@@ -19,17 +17,6 @@ class UserService {
         }
         return UserService.instance;
     }
-
-    generateTokenPair(payload) {
-        const privateKey = crypto.randomBytes(64).toString('hex');
-        const publicKey = crypto.randomBytes(64).toString('hex');
-
-        const accessToken = jwt.sign(payload, publicKey, { expiresIn: '1h' });
-        const refreshToken = jwt.sign(payload, publicKey, { expiresIn: '7d' });
-
-        return { accessToken, refreshToken, privateKey, publicKey };
-    }
-
     async registerUser(data) {
         const { userDetails, permissions } = data;
         const email = userDetails.email
@@ -106,9 +93,11 @@ class UserService {
         await KeyTokenService.removeTokensByUserId(userId);
         await UserRepository.updateUserStatus({ userId, status: 'offline'});
     }
-
+    async findUserById(userId) {
+        await UserRepository.findUserById({ userId })
+    }
     async findUserByEmail(email) {
-        await UserRepository.findUserByEmail({ email, select: ['name', 'email', 'avatar', 'username'] })
+        await UserRepository.findUserByEmail({ email, select: ['email', 'avatar', 'username', 'friends'] })
     }
     async refreshAccessToken(refreshToken) {
         const tokenRecord = await TokenRepository.findByRefreshToken(refreshToken);
@@ -131,18 +120,29 @@ class UserService {
         return await UserRepository.updateUser({ userId, updateData });
     }
 
-    async addFriend(userId, friendId) {
+    async searchUsers(value) {
+        try {
+            const regexArray = value.split(',').map(keyword => ({
+                email: { $regex: keyword, $options: 'i' }
+              }));
+            const users = await UserRepository.searching(regexArray)
+            return users;
+        } catch (error) {
+            throw new NotFoundError(error.message)
+        }
+    }
+    async addFriend(userId, yourId) {
         const user = await UserRepository.findUserById(userId);
-        const friend = await UserRepository.findUserById(friendId);
-        if (!user || !friend) {
+        const your = await UserRepository.findUserById(yourId);
+        if (!user || !your) {
             throw new NotFoundError('User not found');
         }
 
-        user.friends.push(friendId);
+        user.friends.push(yourId);
         await user.save();
 
-        friend.friends.push(userId);
-        await friend.save();
+        your.friends.push(userId);
+        await your.save();
 
         return user;
     }

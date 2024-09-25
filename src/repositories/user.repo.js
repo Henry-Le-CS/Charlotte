@@ -6,21 +6,23 @@ class UserRepository {
         return await UserModel.create(userDetails);
     }
 
-    async findUserById(id) {
-        return await UserModel.findById(id).populate('friends');
+    async findUserById({ userId }) {
+        return await UserModel.findById(userId).populate('friends');
     }
 
     async findUserByEmail({ email, select = []}) {
         return await UserModel.findOne({ email }).select(select).lean();
     }
-
+    async searching(value) {
+        console.log(value)
+        return await UserModel.find({ $or: value } ).populate('friends');
+    }
     async updateUser({ id, updateData }) {
         return await UserModel.findByIdAndUpdate(id, updateData, { new: true });
     }
 
     async updateUserStatus({ userId, status = '' }) {
-        const updatedStatus = !status
-        return await UserModel.findByIdAndUpdate(userId, { updatedStatus }, { new: true });
+        return await UserModel.findByIdAndUpdate(userId, { status }, { new: true });
     }
     async verified({ userId, isVerified }) {
         return await UserModel.findByIdAndUpdate(userId, { isVerified }, { new: true });
