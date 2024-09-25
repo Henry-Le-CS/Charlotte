@@ -2,8 +2,9 @@ import facebook from '$/assets/icons/facebook.png';
 import google from '$/assets/icons/google.png';
 import PasswordInput from '$/components/PasswordInput';
 import Spring from '$/components/Spring';
-import { login } from '$/services/user';
+import { checkStatus, login } from '$/services/user';
 import classNames from 'classnames';
+import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -12,7 +13,23 @@ import loginImg from '../../../design/1558355117500.jfif';
 import RouterLinks from '../RouterLinks/index';
 import styles from './index.module.scss';
 const AuthLayout = () => {
+    const [status, setStatus] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchStatus = async () => {
+            try {
+                const results = await checkStatus();
+                setTimeout(() => navigate('/chat'), 1500)
+                toast.success(results.message);
+                setStatus(false)
+            } catch (error) {
+                setStatus(true)
+            }
+        };
+
+        fetchStatus();
+    }, [navigate]);
     const { register, handleSubmit, formState: { errors }, control, setValue } = useForm({
         defaultValues: {
             email: '',
@@ -50,7 +67,7 @@ const AuthLayout = () => {
         toast.error(err);
     }
     return (
-        <div className={`p-10 min-h-screen flex items-center justify-center bg-gray-50 ${styles.container}`}>
+        status && <div className={`p-10 min-h-screen flex items-center justify-center bg-gray-50 ${styles.container}`}>
             <div className="flex lg:flex-row lg:w-[80%] shadow-lg rounded-xl min-h-[60vh]">
                 <img className='max-w-[450px] rounded-l-lg' src={loginImg} alt="" />
                 <div className="bg-white w-full flex items-center justify-center">

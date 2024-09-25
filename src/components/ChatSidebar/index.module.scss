@@ -13,6 +13,7 @@ $large-desktop: 1200px;
 }
 
 .container {
+    
     padding-bottom: 0 !important;
     @include respond-to($mobile) {
         display: none;
