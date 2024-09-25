@@ -9,10 +9,12 @@ const router = express.Router();
 router.post('/user/register', userController.register);
 router.use('/email', emailRouter)
 
-router.use('/user/login', proxyService.createProxyByHttpProxy(), userController.loginUser);
+
+// router.use('/', proxyService.getApiKey, proxyService.createHeaderForApiKey()); // DOWN DIFFICULT LEVEL
+router.post('/user/login', userController.loginUser)
+router.use('/', proxyService.accessRelease())
 router.use(check.apiKey);
 router.use(check.permission());
-router.use('/', proxyService.accessRelease())
 
 router.use('/user', user);
 

@@ -4,7 +4,7 @@ const DOCUMENT_NAME ='User'
 const COLLECTION_NAME = 'Users'
 const UserSchema = new Schema({
     username: { type: String, required: true, unique: true, index: true },
-    email: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true, index: true },
     password_hash: { type: String, required: true },
     status: { type: String, default: 'offline' },  // online, offline, busy, etc.
     friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', default: [] }],

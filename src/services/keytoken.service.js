@@ -19,9 +19,9 @@ export default class KeyTokenService {
         }
     }
 
-    static async findByUserId(userId) {
+    static async findByUserId({ userId, select = []}) {
         try {
-            return await TokenRepository.findByUserId(userId);
+            return await TokenRepository.findByUserId({ userId, select});
         } catch (error) {
             throw new NotFoundError('Error finding token by user ID');
         }
@@ -55,7 +55,7 @@ export default class KeyTokenService {
         try {
             return await TokenRepository.removeTokensByUserId(userId);
         } catch (error) {
-            throw new BadRequestError('Error removing tokens by user ID');
+            throw new BadRequestError('Error removing tokens by user ID', error.message);
         }
     }
 }

@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import 'dotenv/config';
 import express from 'express';
+import session from 'express-session';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import multer from 'multer';
@@ -32,6 +33,12 @@ app.use((req, res, next) => {
     next();
 });
 app.use(cookieParser())
+app.use(session({
+    resave: true, 
+    saveUninitialized: true, 
+    secret: process.env.SECRET_SESSION_KEY, 
+    cookie: { maxAge: 60000, sameSite: 'Lax', secure: (process.env.SECURE === 'true') }
+})); 
 
 // Init other middleware
 app.use(morgan('common'));

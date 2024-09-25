@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import crypto from 'node:crypto';
+import { createTokenPair } from '../auth/authUtils.js';
 import PermissionRepository from '../repositories/permission.repo.js';
 import UserRepository from '../repositories/user.repo.js';
 import ApikeyService from '../services/apiKey.service.js';
@@ -23,19 +24,10 @@ class UserService {
         const privateKey = crypto.randomBytes(64).toString('hex');
         const publicKey = crypto.randomBytes(64).toString('hex');
 
-        const accessToken = jwt.sign(payload, privateKey, { expiresIn: '1h' });
+        const accessToken = jwt.sign(payload, publicKey, { expiresIn: '1h' });
         const refreshToken = jwt.sign(payload, publicKey, { expiresIn: '7d' });
 
         return { accessToken, refreshToken, privateKey, publicKey };
-    }
-
-    // Helper method to verify tokens
-    verifyToken(token, key) {
-        try {
-            return jwt.verify(token, key);
-        } catch (error) {
-            throw new AuthFailureError('Invalid or expired token');
-        }
     }
 
     async registerUser(data) {
@@ -95,16 +87,19 @@ class UserService {
         if (!user || !await bcrypt.compare(password, user.password_hash)) {
             throw new BadRequestError('Invalid credentials');
         }
-        const userId = user._id
+        const userId = user._id.toString()
         // Generate JWT token pair
-        const tokens = this.generateTokenPair({ id: userId });
+        const tokens = await createTokenPair({userId});
         // Save tokens
-        await KeyTokenService.saveToken(userId, tokens.refreshToken, tokens.privateKey, tokens.publicKey);
+        await KeyTokenService.saveToken(userId, tokens.refreshToken, tokens.publicKey, tokens.privateKey );
 
+        // get apiKey
+        const apiKey = await ApikeyService.findByUserId(userId);
+        if (!apiKey) throw new NotFoundError('API key not found')
         // Update user status
         await UserRepository.updateUserStatus({userId, status: 'online'});
 
-        return { user, tokens: { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken } };
+        return { user, tokens: { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken }, apiKey };
     }
 
     async logoutUser(userId) {
@@ -112,6 +107,9 @@ class UserService {
         await UserRepository.updateUserStatus({ userId, status: 'offline'});
     }
 
+    async findUserByEmail(email) {
+        await UserRepository.findUserByEmail({ email, select: ['name', 'email', 'avatar', 'username'] })
+    }
     async refreshAccessToken(refreshToken) {
         const tokenRecord = await TokenRepository.findByRefreshToken(refreshToken);
         if (!tokenRecord) {
@@ -152,6 +150,7 @@ class UserService {
     async updateUserStatus({ userId, status }) {
         return await UserRepository.updateUserStatus({ userId, status });
     }
+
 }
 
 export default new UserService();

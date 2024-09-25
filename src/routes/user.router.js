@@ -1,11 +1,12 @@
 import express from 'express';
-import { authenticationV2 } from '../auth/authUtils.js';
-import UserController from '../controllers/user.controller.js';
+import { authentication } from '../auth/authUtils.js';
+import userController from '../controllers/user.controller.js';
 
 const router = express.Router()
-router.use(authenticationV2)
-router.post('/logout', UserController.logoutUser)
-router.put('/update-profile', UserController.updateProfile)
-router.post('/add-friend', UserController.addFriend)
-router.post('/update-status', UserController.updateStatus)
+router.use(authentication)
+router.get('/search', userController.findUserByEmail)
+router.get('/logout', userController.logoutUser)
+router.put('/update-profile', userController.updateProfile)
+router.post('/add-friend', userController.addFriend)
+router.post('/update-status', userController.updateStatus)
 export default router

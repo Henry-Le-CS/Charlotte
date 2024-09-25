@@ -2,7 +2,7 @@
 
 import { Types } from 'mongoose';
 import keyTokenModel from '../models/keytoken.model.js';
-const select = ['userId', 'publicKey', 'privateKey']
+import { convertToObjectIdMongodb } from '../utils/index.js';
 class TokenRepository {
     static async saveToken({ userId, refreshToken, publicKey, privateKey }) {
         return await keyTokenModel.create({
@@ -14,8 +14,8 @@ class TokenRepository {
         });
     }
 
-    static async findByUserId(userId) {
-        return await keyTokenModel.findOne({ userId }).lean()
+    static async findByUserId({ userId, select = []}) {
+        return await keyTokenModel.findOne({ userId }).select(select).lean()
     }
 
     static async findById(id) {
@@ -48,7 +48,7 @@ class TokenRepository {
     }
 
     static async removeTokensByUserId(userId) {
-        return await keyTokenModel.deleteMany({ user: new Types.ObjectId(userId) });
+        return await keyTokenModel.deleteMany({ userId: convertToObjectIdMongodb(userId) });
     }
 }
 
