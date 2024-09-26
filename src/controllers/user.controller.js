@@ -67,6 +67,20 @@ export default new class UserController {
             })
         }
     }
+    loadUser = async (req, res, next) => {
+        try {
+            new SuccessResponse({
+                message: 'User found successfully',
+                metadata: await userService.findUserById(req.query.userId)
+            }).send(res)
+        } catch (error) {
+            return res.status(404).json({
+                code: 404,
+                message: 'User Not Found: ' + error.message,
+                status: '404 Not Found'
+            })
+        }
+    }
     addFriend = async (req, res, next) => {
         new SuccessResponse({
             message: 'Friend added successfully',

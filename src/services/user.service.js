@@ -94,10 +94,10 @@ class UserService {
         await UserRepository.updateUserStatus({ userId, status: 'offline'});
     }
     async findUserById(userId) {
-        await UserRepository.findUserById({ userId })
+        return await UserRepository.findUserById({ userId })
     }
     async findUserByEmail(email) {
-        await UserRepository.findUserByEmail({ email, select: ['email', 'avatar', 'username', 'friends'] })
+        return await UserRepository.findUserByEmail({ email, select: ['email', 'avatar', 'username', 'friends'] })
     }
     async refreshAccessToken(refreshToken) {
         const tokenRecord = await TokenRepository.findByRefreshToken(refreshToken);
@@ -125,8 +125,7 @@ class UserService {
             const regexArray = value.split(',').map(keyword => ({
                 email: { $regex: keyword, $options: 'i' }
               }));
-            const users = await UserRepository.searching(regexArray)
-            return users;
+            return await UserRepository.searching(regexArray)
         } catch (error) {
             throw new NotFoundError(error.message)
         }
