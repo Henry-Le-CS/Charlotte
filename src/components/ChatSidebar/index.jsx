@@ -1,16 +1,18 @@
 
 import defaultAvatar from '$/assets/avatar-default.svg';
-import ririka from '$/assets/profile.jpg';
 import Search from '$/components/Search';
+import { loadUser } from '$/services/user';
+import PropTypes from 'prop-types';
 import { useEffect, useState } from "react";
 import { BiBell } from "react-icons/bi";
 import { IoEllipsisHorizontal } from "react-icons/io5";
 import { TbUserPlus, TbUsersPlus } from "react-icons/tb";
 import { useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import Modal from '../Modal';
 import UserStatus from '../UserStatus';
 import styles from "./index.module.scss";
-const ChatSideBar = () => {
+const ChatSideBar = ({ userId }) => {
     // const inputRef = useRef(null);
     const [isModal, setIsModal] = useState(false)
     const location = useLocation()
@@ -19,6 +21,7 @@ const ChatSideBar = () => {
     const [lineWidth, setLineWidth] = useState('0');
     const [searchData, setSearchData] = useState([])
     const [modalUser, setModalUser] = useState(null)
+    const [user, setUser] = useState(undefined)
     useEffect(() => {
         const headerLinks = document.querySelector(`.${styles.header_links}`);
         const activeElement = document.querySelector('#active');
@@ -59,6 +62,23 @@ const ChatSideBar = () => {
             }
         };
     }, [location]);
+
+    useEffect(() => {
+        const myProfile = async () => {
+            if (userId !== null) {
+                try {
+                    const results = await loadUser(userId);
+                    setUser(results?.metadata)
+                } catch (error) {
+                    toast.error('User not found! ' + error?.response?.data?.message || error.message || error);
+                }
+            } else {
+                toast.error('User not found!')
+            }
+        };
+
+        myProfile();
+    }, [userId]);
     const handleApear = (state) => {
         if (state === true) {
             setIsApear(true)
@@ -83,15 +103,16 @@ const ChatSideBar = () => {
     return (
         <div className={`${styles.container}`}>
                 {/* Sidebar Header */}
-                <div className="w-full h-[150px] bubble-shadow p-3">
+                {user && <div className="w-full h-[150px] bubble-shadow p-3">
+                    {console.log(user)}
                     {/* Top Sidebar Header: Profile */}
                     <div className="flex h-[60px] justify-between items-center">
                         <div className="flex items-center">
                             <div className='relative size-[50px] pt-[5px]'>
-                                <img src={ririka} alt="" className="size-[40px] rounded-full object-cover" />
+                                <img src={user.avatar || defaultAvatar} alt="avatar" className="size-[40px] rounded-full object-cover" />
                                 <UserStatus status='active' />
                             </div>
-                            <h5 className="text-white font-mono">Shibayama Ririka</h5>
+                            <h5 className="text-white font-mono min-w-[100px]">{user.username}</h5>
                         </div>
                         <div className="flex items-center">
                             <BiBell />
@@ -111,7 +132,7 @@ const ChatSideBar = () => {
                         <span id='all'>Tất cả</span>
                         <div className={styles.header_links_line} style={{ left: lineLeft, width: lineWidth }}></div>
                     </div>
-                </div>
+                </div>}
                 <div className="h-full w-[305px] bubble-shadow overflow-scroll">
                 {isApear ? (
                     searchData.length > 0 && searchData.map(user => (
@@ -155,6 +176,10 @@ const ChatSideBar = () => {
                 {isModal && modalUser !== null ? <Modal user={modalUser} status={handleModalStatus} /> : <></>}
             </div>
   );
+};
+
+ChatSideBar.propTypes = {
+    userId: PropTypes.string,
 };
 
 export default ChatSideBar

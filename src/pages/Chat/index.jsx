@@ -42,7 +42,7 @@ const Chat = () => {
         
         return null;
       }
-    const userId = userData?.metadata?._id || getCookieValue('x-client-id');
+    const userId = userData?.metadata?._id || getCookieValue('x-client-id')
 
     return (
         status && (
@@ -62,7 +62,7 @@ const Chat = () => {
                     </ul>
                 </div>
                 <SidebarSetting userId={userId} />
-                <ChatSidebar />
+                <ChatSidebar userId={userId} />
                 <ChatContent />
             </div>
         )
