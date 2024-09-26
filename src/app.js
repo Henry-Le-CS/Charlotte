@@ -36,7 +36,7 @@ app.use(cookieParser())
 app.set("trust proxy", 1);
 app.use(session({
     resave: true,
-    saveUninitialized: true,
+    saveUninitialized: false,
     secret: process.env.SECRET_SESSION_KEY, 
     cookie: { maxAge: 7 * 24 * 60 * 60 * 1000, sameSite: 'none', secure: (process.env.SECURE === 'true') }
 })); 
