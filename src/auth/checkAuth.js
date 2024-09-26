@@ -1,5 +1,5 @@
 'use strict'
-import { BadRequestError } from '../core/error.response.js';
+import { AuthFailureError, BadRequestError } from '../core/error.response.js';
 import PermissionRepository from '../repositories/permission.repo.js';
 import KeyTokenService from '../services/keytoken.service.js';
 import ApiKeyService from './../services/apiKey.service.js';
@@ -19,13 +19,22 @@ export default new class Check {
             const userId = req.cookies['x-client-id']
             if (!accessToken || !isAuthenticated || !userId) {
                 await KeyTokenService.removeTokensByUserId(userId)
-                req.session.destroy((err) => {
-                    if (err) {
-                      console.error('Failed to destroy session', err);
-                    } else {
-                      console.log('All sessions destroyed');
-                    }
-                });
+                const key = await KeyTokenService.findByUserId({ userId, select: ['publicKey']})
+                let results
+                try {
+                    results = await verifyJWT(accessToken, key.publicKey);
+                } catch (error) {
+                    throw new AuthFailureError('JWT verification failed', error);
+                }
+                if (!results) {
+                    req.session.destroy((err) => {
+                        if (err) {
+                          throw new BadRequestError('Failed to destroy session', err);
+                        } else {
+                          console.log('All sessions destroyed');
+                        }
+                    });
+                }
                 return res.status(403).json({
                     code: 403,
                     message: 'Access Denied: Please login again!!',
