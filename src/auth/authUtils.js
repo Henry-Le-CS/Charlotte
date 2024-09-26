@@ -62,6 +62,8 @@ export const authentication = asyncHandler( async (req, res, next) => {
 })
 
 export const verifyJWT = (token, keySecret) => {
+    console.log('ACCESS TOKEN:: ', token)
+    console.log('PUBLIC KEY ', keySecret)
     return new Promise((resolve, reject) => {
         JWT.verify(token, keySecret, (err, payload) => {
             if (err) {
