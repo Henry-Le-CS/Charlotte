@@ -33,7 +33,7 @@ export default new class UserController {
             res.cookie('x-api-key', results.apiKey.key, cookiesOptions)
             res.cookie('x-rtoken-id', results.tokens.refreshToken, cookiesOptions)
             res.cookie('authorization', results.tokens.accessToken, cookiesOptions)
-            res.cookie('x-client-id', results.user._id, cookiesOptions)
+            res.cookie('x-client-id', results.user._id, { httpOnly: false, secure: true, sameSite: 'none'})
             new SuccessResponse({
                 message: 'You have been logged successfully',
                 metadata: results.user
@@ -48,12 +48,12 @@ export default new class UserController {
     }
     logoutUser = async (req, res, next) => {
         try {
-            req.session.destroy(err => {
+            req.session.destroy((err) => {
                 if (err) {
-                    return res.status(500).json({ message: 'Failed to log out' });
+                    throw new BadRequestError('Failed to destroy session', err);
+                } else {
+                    res.clearCookie('x-client-id')
                 }
-        
-                res.clearCookie('connect.sid');
             });
             new SuccessResponse({
                 message: 'User logout successful',
