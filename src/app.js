@@ -33,12 +33,16 @@ app.use((req, res, next) => {
     next();
 });
 app.use(cookieParser())
+
+import store from './models/stote/mongodb.store.js';
 app.set("trust proxy", 1);
 app.use(session({
     resave: true,
-    saveUninitialized: false,
+    saveUninitialized: true,
+    proxy: true,
     secret: process.env.SECRET_SESSION_KEY, 
-    cookie: { maxAge: 7 * 24 * 60 * 60 * 1000, sameSite: 'none', secure: (process.env.SECURE === 'true') }
+    cookie: { maxAge: 7 * 24 * 60 * 60 * 1000, sameSite: 'none', secure: (process.env.SECURE === 'true') },
+    store: store
 })); 
 
 // Init other middleware
