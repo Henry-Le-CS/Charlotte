@@ -5,7 +5,7 @@ import { CREATED, SuccessResponse } from './../core/success.response.js';
 const cookiesOptions = {
     httpOnly: true,
     secure: true, 
-    sameSite: 'Lax'
+    sameSite: 'none'
 }
 export default new class UserController { 
     register = async (req, res, next) => {
