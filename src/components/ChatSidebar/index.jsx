@@ -70,7 +70,6 @@ const ChatSideBar = () => {
         setSearchData(metadata)
     }
     const handleModal = (e, user) => {
-        console.log(user)
         e.stopPropagation()
         setIsModal(true)
         setModalUser(user)
@@ -78,6 +77,7 @@ const ChatSideBar = () => {
     const handleModalStatus = (status) => {
         if (status === false) {
             setIsModal(false)
+            setSearchData([])
         }
     }
     return (
@@ -114,7 +114,7 @@ const ChatSideBar = () => {
                 </div>
                 <div className="h-full w-[305px] bubble-shadow overflow-scroll">
                 {isApear ? (
-                    searchData.map(user => (
+                    searchData.length > 0 && searchData.map(user => (
                         <ul key={user._id} className="w-full mb-4" onClick={(e) => handleModal(e, user)}>
                             <li className="w-[60px] flex justify-center items-center">
                                 <div className='relative size-[60px] pt-[10px]'>
@@ -132,7 +132,7 @@ const ChatSideBar = () => {
                         </ul>
                     ))
                 ) : (
-                    searchData.map(user => (
+                    searchData.length > 0 && searchData.map(user => (
                         <ul key={user._id} className="w-full mb-4">
                             <li className="w-[60px] flex justify-center items-center">
                                 <div className='relative size-[60px] pt-[10px]'>
