@@ -33,9 +33,10 @@ app.use((req, res, next) => {
     next();
 });
 app.use(cookieParser())
+console.log(process.env.SECURE === 'true')
 app.use(session({
     resave: true, 
-    saveUninitialized: true, 
+    saveUninitialized: true,
     secret: process.env.SECRET_SESSION_KEY, 
     cookie: { maxAge: 60000, sameSite: 'Lax', secure: (process.env.SECURE === 'true') }
 })); 
