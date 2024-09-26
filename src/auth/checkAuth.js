@@ -2,6 +2,7 @@
 import { AuthFailureError, BadRequestError } from '../core/error.response.js';
 import PermissionRepository from '../repositories/permission.repo.js';
 import KeyTokenService from '../services/keytoken.service.js';
+import userService from '../services/user.service.js';
 import ApiKeyService from './../services/apiKey.service.js';
 import { verifyJWT } from './authUtils.js';
 const pmsSelect = ['actions']
@@ -27,6 +28,7 @@ export default new class Check {
                         })
                     } catch (error) {
                         await KeyTokenService.removeTokensByUserId(userId)
+                        await userService.updateUserStatus({ userId, status: 'offline'})
                         req.session.destroy((err) => {
                             if (err) {
                                 throw new BadRequestError('Failed to destroy session', err);
