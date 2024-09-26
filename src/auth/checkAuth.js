@@ -15,38 +15,26 @@ export default new class Check {
     status = async (req, res) => {
         try {
             const accessToken = req.session.accessToken
-            const isAuthenticated = req.session.isAuthenticated
             const userId = req.cookies['x-client-id']
-            if (!accessToken || !isAuthenticated || !userId) {
-                await KeyTokenService.removeTokensByUserId(userId)
-                const key = await KeyTokenService.findByUserId({ userId, select: ['publicKey']})
-                let results
+            const key = await KeyTokenService.findByUserId({ userId, select: ['publicKey']})
                 try {
-                    results = await verifyJWT(accessToken, key.publicKey);
+                    await verifyJWT(accessToken, key.publicKey);
+                    return res.status(200).json({
+                        code: 200,
+                        message: 'You are allready logged in, wait for return to your home!',
+                        status: 'Success'
+                    })
                 } catch (error) {
-                    throw new AuthFailureError('JWT verification failed', error);
-                }
-                if (!results) {
+                    await KeyTokenService.removeTokensByUserId(userId)
                     req.session.destroy((err) => {
                         if (err) {
-                          throw new BadRequestError('Failed to destroy session', err);
+                            throw new BadRequestError('Failed to destroy session', err);
                         } else {
-                          console.log('All sessions destroyed');
+                            console.log('All sessions destroyed');
                         }
                     });
+                    return new AuthFailureError('Access Denied: Please login again!!', error);
                 }
-                return res.status(403).json({
-                    code: 403,
-                    message: 'Access Denied: Please login again!!',
-                    status: 'Forbidden'
-                })
-            } else {
-                return res.status(200).json({
-                    code: 200,
-                    message: 'You are allready logged in, wait for return to your home!',
-                    status: 'Success'
-                })
-            }
         } catch (error) {
             return res.status(500).json({
                 code: 500,
