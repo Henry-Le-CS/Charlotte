@@ -33,7 +33,7 @@ export default new class Check {
                             console.log('All sessions destroyed');
                         }
                     });
-                    return new AuthFailureError('Access Denied: Please login again!!', error);
+                    throw new AuthFailureError('Access Denied: Please login again!!', error);
                 }
         } catch (error) {
             return res.status(500).json({
