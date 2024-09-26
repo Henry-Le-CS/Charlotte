@@ -33,12 +33,11 @@ app.use((req, res, next) => {
     next();
 });
 app.use(cookieParser())
-console.log(process.env.SECURE === 'true')
 app.use(session({
-    resave: true, 
+    resave: false, 
     saveUninitialized: true,
     secret: process.env.SECRET_SESSION_KEY, 
-    cookie: { maxAge: 60000, sameSite: 'Lax', secure: (process.env.SECURE === 'true') }
+    cookie: { maxAge: 7 * 24 * 60 * 60 * 1000, sameSite: 'none', secure: (process.env.SECURE === 'true') }
 })); 
 
 // Init other middleware
