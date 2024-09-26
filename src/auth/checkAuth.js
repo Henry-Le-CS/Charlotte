@@ -17,23 +17,27 @@ export default new class Check {
             const accessToken = req.session.accessToken
             const userId = req.cookies['x-client-id']
             const key = await KeyTokenService.findByUserId({ userId, select: ['publicKey']})
-                try {
-                    await verifyJWT(accessToken, key.publicKey);
-                    return res.status(200).json({
-                        code: 200,
-                        message: 'You are allready logged in, wait for return to your home!',
-                        status: 'Success'
-                    })
-                } catch (error) {
-                    await KeyTokenService.removeTokensByUserId(userId)
-                    req.session.destroy((err) => {
-                        if (err) {
-                            throw new BadRequestError('Failed to destroy session', err);
-                        } else {
-                            console.log('All sessions destroyed');
-                        }
-                    });
-                    throw new AuthFailureError('Access Denied: Please login again!!', error);
+                if (accessToken) {
+                    try {
+                        await verifyJWT(accessToken, key.publicKey);
+                        return res.status(200).json({
+                            code: 200,
+                            message: 'You are allready logged in, wait for return to your home!',
+                            status: 'Success'
+                        })
+                    } catch (error) {
+                        await KeyTokenService.removeTokensByUserId(userId)
+                        req.session.destroy((err) => {
+                            if (err) {
+                                throw new BadRequestError('Failed to destroy session', err);
+                            } else {
+                                console.log('All sessions destroyed');
+                            }
+                        });
+                        throw new AuthFailureError('Access Denied: Please login again!!', error);
+                    }
+                } else {
+                    throw new AuthFailureError('Access Denied: Please login first!!')
                 }
         } catch (error) {
             return res.status(500).json({

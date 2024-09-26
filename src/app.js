@@ -34,7 +34,7 @@ app.use((req, res, next) => {
 });
 app.use(cookieParser())
 app.use(session({
-    resave: false, 
+    resave: true, 
     saveUninitialized: true,
     secret: process.env.SECRET_SESSION_KEY, 
     cookie: { maxAge: 7 * 24 * 60 * 60 * 1000, sameSite: 'none', secure: (process.env.SECURE === 'true') }
