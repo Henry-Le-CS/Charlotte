@@ -1,4 +1,5 @@
 'use strict'
+import { BadRequestError } from '../core/error.response.js';
 import UserModel from '../models/user.model.js';
 
 class UserRepository {
@@ -29,6 +30,22 @@ class UserRepository {
     }
     async deleteUserByUserId(userId) {
         return await UserModel.deleteOne({ userId })
+    }
+    async addFriend({ userId, friendId }) {
+        try {
+            return await Promise.all([
+                UserModel.findOneAndUpdate(
+                    { _id: userId },
+                    { $addToSet: { friends: friendId } }
+                ),
+                UserModel.findOneAndUpdate(
+                    { _id: friendId },
+                    { $addToSet: { friends: userId } }
+                )
+            ]);
+        } catch (error) {
+            throw new BadRequestError('Failed to add friend:: ', error.message);
+        }
     }
 }
 

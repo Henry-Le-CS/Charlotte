@@ -130,26 +130,45 @@ class UserService {
             throw new NotFoundError(error.message)
         }
     }
-    async addFriend(userId, yourId) {
+    async addFriend(userId, friendId) {
         const user = await UserRepository.findUserById(userId);
-        const your = await UserRepository.findUserById(yourId);
-        if (!user || !your) {
+        const friend = await UserRepository.findUserById(friendId);
+    
+        if (!user || !friend) {
             throw new NotFoundError('User not found');
         }
-
-        user.friends.push(yourId);
-        await user.save();
-
-        your.friends.push(userId);
-        await your.save();
-
-        return user;
+    
+        // Start a transaction 
+        const session = await mongoose.startSession();
+        session.startTransaction();
+    
+        try {
+            if (!user.friends.includes(friendId)) {
+                user.friends.push(friendId);
+                await user.save({ session });
+            }
+    
+            if (!friend.friends.includes(userId)) {
+                friend.friends.push(userId);
+                await friend.save({ session });
+            }
+    
+            // Commit 
+            await session.commitTransaction();
+            session.endSession();
+    
+            return user;
+        } catch (error) {
+            await session.abortTransaction();
+            session.endSession();
+            throw new BadRequestError('Failed to update friends');
+        }
     }
+    
     
     async updateUserStatus({ userId, status }) {
         return await UserRepository.updateUserStatus({ userId, status });
     }
-
 }
 
 export default new UserService();

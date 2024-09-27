@@ -28,7 +28,7 @@ export default new class UserController {
         try {
             const results = await userService.loginUser(req.body)
             req.session.isAuthenticated = true
-            req.session.user = results.user.email
+            req.session.user = results.user._id
             req.session.accessToken = results.tokens.accessToken
             res.cookie('x-api-key', results.apiKey.key, cookiesOptions)
             res.cookie('x-rtoken-id', results.tokens.refreshToken, cookiesOptions)
@@ -69,9 +69,10 @@ export default new class UserController {
     }
     loadUser = async (req, res, next) => {
         try {
+            const userId = req.cookies['x-client-id']
             new SuccessResponse({
                 message: 'User found successfully',
-                metadata: await userService.findUserById(req.query.userId)
+                metadata: await userService.findUserById(userId)
             }).send(res)
         } catch (error) {
             return res.status(404).json({

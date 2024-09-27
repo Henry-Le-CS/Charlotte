@@ -17,5 +17,5 @@ const UserSchema = new Schema({
     timestamps: true,
     collection: COLLECTION_NAME
 });
-UserSchema.index({ _id: 1, email: 1 });
+UserSchema.index({ username: 1, email: 1 });
 export default mongoose.model(DOCUMENT_NAME, UserSchema);
