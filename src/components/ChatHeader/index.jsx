@@ -12,7 +12,7 @@ const ChatHeader = ( ) => {
                   <UserStatus status='active' />
                 </div>
                 <div className="flex flex-col items-center justify-start text-white">
-                    <span className="text-4xl w-auto"><b>{user.username || 'Waiting for features...'}</b></span>
+                    <span className="text-4xl w-auto"><b>{'Waiting for features...'}</b></span>
                     <span className="pl-6 text-[var(--icon-color)]">Đang hoạt động</span>
                 </div>
               </div>
