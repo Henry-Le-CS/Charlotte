@@ -1,10 +1,11 @@
 
 import defaultAvatar from '$/assets/avatar-default.svg';
+import Notification from '$/components/Notifications';
 import Search from '$/components/Search';
+import { checkRequestSent } from '$/services/notification';
 import { loadUser } from '$/services/user';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from "react";
-import { BiBell } from "react-icons/bi";
 import { IoEllipsisHorizontal } from "react-icons/io5";
 import { TbUserPlus, TbUsersPlus } from "react-icons/tb";
 import { useLocation } from 'react-router-dom';
@@ -12,7 +13,7 @@ import { toast } from 'react-toastify';
 import Modal from '../Modal';
 import UserStatus from '../UserStatus';
 import styles from "./index.module.scss";
-const ChatSideBar = ({ userId }) => {
+const ChatSideBar = () => {
     // const inputRef = useRef(null);
     const [isModal, setIsModal] = useState(false)
     const location = useLocation()
@@ -21,6 +22,7 @@ const ChatSideBar = ({ userId }) => {
     const [lineWidth, setLineWidth] = useState('0');
     const [searchData, setSearchData] = useState([])
     const [modalUser, setModalUser] = useState(null)
+    const [requestSent, setRequestSent] = useState(false)
     const [user, setUser] = useState(undefined)
     useEffect(() => {
         const headerLinks = document.querySelector(`.${styles.header_links}`);
@@ -65,20 +67,16 @@ const ChatSideBar = ({ userId }) => {
 
     useEffect(() => {
         const myProfile = async () => {
-            if (userId !== null) {
-                try {
-                    const results = await loadUser(userId);
-                    setUser(results?.metadata)
-                } catch (error) {
-                    toast.error('User not found! ' + error?.response?.data?.message || error.message || error);
-                }
-            } else {
-                toast.error('User not found!')
+            try {
+                const results = await loadUser();
+                setUser(results?.metadata)
+            } catch (error) {
+                toast.error('User not found! ' + error?.response?.data?.message || error.message || error);
             }
         };
 
         myProfile();
-    }, [userId]);
+    }, []);
     const handleApear = (state) => {
         if (state === true) {
             setIsApear(true)
@@ -89,22 +87,27 @@ const ChatSideBar = ({ userId }) => {
     const handleData = (metadata) => {
         setSearchData(metadata)
     }
-    const handleModal = (e, user) => {
+    const handleModal = async (e, user) => {
         e.stopPropagation()
         setIsModal(true)
         setModalUser(user)
+        try {
+            const results = await checkRequestSent(user._id)
+            if (results) setRequestSent(true)
+        } catch (error) {
+            setRequestSent(false)
+            toast.error('Error occurred while checking request sent! ' + error?.response?.data?.message || error.message || error);
+        }
     }
     const handleModalStatus = (status) => {
         if (status === false) {
             setIsModal(false)
-            setSearchData([])
         }
     }
     return (
         <div className={`${styles.container}`}>
                 {/* Sidebar Header */}
                 {user && <div className="w-full h-[150px] bubble-shadow p-3">
-                    {console.log(user)}
                     {/* Top Sidebar Header: Profile */}
                     <div className="flex h-[60px] justify-between items-center">
                         <div className="flex items-center">
@@ -115,7 +118,7 @@ const ChatSideBar = ({ userId }) => {
                             <h5 className="text-white font-mono min-w-[100px]">{user.username}</h5>
                         </div>
                         <div className="flex items-center">
-                            <BiBell />
+                            <Notification />
                             <IoEllipsisHorizontal />
                         </div>
                     </div>
@@ -173,7 +176,7 @@ const ChatSideBar = ({ userId }) => {
                 )}
 
                 </div>
-                {isModal && modalUser !== null ? <Modal user={modalUser} status={handleModalStatus} /> : <></>}
+                {isModal && modalUser !== null ? <Modal user={modalUser} status={handleModalStatus} isRequestSent={requestSent} /> : <></>}
             </div>
   );
 };

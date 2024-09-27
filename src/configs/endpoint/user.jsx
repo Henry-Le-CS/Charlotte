@@ -5,9 +5,9 @@ const userEnpoint = {
     // UPDATE INFOMATION
     updateInfomation: (id) => `/user/${id}/updating`,
 
-    load: (userId) => `/user?userId=${userId}`,
+    load: () => `/user/getUser`,
     search: (value) => `/user/search?${value}`,
-    checkStatus: () => `/user/checkStatus`
+    checkStatus: () => `/user/checkStatus`,
 }
 
 export default userEnpoint

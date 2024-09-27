@@ -19,6 +19,8 @@ const Search = ({ location, data, status }) => {
         if (metadata.length > 0) {
           data(metadata)
           setSidebarStatus(true)
+        } else {
+          setSidebarStatus(false)
         }
     }, [metadata])
 
@@ -27,7 +29,7 @@ const Search = ({ location, data, status }) => {
         status(sidebarStatus);
       }
     }, [sidebarStatus])
-
+    
       const onSearch = async (data) => {
         const query = new URLSearchParams();
       
@@ -58,8 +60,7 @@ const Search = ({ location, data, status }) => {
                     placeholder=" "
                     {...register('searchValue')}
                     // ref={inputRef}
-                    onFocus={() => setSidebarStatus(false)}
-                    onBlur={() => setSidebarStatus(true)}
+                    onFocus={() => setSidebarStatus(true)}
                 />
                 <div>
                     <svg>

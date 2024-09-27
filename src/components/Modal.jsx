@@ -1,11 +1,12 @@
 import defaultAvatar from '$/assets/avatar-default.svg';
+import { sendFriendRequest } from '$/services/notification';
 import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
+import { toast } from 'react-toastify';
 const defaultBio = 'Vấn đề không phải là bạn có bị hạ gục hay không, mà là bạn có đứng dậy hay không.'
-const Modal = ({ user, status }) => {
+const Modal = ({ user, status, isRequestSent }) => {
     const [isApear, setIsApear] = useState(true);
     const modalRef = useRef();
-
     useEffect(() => {
         if (typeof status === 'function') {
             status(isApear);
@@ -24,7 +25,16 @@ const Modal = ({ user, status }) => {
             document.removeEventListener('mousedown', handleClose);
         };
     }, []);
-
+    const handleSendFriendRequest = async (e, receiverId)  => {
+        e.preventDefault();
+        try {
+            await sendFriendRequest(receiverId)
+            toast.success('Successfully Send Request')
+            setTimeout(() => setIsApear(false), 1500)
+        } catch (error) {
+            toast.error('Failed to send request', error.message)
+        }
+    }
     return (
         isApear && user && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[999] backdrop-blur-sm">
@@ -47,9 +57,15 @@ const Modal = ({ user, status }) => {
                                         <p className="mt-5 leading-relaxed text-2xl text-center text-white">{user.email}</p>
                                         <p className="mt-5 leading-relaxed text-1xl text-center text-white">{user.bio || defaultBio}</p>
                                         <div className="w-full mt-8">
-                                            <button className="flex text-center items-center justify-center w-full py-5 text-2xl font-medium text-white bg-indigo-600 rounded-xl transition duration-500 ease-in-out transform hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                                Kết bạn
-                                            </button>
+                                            {!isRequestSent ? <button className="flex text-center items-center justify-center w-full py-5 text-2xl font-medium text-white bg-indigo-600 rounded-xl transition duration-500 ease-in-out transform hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                                onClick={e => handleSendFriendRequest(e, user._id)}
+                                            >
+                                                Kết Bạn
+                                            </button> : <button className="flex text-center items-center justify-center w-full py-5 text-2xl font-medium text-white bg-gray-600 rounded-xl cursor-not-allowed"
+                                                onClick={e => handleSendFriendRequest(e, user._id)}
+                                            >
+                                                Đã gửi lời mời kết bạn
+                                            </button>}
                                         </div>
                                     </div>
                                 </div>
@@ -64,12 +80,14 @@ const Modal = ({ user, status }) => {
 
 Modal.propTypes = {
     user: PropTypes.shape({
+        _id: PropTypes.string,
         username: PropTypes.string,
         bio: PropTypes.string,
         email: PropTypes.string,
         avatar: PropTypes.string,
     }),
     status: PropTypes.func,
+    isRequestSent: PropTypes.bool
 };
 
 export default Modal;
