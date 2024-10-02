@@ -3,12 +3,15 @@ import { searchUser } from "$/services/user";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import { setLoading } from "../../features/notifications.slice";
 import styles from './index.module.scss';
 
 const Search = ({ location, data, status }) => {
     const [metadata, setMetadata] = useState([])
     const [sidebarStatus, setSidebarStatus] = useState(true)
+    const disPatch = useDispatch()
     const { handleSubmit, register } = useForm({
         defaultValues: {
           searchValue: ''
@@ -19,17 +22,17 @@ const Search = ({ location, data, status }) => {
         if (metadata.length > 0) {
           data(metadata)
           setSidebarStatus(true)
+          disPatch(setLoading(false))
         } else {
+          disPatch(setLoading(false))
           setSidebarStatus(false)
         }
     }, [metadata])
-
     useEffect(() => {
       if (typeof status === 'function') {
         status(sidebarStatus);
       }
     }, [sidebarStatus])
-    
       const onSearch = async (data) => {
         const query = new URLSearchParams();
       
@@ -41,10 +44,12 @@ const Search = ({ location, data, status }) => {
           const results = await searchUser(`${query.toString()}`); 
           const usersFound = results.metadata
           setMetadata(usersFound)
-          
           if (!results.metadata.length) {
+            setMetadata([])
+            disPatch(setLoading(false))
             toast.error('Không tìm thấy kết quả');
           } else {
+            disPatch(setLoading(false))
             toast.success(results.message);
           }
         } catch (error) {

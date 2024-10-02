@@ -6,6 +6,7 @@ const userEnpoint = {
     updateInfomation: (id) => `/user/${id}/updating`,
 
     load: () => `/user/getUser`,
+    getFriends: (friendId) => `/user/getFriends?friendId=${friendId}`,
     search: (value) => `/user/search?${value}`,
     checkStatus: () => `/user/checkStatus`,
 }

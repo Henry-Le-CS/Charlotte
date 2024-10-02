@@ -1,11 +1,12 @@
 import { logout } from '$/services/user';
 import PropTypes from "prop-types";
-import { HiOutlineBell, HiOutlineUser } from "react-icons/hi2";
+import { HiOutlineUser } from "react-icons/hi2";
 import { IoIosHeartEmpty } from "react-icons/io";
 import { IoLogOutOutline, IoSettingsOutline } from "react-icons/io5";
 import { LiaWalletSolid } from "react-icons/lia";
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import Notification from '../Notifications';
 import styles from './index.module.scss';
 const SidebarSetting = ({ userId }) => {
     const navigate = useNavigate()
@@ -27,7 +28,7 @@ const SidebarSetting = ({ userId }) => {
     return (
         <div className={`min-w-[50px] flex flex-col items-center justify-end py-5 ${styles.sidebar_container}`}>
                 <HiOutlineUser />
-                <HiOutlineBell />
+                <Notification/>
                 <IoIosHeartEmpty />
                 <LiaWalletSolid />
                 <IoSettingsOutline />

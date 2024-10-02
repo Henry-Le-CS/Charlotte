@@ -6,14 +6,16 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import SidebarSetting from '../../components/SidebarSetting';
+import { setUser } from '../../features/user.slice';
+import { useAppDispatch } from '../../redux/hooks';
 import styles from './index.module.scss';
 
 const Chat = () => {
     const [status, setStatus] = useState(false);
     const location = useLocation();
+    const disPatch = useAppDispatch();
     const navigate = useNavigate();
     const userData = location.state?.userData;
-
     useEffect(() => {
         const fetchStatus = async () => {
             try {
@@ -31,19 +33,20 @@ const Chat = () => {
     
     function getCookieValue(cookieName) {
         const cookies = document.cookie.split(';');
-        
         for (let i = 0; i < cookies.length; i++) {
-          const cookie = cookies[i].trim();
+            const cookie = cookies[i].trim();
           
           if (cookie.startsWith(`${cookieName}=`)) {
-            return cookie.substring(cookieName.length + 1);
+            return cookie.substring(cookieName.length + 8, cookieName.length + 32)
           }
         }
         
         return null;
       }
     const userId = userData?.metadata?._id || getCookieValue('x-client-id')
-
+    if (userData) {
+        disPatch(setUser(userData))
+    }
     return (
         status && (
             <div className='flex justify-center h-screen overflow-hidden'>
@@ -61,8 +64,8 @@ const Chat = () => {
                         <li></li>
                     </ul>
                 </div>
-                <SidebarSetting userId={userId} />
-                <ChatSidebar userId={userId} />
+                <SidebarSetting userId={userId}/>
+                <ChatSidebar />
                 <ChatContent />
             </div>
         )

@@ -7,6 +7,6 @@ const signup = formData => axiosInstance({ formData: true }).post(userEnpoint.re
 const searchUser = value => axiosInstance({ formData: false }).get(userEnpoint.search(value))
 const loadUser = () => axiosInstance({ formData: false }).get(userEnpoint.load())
 const checkStatus = () => axiosInstance({ formData: false}).get(userEnpoint.checkStatus())
-
-export { checkStatus, loadUser, login, logout, searchUser, signup };
+const getFriends = (friendId) => axiosInstance({ formData: false}).get(userEnpoint.getFriends(friendId))
+    export { checkStatus, getFriends, loadUser, login, logout, searchUser, signup };
 
