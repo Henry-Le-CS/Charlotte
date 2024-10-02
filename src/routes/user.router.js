@@ -5,6 +5,7 @@ import userController from '../controllers/user.controller.js';
 const router = express.Router()
 router.use(authentication)
 router.get('/getUser', userController.loadUser)
+router.get('/getFriends', userController.getFriends)
 router.get('/search', userController.search)
 router.get('/logout', userController.logoutUser)
 router.put('/update-profile', userController.updateProfile)

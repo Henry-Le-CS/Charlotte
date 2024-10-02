@@ -58,12 +58,12 @@ export default new class NotificationController {
     }
     acceptFriendRequest = async (req, res, next) => {
         try {
-            const senderId = req.session.user
-            const receiverId = req.query.receiverId
-            if (senderId && friendId) {
+            const receiverId = req.session.user
+            const senderId = req.query.receiverId
+            if (senderId && receiverId) {
                 new SuccessResponse({
                     message: 'Friend request sent successfully',
-                    metadata: await FriendRequest.accept({ senderId, receiverId})
+                    metadata: await Notification.accept({ senderId, receiverId })
                 }).send(res)
             }
         } catch (error) {

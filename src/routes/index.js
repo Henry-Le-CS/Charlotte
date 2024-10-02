@@ -19,5 +19,5 @@ router.use(check.apiKey);
 router.use(check.permission());
 
 router.use('/user', user);
-router.use('/notification', notification)
+router.use('/notifications', notification)
 export default router;

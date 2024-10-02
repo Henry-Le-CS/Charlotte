@@ -4,6 +4,7 @@ import { createTokenPair } from '../auth/authUtils.js';
 import PermissionRepository from '../repositories/permission.repo.js';
 import UserRepository from '../repositories/user.repo.js';
 import ApikeyService from '../services/apiKey.service.js';
+import { convertToObjectIdMongodb } from '../utils/index.js';
 import { AuthFailureError, BadRequestError, NotFoundError } from './../core/error.response.js';
 import KeyTokenService from './keytoken.service.js';
 // export const apiKeyStore = new Map();
@@ -93,8 +94,8 @@ class UserService {
         await KeyTokenService.removeTokensByUserId(userId);
         await UserRepository.updateUserStatus({ userId, status: 'offline'});
     }
-    async findUserById(userId) {
-        return await UserRepository.findUserById({ userId })
+    async findUserById({ userId, select = []}) {
+        return await UserRepository.findUserById({ userId, select })
     }
     async findUserByEmail(email) {
         return await UserRepository.findUserByEmail({ email, select: ['email', 'avatar', 'username', 'friends'] })
@@ -130,40 +131,33 @@ class UserService {
             throw new NotFoundError(error.message)
         }
     }
-    async addFriend(userId, friendId) {
-        const user = await UserRepository.findUserById(userId);
-        const friend = await UserRepository.findUserById(friendId);
-    
+    async addFriend(senderId, receiverId) {
+        const sender = senderId.toString();
+        const receiver = receiverId.toString();
+        const friend = await UserRepository.findUserById({ userId: sender, select: ['_id', 'friends'] });
+        const user = await UserRepository.findUserById({ userId: receiver, select: ['_id', 'friends'] });
+        
         if (!user || !friend) {
             throw new NotFoundError('User not found');
         }
     
-        // Start a transaction 
-        const session = await mongoose.startSession();
-        session.startTransaction();
-    
         try {
-            if (!user.friends.includes(friendId)) {
-                user.friends.push(friendId);
-                await user.save({ session });
+            if (!user.friends.includes(sender)) {
+                user.friends.push(convertToObjectIdMongodb(sender));
+                await user.save();
             }
     
-            if (!friend.friends.includes(userId)) {
-                friend.friends.push(userId);
-                await friend.save({ session });
+            if (!friend.friends.includes(receiver)) {
+                friend.friends.push(convertToObjectIdMongodb(receiver));
+                await friend.save();
             }
-    
-            // Commit 
-            await session.commitTransaction();
-            session.endSession();
     
             return user;
         } catch (error) {
-            await session.abortTransaction();
-            session.endSession();
-            throw new BadRequestError('Failed to update friends');
+            throw new BadRequestError(`Failed to add friends ${error.message}`);
         }
     }
+    
     
     
     async updateUserStatus({ userId, status }) {

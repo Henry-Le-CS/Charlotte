@@ -72,7 +72,7 @@ export default new class UserController {
             const userId = req.cookies['x-client-id']
             new SuccessResponse({
                 message: 'User found successfully',
-                metadata: await userService.findUserById(userId)
+                metadata: await userService.findUserById({ userId })
             }).send(res)
         } catch (error) {
             return res.status(404).json({
@@ -86,6 +86,13 @@ export default new class UserController {
         new SuccessResponse({
             message: 'Friend added successfully',
             metadata: await userService.addFriend(req.query)
+        }).send(res)
+    }
+    getFriends = async (req, res, next) => {
+        const userId = req.query.friendId
+        new SuccessResponse({
+            message: 'Friends getted successfully',
+            metadata: await userService.findUserById({ userId, select: ['username', 'email', 'bio', 'avatar', 'status', 'createdAt']})
         }).send(res)
     }
     updateProfile = async (req, res, next) => {
