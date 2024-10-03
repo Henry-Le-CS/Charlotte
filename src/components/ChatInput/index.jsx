@@ -1,8 +1,11 @@
+import PropTypes from "prop-types";
 import { useEffect, useRef } from "react";
+import { useForm } from "react-hook-form";
 import { FaTelegramPlane } from "react-icons/fa";
 import { FaRegFaceAngry } from "react-icons/fa6";
-const ChatInput = () => {
-  
+import { toast } from "react-toastify";
+
+const ChatInput = ({ socket }) => {
   const textareaRef = useRef(null);
 
   useEffect(() => {
@@ -25,24 +28,78 @@ const ChatInput = () => {
       };
     }
   }, []);
-    return (
-        <form className="w-full h-[10vh] flex items-center justify-evenly">
-            <div className="relative w-[80%] h-full">
-              <FaRegFaceAngry className="w-10 h-10 absolute mt-6 ml-[10px] z-10 text-[var(--icon-color)]"/>
-              <textarea
-                  ref={textareaRef}
-                  rows="1"
-                  placeholder="Nhập tin nhắn"
-                  className="border-none bg-transparent pt-4 pb-4 pl-20 p4-20 min-w-full absolute mb-[13px] text-white"
-                />
-              </div>
-            <div className="relative">
-              <button type="button" className="w-[40px] h-[40px] text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                <FaTelegramPlane className="w-[25px] h-[25px]" />
-              </button>
-            </div>
-        </form>
-    )
-}
 
-export default ChatInput
+  const { register, handleSubmit, setValue, reset } = useForm({
+    defaultValues: {
+      message: ''
+    }
+  });
+
+  const onSubmit = async (data) => {
+    const formData = new FormData();
+
+    Object.keys(data).forEach(key => {
+      if (typeof data[key] === 'object' && data[key] !== null) {
+        Object.keys(data[key]).forEach(subKey => {
+          if (data[key][subKey] !== '') {
+            setValue(`${key}.${subKey}`, data[key][subKey]);
+            formData.append(`${key}[${subKey}]`, data[key][subKey]);
+          }
+        });
+      } else if (data[key] !== '') {
+        setValue(key, data[key]);
+        formData.append(key, data[key]);
+      }
+    });
+
+    try {
+      
+      socket.emit('chat message', data.message);
+      reset();
+    } catch (error) {
+      toast.error('Message sending failed: ' + (error.response?.data?.message || error.message || error));
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      if (event.shiftKey) {
+        return;
+      } else {
+        event.preventDefault();
+        handleSubmit(onSubmit)();
+      }
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full h-[10vh] flex items-center absolute bottom-0 left-0">
+      <div className="relative w-full h-full">
+        <FaRegFaceAngry className="w-10 h-10 absolute mt-10 ml-[10px] z-10 text-[var(--icon-color)]" />
+        <label htmlFor="message"></label>
+        <textarea
+          ref={textareaRef}
+          rows="1"
+          placeholder="Nhập tin nhắn"
+          {...register('message', { required: true })}
+          className="border-none bg-transparent pt-4 pb-4 pl-20 pr-40 min-w-full absolute bottom-0 text-white"
+          onKeyDown={handleKeyDown} // Handle keydown event
+        />
+      </div>
+      <div className="absolute right-0 mt-6">
+        <button
+          type="submit"
+          className="w-[40px] h-[40px] text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        >
+          <FaTelegramPlane className="w-[25px] h-[25px]" />
+        </button>
+      </div>
+    </form>
+  );
+};
+
+ChatInput.propTypes = {
+  socket: PropTypes.object.isRequired
+};
+
+export default ChatInput;

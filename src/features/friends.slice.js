@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-    friend: null
+    friends: null,
+    friendOnChat: null
 }
 
 const friendSlice = createSlice({
@@ -9,10 +10,13 @@ const friendSlice = createSlice({
     initialState,
     reducers: {
         setFriend(state, action) {
-            state.friend = action.payload
+            state.friends = action.payload
+        },
+        setFriendOnChat(state, action) {
+            state.friendOnChat = action.payload
         }
     }
 })
 
-export const { setFriend } = friendSlice.actions
+export const { setFriend, setFriendOnChat } = friendSlice.actions
 export default friendSlice.reducer

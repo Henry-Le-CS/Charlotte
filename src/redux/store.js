@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import friendReducer from '../features/friend.slice';
+import friendReducer from '../features/friends.slice';
 import notisReducer, { notiApiSlice } from '../features/notifications.slice';
 import requestedUserReducer from "../features/requested.user";
 import userReducer from '../features/user.slice';

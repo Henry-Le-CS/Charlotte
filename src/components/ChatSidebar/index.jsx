@@ -9,6 +9,7 @@ import { IoEllipsisHorizontal } from "react-icons/io5";
 import { TbUserPlus, TbUsersPlus } from "react-icons/tb";
 import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { setFriend, setFriendOnChat } from '../../features/friends.slice';
 import { setLoading } from '../../features/notifications.slice';
 import { setRequestedUser } from '../../features/requested.user';
 import { setUser } from '../../features/user.slice';
@@ -149,7 +150,7 @@ const ChatSideBar = () => {
         } else {
             return (
                 friends.length > 0 && friends.map(friend => (
-                    <ul key={friend._id} className="w-full mb-4">
+                    <ul key={friend._id} className="w-full mb-4" onClick={() => handleFriendOnChat(friend)}>
                         <li className="w-[60px] flex justify-center items-center">
                             <div className='relative size-[60px] pt-[10px]'>
                                 <img src={friend.avatar || defaultAvatar} alt="avatar" className="size-[40px] rounded-full object-cover" />
@@ -193,6 +194,7 @@ const ChatSideBar = () => {
     }
     const handleRenderFriends = () => {
         disPatch(setLoading(false))
+        disPatch(setFriend(friends))
         setIsApear(false)
         return (
             friends.length > 0 && friends.map(friend => (
@@ -213,6 +215,10 @@ const ChatSideBar = () => {
                 </ul>
             ))
         )
+    }
+
+    const handleFriendOnChat = (friend) => {
+        disPatch(setFriendOnChat(friend))
     }
     return (
         <div className={`${styles.container}`}>

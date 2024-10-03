@@ -5,13 +5,14 @@ import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { io } from 'socket.io-client';
 import SidebarSetting from '../../components/SidebarSetting';
 import { setUser } from '../../features/user.slice';
 import { useAppDispatch } from '../../redux/hooks';
 import styles from './index.module.scss';
-
 const Chat = () => {
     const [status, setStatus] = useState(false);
+    const [socket, setSocketOn] = useState(null);
     const location = useLocation();
     const disPatch = useAppDispatch();
     const navigate = useNavigate();
@@ -21,6 +22,23 @@ const Chat = () => {
             try {
                 await checkStatus();
                 setStatus(true)
+                 // Initialize Socket.IO connection after successful status check
+                 const newSocket = io(import.meta.env.VITE_APP_WS_ENDPOINT, {
+                    query: { userId: userData?._id || getCookieValue('x-client-id') },
+                    withCredentials: true,
+                });
+                setSocketOn(newSocket);
+                newSocket.on('connect', () => {
+                    console.log('Socket connected:', newSocket.id);
+                });
+
+                newSocket.on('disconnect', () => {
+                    console.log('Socket disconnected');
+                });
+
+                return () => {
+                    if (newSocket) newSocket.disconnect();
+                };
             } catch (error) {
                 toast.error('You are not logging! ' + error?.response?.data?.message || error.message || error);
                 setStatus(false)
@@ -66,7 +84,7 @@ const Chat = () => {
                 </div>
                 <SidebarSetting userId={userId}/>
                 <ChatSidebar />
-                <ChatContent />
+                <ChatContent socket={socket} />
             </div>
         )
     );

@@ -17,7 +17,7 @@ const Home = () => {
                     </div>
                 </div>
                 <div className={styles.home_container_rightside}>
-                    <img src='https://cdn.dribbble.com/users/948834/screenshots/4257434/1.png?resize=768x576&vertical=center' alt="Ứng dụng trò chuyện" />
+                    <img className='mt-[30px]' src='https://cdn.dribbble.com/users/948834/screenshots/4257434/1.png?resize=768x576&vertical=center' alt="Ứng dụng trò chuyện" />
                 </div>
             </div>
             <div className={styles.home_footer}>

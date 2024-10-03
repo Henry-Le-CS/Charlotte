@@ -1,6 +1,7 @@
 import defaultDog from '$/assets/default-dog.jpg';
 import { acceptFriendRequest } from '$/services/notification';
 import { loadUser } from '$/services/user';
+import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { saveNotis, setLoading } from "../../features/notifications.slice";
 import { setRequestedUser } from '../../features/requested.user';
@@ -9,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import DefaultChat from '../Chat/default';
 import ChatHeader from './../ChatHeader/index';
 import ChatInput from './../ChatInput/index';
-const ChatContent = () => {
+const ChatContent = ({ socket }) => {
     const isNotisLoading = useAppSelector(state => state.notis.isLoading)
     const requestedUser = useAppSelector(state => state.requestedUser.user)
     const notisData = useAppSelector(state => state.notis.data?.metadata?.notisWithSender)
@@ -116,11 +117,11 @@ const ChatContent = () => {
         )
       } else {
         return (
-          <>
+          <div className='absolute h-full w-full'>
           <ChatHeader />
           <DefaultChat />
-          <ChatInput />
-          </>
+          <ChatInput socket={socket} />
+          </div>
         )
       }
     }
@@ -140,11 +141,15 @@ const ChatContent = () => {
       }
     }
     return (
-      <div className="w-full flex flex-col justify-center">
+      <div className="w-full flex flex-col justify-center relative">
         {handleRenderContainer()}
       </div>
     );
   };
+  
+  ChatContent.propTypes = {
+    socket: PropTypes.object.isRequired
+  }
   
   export default ChatContent;
   
