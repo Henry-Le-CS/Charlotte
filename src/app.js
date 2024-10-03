@@ -34,6 +34,9 @@ app.use((req, res, next) => {
 });
 app.use(cookieParser())
 
+
+// Handle Socket.IO connections
+
 import store from './models/stote/mongodb.store.js';
 app.set("trust proxy", 1);
 app.use(session({
@@ -47,6 +50,7 @@ app.use(session({
         secure: process.env.ENVIROMENT === 'production' },
     store: store
 })); 
+
 
 // Init other middleware
 app.use(morgan('common'));

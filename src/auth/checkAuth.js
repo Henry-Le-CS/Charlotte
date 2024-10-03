@@ -9,13 +9,13 @@ const pmsSelect = ['actions']
 const permission = ['admin', 'create', 'read', 'write', 'delete']
 const HEADER = {
     API_KEY: 'x-api-key',
-    // AUTHORIZATION: 'authorization'
+    AUTHORIZATION: 'authorization'
 }
 
 export default new class Check {
     status = async (req, res) => {
         try {
-            const accessToken = req.session.accessToken
+            const accessToken = req.session.accessToken || req.cookies[HEADER.AUTHORIZATION]
             const userId = req.cookies['x-client-id']
             const key = await KeyTokenService.findByUserId({ userId, select: ['publicKey']})
                 if (accessToken) {
