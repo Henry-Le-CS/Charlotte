@@ -10,6 +10,7 @@ const HEADER = {
 
 export default new class Check {
     apiKey = async (req, res, next) => {
+        console.log(req.headers)
         try {
             const key = req.headers[HEADER.API_KEY]?.key.toString()
             if (!key) {
