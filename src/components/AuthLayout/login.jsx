@@ -9,7 +9,6 @@ import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { LoginSocialFacebook, LoginSocialGoogle } from 'reactjs-social-login';
-import loginImg from '../../../design/1558355117500.jfif';
 import RouterLinks from '../RouterLinks/index';
 import styles from './index.module.scss';
 const AuthLayout = () => {
@@ -67,9 +66,8 @@ const AuthLayout = () => {
         toast.error(err);
     }
     return (
-        status && <div className={`p-10 min-h-screen flex items-center justify-center bg-gray-50 ${styles.container}`}>
+        status && <div className={`max-w-[60%] m-auto p-10 min-h-screen flex items-center justify-center bg-gray-50 ${styles.container}`}>
             <div className="flex lg:flex-row lg:w-[80%] shadow-lg rounded-xl min-h-[60vh]">
-                <img className='max-w-[450px] rounded-l-lg' src={loginImg} alt="" />
                 <div className="bg-white w-full flex items-center justify-center">
                 <Spring className="max-w-[80%] w-full" type="slideUp" duration={400} delay={300}>
                     <div className="text-center mb-10">

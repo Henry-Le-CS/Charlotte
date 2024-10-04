@@ -3,6 +3,9 @@ import Loader from '$/components/Loader';
 import Home from '$/pages/Home';
 import { Suspense, lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
+import About from '../pages/About';
+import Blog from '../pages/Blog';
+import Contact from '../pages/Contact';
 import EmailSent from '../pages/Response/emailSent';
 import PageNotFound from '../pages/Response/pageNotFound';
 import ServerError from '../pages/Response/serverError';
@@ -15,6 +18,9 @@ const RouterController = () => {
         <Suspense fallback={<Loader />}>
             <Routes>
                 <Route path="/" element={<Header><Home /></Header> }/>
+                <Route path="/about" element={<Header><About /></Header> }/>
+                <Route path="/contact" element={<Header><Contact /></Header> }/>
+                <Route path="/blog" element={<Header><Blog /></Header> }/>
                 <Route path="/user/login" element={<Header><Login /></Header> }/>
                 <Route path="/user/register" element={<Header><SignUp /></Header> }/>
                 <Route path="/chat" element={<Chat /> }/>
