@@ -13,6 +13,11 @@ export default class ApiKeyService {
         return apiKey;
     }
 
+    static async findByUserId(userId) {
+        const apiKey = await ApiKeyRepository.findByUserId(userId);
+        if (!apiKey) throw new NotFoundError('API key not found or inactive');
+        return apiKey
+    }
     // Tạo một API key mới
     static async createApiKey({ userId, pmsId}) {
         const key = crypto.randomBytes(64).toString('hex');

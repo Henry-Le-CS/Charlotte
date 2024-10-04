@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import 'dotenv/config';
 import express from 'express';
+import session from 'express-session';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import multer from 'multer';
@@ -10,7 +11,7 @@ const app = express();
 
 // CORS configuration
 var corsOptions = {
-    origin: ['http://localhost:3000', 'https://charlotte-webapp.vercel.app', 'https://charlotte-git-master-undergrsystems-projects.vercel.app', 'https://charlotte.io.vn'],
+    origin: ['http://localhost:3000', 'https://charlotte.io.vn'],
     credentials: true,
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     allowedHeaders: ['Content-Type', 'authorization', 'ngrok-skip-browser-warning', 'x-api-key', 'x-client-id', 'x-rtoken-id'] 
@@ -21,7 +22,7 @@ app.options('*', cors(corsOptions));
 const upload = multer();
 app.use(upload.none());
 app.use((req, res, next) => {
-    const allowedOrigins = ['http://localhost:3000', 'https://charlotte-webapp.vercel.app', 'https://charlotte-git-master-undergrsystems-projects.vercel.app', 'https://charlotte.io.vn'];
+    const allowedOrigins = ['http://localhost:3000', 'https://charlotte.io.vn'];
     const origin = req.headers.origin;
     if (allowedOrigins.includes(origin)) {
         res.header('Access-Control-Allow-Origin', origin);
@@ -32,6 +33,24 @@ app.use((req, res, next) => {
     next();
 });
 app.use(cookieParser())
+
+
+// Handle Socket.IO connections
+
+import store from './models/stote/mongodb.store.js';
+app.set("trust proxy", 1);
+app.use(session({
+    resave: true,
+    saveUninitialized: true,
+    proxy: process.env.ENVIROMENT === 'production',
+    secret: process.env.SECRET_SESSION_KEY, 
+    cookie: { 
+        maxAge: 7 * 24 * 60 * 60 * 1000, 
+        sameSite: process.env.ENVIROMENT === 'production' ? 'none' : 'lax', 
+        secure: process.env.ENVIROMENT === 'production' },
+    store: store
+})); 
+
 
 // Init other middleware
 app.use(morgan('common'));

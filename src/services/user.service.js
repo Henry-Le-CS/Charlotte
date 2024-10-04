@@ -1,10 +1,10 @@
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
-import crypto from 'node:crypto';
+import { createTokenPair } from '../auth/authUtils.js';
 import PermissionRepository from '../repositories/permission.repo.js';
 import UserRepository from '../repositories/user.repo.js';
 import ApikeyService from '../services/apiKey.service.js';
+import { convertToObjectIdMongodb } from '../utils/index.js';
 import { AuthFailureError, BadRequestError, NotFoundError } from './../core/error.response.js';
 import KeyTokenService from './keytoken.service.js';
 // export const apiKeyStore = new Map();
@@ -18,26 +18,6 @@ class UserService {
         }
         return UserService.instance;
     }
-
-    generateTokenPair(payload) {
-        const privateKey = crypto.randomBytes(64).toString('hex');
-        const publicKey = crypto.randomBytes(64).toString('hex');
-
-        const accessToken = jwt.sign(payload, privateKey, { expiresIn: '1h' });
-        const refreshToken = jwt.sign(payload, publicKey, { expiresIn: '7d' });
-
-        return { accessToken, refreshToken, privateKey, publicKey };
-    }
-
-    // Helper method to verify tokens
-    verifyToken(token, key) {
-        try {
-            return jwt.verify(token, key);
-        } catch (error) {
-            throw new AuthFailureError('Invalid or expired token');
-        }
-    }
-
     async registerUser(data) {
         const { userDetails, permissions } = data;
         const email = userDetails.email
@@ -95,23 +75,31 @@ class UserService {
         if (!user || !await bcrypt.compare(password, user.password_hash)) {
             throw new BadRequestError('Invalid credentials');
         }
-        const userId = user._id
+        const userId = user._id.toString()
         // Generate JWT token pair
-        const tokens = this.generateTokenPair({ id: userId });
+        const tokens = await createTokenPair({userId});
         // Save tokens
-        await KeyTokenService.saveToken(userId, tokens.refreshToken, tokens.privateKey, tokens.publicKey);
+        await KeyTokenService.saveToken(userId, tokens.refreshToken, tokens.publicKey, tokens.privateKey );
 
+        // get apiKey
+        const apiKey = await ApikeyService.findByUserId(userId);
+        if (!apiKey) throw new NotFoundError('API key not found')
         // Update user status
         await UserRepository.updateUserStatus({userId, status: 'online'});
 
-        return { user, tokens: { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken } };
+        return { user, tokens: { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken }, apiKey };
     }
 
     async logoutUser(userId) {
         await KeyTokenService.removeTokensByUserId(userId);
         await UserRepository.updateUserStatus({ userId, status: 'offline'});
     }
-
+    async findUserById({ userId, select = []}) {
+        return await UserRepository.findUserById({ userId, select })
+    }
+    async findUserByEmail(email) {
+        return await UserRepository.findUserByEmail({ email, select: ['email', 'avatar', 'username', 'friends'] })
+    }
     async refreshAccessToken(refreshToken) {
         const tokenRecord = await TokenRepository.findByRefreshToken(refreshToken);
         if (!tokenRecord) {
@@ -133,21 +121,44 @@ class UserService {
         return await UserRepository.updateUser({ userId, updateData });
     }
 
-    async addFriend(userId, friendId) {
-        const user = await UserRepository.findUserById(userId);
-        const friend = await UserRepository.findUserById(friendId);
+    async searchUsers(value) {
+        try {
+            const regexArray = value.split(',').map(keyword => ({
+                email: { $regex: keyword, $options: 'i' }
+              }));
+            return await UserRepository.searching(regexArray)
+        } catch (error) {
+            throw new NotFoundError(error.message)
+        }
+    }
+    async addFriend(senderId, receiverId) {
+        const sender = senderId.toString();
+        const receiver = receiverId.toString();
+        const friend = await UserRepository.findUserById({ userId: sender, select: ['_id', 'friends'] });
+        const user = await UserRepository.findUserById({ userId: receiver, select: ['_id', 'friends'] });
+        
         if (!user || !friend) {
             throw new NotFoundError('User not found');
         }
-
-        user.friends.push(friendId);
-        await user.save();
-
-        friend.friends.push(userId);
-        await friend.save();
-
-        return user;
+    
+        try {
+            if (!user.friends.includes(sender)) {
+                user.friends.push(convertToObjectIdMongodb(sender));
+                await user.save();
+            }
+    
+            if (!friend.friends.includes(receiver)) {
+                friend.friends.push(convertToObjectIdMongodb(receiver));
+                await friend.save();
+            }
+    
+            return user;
+        } catch (error) {
+            throw new BadRequestError(`Failed to add friends ${error.message}`);
+        }
     }
+    
+    
     
     async updateUserStatus({ userId, status }) {
         return await UserRepository.updateUserStatus({ userId, status });
