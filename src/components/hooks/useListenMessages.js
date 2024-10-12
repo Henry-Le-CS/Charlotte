@@ -21,6 +21,6 @@ const useListenMessages = () => {
 		});
 
 		return () => socket?.off("newMessage");
-	}, [socket, setMessages, messages]);
+	}, [socket, setMessages, messages, selectedFriend?._id]);
 };
 export default useListenMessages;

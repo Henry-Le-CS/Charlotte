@@ -170,7 +170,7 @@ const ChatSideBar = () => {
         setModalUser(user)
         try {
             const results = await checkRequestSent(user._id)
-            if (results) setRequestSent(true)
+            if (results.metadata.senderId === userData._id) setRequestSent(true)
                 else setRequestSent(false)
         } catch (error) {
             setRequestSent(false)
