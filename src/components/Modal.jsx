@@ -61,9 +61,7 @@ const Modal = ({ user, status, isRequestSent }) => {
                                                 onClick={e => handleSendFriendRequest(e, user._id)}
                                             >
                                                 Kết Bạn
-                                            </button> : <button className="flex text-center items-center justify-center w-full py-5 text-2xl font-medium text-white bg-gray-600 rounded-xl cursor-not-allowed"
-                                                onClick={e => handleSendFriendRequest(e, user._id)}
-                                            >
+                                            </button> : <button className="flex text-center items-center justify-center w-full py-5 text-2xl font-medium text-white bg-gray-600 rounded-xl cursor-not-allowed">
                                                 Đã gửi lời mời kết bạn
                                             </button>}
                                         </div>

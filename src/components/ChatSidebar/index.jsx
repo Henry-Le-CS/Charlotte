@@ -171,6 +171,7 @@ const ChatSideBar = () => {
         try {
             const results = await checkRequestSent(user._id)
             if (results) setRequestSent(true)
+                else setRequestSent(false)
         } catch (error) {
             setRequestSent(false)
         }
