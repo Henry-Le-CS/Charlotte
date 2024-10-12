@@ -1,9 +1,9 @@
+import https from 'https';
 import { PropTypes } from 'prop-types';
 import { createContext, useContext, useEffect, useState } from "react";
 import io from 'socket.io-client';
 import { setOnlineUsers } from "../features/socket.slice";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-
 const SocketContext = createContext();
 
 export const useSocketContext = () => {
@@ -18,11 +18,13 @@ export const SocketContextProvider = ({ children }) => {
     // Initialize Socket.IO connection after successful status check
     useEffect(() => {
         if (userData) {
+            https.globalAgent.options.rejectUnauthorized = false;
             const newSocket = io(import.meta.env.VITE_APP_WS_ENDPOINT, {
                 query: { userId: userData?._id },
                 transports: ['websocket'],
                 withCredentials: true,
-                secure: true
+                secure: true,
+                agent: https.globalAgent
             });
             setSocket(newSocket);
             newSocket.on("getOnlineUsers", (users) => {
