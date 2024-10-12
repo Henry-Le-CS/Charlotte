@@ -7,12 +7,7 @@ const server = app.listen(port, () => {
     console.log(`Server started on port ${port}`);
 });
 // io server
-const io = new Server(server, {
-    cors: {
-        origin: ['http://localhost:3000', 'https://charlotte.io.vn'],
-        credentials: true
-    }
-});
+const io = new Server(server);
 export const userSocketMap = {}; // {userId: socketId}
 
 io.on("connection", (socket) => {
