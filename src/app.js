@@ -7,7 +7,7 @@ import session from 'express-session';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import multer from 'multer';
-const app = express();
+const app = express()
 
 // CORS configuration
 var corsOptions = {
@@ -86,4 +86,4 @@ app.use((error, req, res, next) => {
     });
 });
 
-export default app;
+export default app

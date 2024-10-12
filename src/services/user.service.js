@@ -94,6 +94,9 @@ class UserService {
         await KeyTokenService.removeTokensByUserId(userId);
         await UserRepository.updateUserStatus({ userId, status: 'offline'});
     }
+    async offlineUser(userId) {
+        await UserRepository.updateUserStatus({ userId, status: 'offline'});
+    }
     async findUserById({ userId, select = []}) {
         return await UserRepository.findUserById({ userId, select })
     }

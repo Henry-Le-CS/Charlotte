@@ -1,29 +1,38 @@
-import MessageModel from "../src/models/Messages.js";
-
-const SendMessage = async (req, res) => {
-    const message = new MessageModel({
-        chatID: req.body.chatID,
-        senderID: req.body.senderID,
-        text: req.body.text
-    })
-    try {
-        const results = await message.save()
-        res.status(200).send(results)
-    } catch (error) {
-        res.status(500).send({ message: 'Message fail on sending'})
+import { CREATED, SuccessResponse } from "../core/success.response.js"
+import MessageService from '../services/message.service.js'
+export default new class MessageController {
+    send = async (req, res, next) => {
+        const { message } = req.body
+        const receiverId = req.query.id
+        const senderId = req.session.user || req.cookies['x-client-id']
+        try {
+            new CREATED({
+                message: 'Message sent successfully',
+                metadata: await MessageService.sendMessage(senderId, receiverId, message)
+            }).send(res)
+        } catch (error) {
+            return res.status(500).json({
+                code: 500,
+                message: `Message sending failed ${error.message}`,
+                status: '500 Internal Server Error'
+            })
+        }
+    }
+    get = async (req, res, next) => {
+        const receiverId = req.query.id
+        const senderId = req.session.user || req.cookies['x-api-key']
+        try {
+            new SuccessResponse({
+                message: 'Get All Message Successfully',
+                metadata: await MessageService.getMessage(senderId, receiverId)
+            }).send(res)
+        } catch (error) {
+            return res.status(404).json({
+                code: 404,
+                message: `Get Messages Error: ${error.message}`,
+                status: '404 Not Found'
+            })
+        }
     }
 }
-
-const FindMessages = async (req, res) => {
-    const id = req.params
-    try {
-        const results = await MessageModel.find({ id })
-        res.status(200).json(results)
-    } catch (error) {
-        res.status(500).send({ message: `Message finding failed ${error}` })
-    }
-}
-export {
-    FindMessages, SendMessage
-};
 
