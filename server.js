@@ -11,6 +11,7 @@ const io = new Server(server);
 export const userSocketMap = {}; // {userId: socketId}
 
 io.on("connection", (socket) => {
+    console.log('a user connected to socket')
     const userId = socket.handshake.query.userId;
     if (userId != "undefined") userSocketMap[userId] = socket.id;
     // Listen for custom events
