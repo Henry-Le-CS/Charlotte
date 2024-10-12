@@ -7,10 +7,10 @@ import { saveNotis, setLoading } from "../../features/notifications.slice";
 import { setRequestedUser } from '../../features/requested.user';
 import { setUser } from '../../features/user.slice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import DefaultChat from '../Chat/default';
+import Messages from '../Chat/Messages';
 import ChatHeader from './../ChatHeader/index';
 import ChatInput from './../ChatInput/index';
-const ChatContent = ({ socket }) => {
+const ChatContent = () => {
     const isNotisLoading = useAppSelector(state => state.notis.isLoading)
     const requestedUser = useAppSelector(state => state.requestedUser.user)
     const notisData = useAppSelector(state => state.notis.data?.metadata?.notisWithSender)
@@ -117,10 +117,10 @@ const ChatContent = ({ socket }) => {
         )
       } else {
         return (
-          <div className='absolute h-full w-full'>
-          <ChatHeader />
-          <DefaultChat />
-          <ChatInput socket={socket} />
+          <div className='fixed bottom-0 max-w-[1010px] right-0 ml-[355px] flex flex-col justify-center h-full w-full'>
+            <ChatHeader />
+            <Messages />
+            <ChatInput />
           </div>
         )
       }
@@ -141,14 +141,14 @@ const ChatContent = ({ socket }) => {
       }
     }
     return (
-      <div className="w-full flex flex-col justify-center relative">
+      <div className="w-full relative">
         {handleRenderContainer()}
       </div>
     );
   };
   
   ChatContent.propTypes = {
-    socket: PropTypes.object.isRequired
+    socket: PropTypes.object
   }
   
   export default ChatContent;

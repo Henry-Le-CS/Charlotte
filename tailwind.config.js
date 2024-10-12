@@ -1,7 +1,7 @@
 import flowbite from 'flowbite-react/tailwind';
 /** @type {import('tailwindcss').Config} */
 export default {
-  darkMode: 'class',
+  // darkMode: 'class',
   content: [
     "./index.html",
     flowbite.content(),
@@ -59,6 +59,7 @@ export default {
     },
   },
   plugins: [
-    flowbite.plugin()
+    flowbite.plugin(),
+    require('daisyui')
   ],
 }

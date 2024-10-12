@@ -4,8 +4,10 @@ import { useForm } from "react-hook-form";
 import { FaTelegramPlane } from "react-icons/fa";
 import { FaRegFaceAngry } from "react-icons/fa6";
 import { toast } from "react-toastify";
+import useSendMessage from "../hooks/useSendMessage";
 
-const ChatInput = ({ socket }) => {
+const ChatInput = () => {
+    const { send } = useSendMessage();
   const textareaRef = useRef(null);
 
   useEffect(() => {
@@ -36,28 +38,27 @@ const ChatInput = ({ socket }) => {
   });
 
   const onSubmit = async (data) => {
-    const formData = new FormData();
+    const message = new FormData();
 
     Object.keys(data).forEach(key => {
       if (typeof data[key] === 'object' && data[key] !== null) {
         Object.keys(data[key]).forEach(subKey => {
           if (data[key][subKey] !== '') {
             setValue(`${key}.${subKey}`, data[key][subKey]);
-            formData.append(`${key}[${subKey}]`, data[key][subKey]);
+            message.append(`${key}[${subKey}]`, data[key][subKey]);
           }
         });
       } else if (data[key] !== '') {
         setValue(key, data[key]);
-        formData.append(key, data[key]);
+        message.append(key, data[key]);
       }
     });
-
+    
     try {
-      
-      socket.emit('chat message', data.message);
-      reset();
+      await send(message)
+      reset()
     } catch (error) {
-      toast.error('Message sending failed: ' + (error.response?.data?.message || error.message || error));
+      toast.error(error.message)
     }
   };
 
@@ -99,7 +100,7 @@ const ChatInput = ({ socket }) => {
 };
 
 ChatInput.propTypes = {
-  socket: PropTypes.object.isRequired
+  socket: PropTypes.object
 };
 
 export default ChatInput;
