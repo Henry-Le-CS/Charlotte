@@ -20,7 +20,9 @@ export const SocketContextProvider = ({ children }) => {
         if (userData) {
             const newSocket = io(import.meta.env.VITE_APP_WS_ENDPOINT, {
                 query: { userId: userData?._id },
+                transports: ['websocket'],
                 withCredentials: true,
+                secure: true
             });
             setSocket(newSocket);
             newSocket.on("getOnlineUsers", (users) => {
