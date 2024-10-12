@@ -16,8 +16,8 @@ const useListenMessages = () => {
 			const sound = new Audio(notificationSound);
 			sound.play();
 			if (selectedFriend?._id !== newMessage.sender) toast.success(`Bạn có một tin nhắn mới`)
-
-			if (selectedFriend === newMessage.sender) disPatch(setMessages([...messages, newMessage]));
+				
+			if (selectedFriend._id === newMessage.sender) disPatch(setMessages([...messages, newMessage]));
 		});
 
 		return () => socket?.off("newMessage");
