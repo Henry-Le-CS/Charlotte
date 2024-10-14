@@ -1,6 +1,5 @@
 // import cert from '$/configs/cert.pem';
 import fs from 'fs';
-import https from 'https';
 import { PropTypes } from 'prop-types';
 import { createContext, useContext, useEffect, useState } from "react";
 import io from 'socket.io-client';
@@ -20,14 +19,14 @@ export const SocketContextProvider = ({ children }) => {
     // Initialize Socket.IO connection after successful status check
     useEffect(() => {
         if (userData) {
-            https.globalAgent.options.rejectUnauthorized = false;
+            // https.globalAgent.options.rejectUnauthorized = false;
             const newSocket = io(import.meta.env.VITE_APP_WS_ENDPOINT, {
                 ca: fs.readFileSync('../configs/cert.pem'),
                 query: { userId: userData?._id },
                 transports: ['websocket'],
                 withCredentials: true,
                 secure: true,
-                agent: https.globalAgent
+                // agent: https.globalAgent
             });
             setSocket(newSocket);
             newSocket.on("getOnlineUsers", (users) => {
