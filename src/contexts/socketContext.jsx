@@ -1,4 +1,4 @@
-import cert from '$/config/cert.pem';
+import cert from '$/configs/cert.pem';
 import fs from 'fs';
 import https from 'https';
 import { PropTypes } from 'prop-types';
