@@ -1,5 +1,6 @@
 import { Server } from 'socket.io';
 import app from './src/app.js';
+import userService from './src/services/user.service.js';
 const port = process.env.DEV_APP_PORT
 // Start the server
 const server = app.listen(port, () => {
@@ -23,8 +24,8 @@ io.on("connection", (socket) => {
 	io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
     // Handle disconnections
-    socket.on("disconnect", () => {
-		console.log("user disconnected", socket.id);
+    socket.on("disconnect", async () => {
+		await userService.offlineUser(userId)
 		delete userSocketMap[userId];
 		io.emit("getOnlineUsers", Object.keys(userSocketMap));
 	});
