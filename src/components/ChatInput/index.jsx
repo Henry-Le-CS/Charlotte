@@ -74,7 +74,7 @@ const ChatInput = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="w-full h-[10vh] flex items-center absolute bottom-0 left-0">
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full h-[10vh] absolute bottom-0 flex items-center">
       <div className="relative w-full h-full">
         <FaRegFaceAngry className="w-10 h-10 absolute mt-10 ml-[10px] z-10 text-[var(--icon-color)]" />
         <label htmlFor="message"></label>

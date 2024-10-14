@@ -17,7 +17,7 @@ const Messages = () => {
 	}, [messages]);
 
 	return (
-		<div className='px-4 mb-[8vh] h-auto overflow-scroll'>
+		<div className='px-4 overflow-scroll'>
 			{!loading &&
 				messages.length > 0 &&
 				messages.map((message) => (

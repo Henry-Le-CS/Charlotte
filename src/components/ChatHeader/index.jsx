@@ -7,7 +7,7 @@ import styles from './index.module.scss';
 const ChatHeader = ( ) => {
     const { selectedFriend } = useAppSelector(state => state.friend)
     return (
-      selectedFriend && <header className="absolute top-0 bg-transparent bubble-shadow p-5 text-gray-700 min-h-[60px] mb-[5px] flex">
+      selectedFriend && <header className="bg-transparent absolute top-0 left-0 bubble-shadow p-5 text-gray-700 min-h-[60px] w-full mb-[5px] flex">
                 {/* Left Side Chat Header */}
               <div className="flex items-center justify-start min-w-[50%] pl-10">
                 <div className="relative w-[50px] h-[50px] pt-[5px]">
