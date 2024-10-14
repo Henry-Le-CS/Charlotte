@@ -49,7 +49,7 @@ const Chat = () => {
     
     return (
         status && (
-            <div className='flex static justify-center h-screen overflow-hidden'>
+            <div className='flex static justify-center h-screen sticky'>
                 <div className={styles.area}>
                     <ul className={styles.circles}>
                         <li></li>
