@@ -1,3 +1,5 @@
+import cert from '$/config/cert.pem';
+import fs from 'fs';
 import https from 'https';
 import { PropTypes } from 'prop-types';
 import { createContext, useContext, useEffect, useState } from "react";
@@ -20,6 +22,7 @@ export const SocketContextProvider = ({ children }) => {
         if (userData) {
             https.globalAgent.options.rejectUnauthorized = false;
             const newSocket = io(import.meta.env.VITE_APP_WS_ENDPOINT, {
+                ca: fs.readFileSync(cert),
                 query: { userId: userData?._id },
                 transports: ['websocket'],
                 withCredentials: true,
