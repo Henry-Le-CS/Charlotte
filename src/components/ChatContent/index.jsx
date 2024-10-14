@@ -117,7 +117,7 @@ const ChatContent = () => {
         )
       } else {
         return (
-          <div className='absolute bottom-0 right-0 flex flex-col justify-center h-screen w-full'>
+          <div className='absolute bottom-0 right-0 flex flex-col h-screen w-full'>
             <ChatHeader />
             <Messages />
             <ChatInput />
