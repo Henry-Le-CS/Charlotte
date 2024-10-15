@@ -6,9 +6,11 @@ import { IoLogOutOutline, IoSettingsOutline } from "react-icons/io5";
 import { LiaWalletSolid } from "react-icons/lia";
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useAppSelector } from '../../redux/hooks';
 import Notification from '../Notifications';
 import styles from './index.module.scss';
 const SidebarSetting = ({ userId }) => {
+    const isMobileChatContent = useAppSelector(state => state.user.isMobile)
     const navigate = useNavigate()
     const handleLogout = async () => {
         if (userId) {
@@ -25,13 +27,20 @@ const SidebarSetting = ({ userId }) => {
             }
         }
     };
+    const handleAddBackground = (e) => {
+        const icons = document.querySelectorAll(`svg`)
+        icons.forEach((icon) => {
+            icon.style.backgroundColor = 'transparent';
+        });
+        e.currentTarget.style.backgroundColor = 'var(--navbar-dark-secondary)';
+    }
     return (
-        <div className={`min-w-[50px] flex flex-col items-center justify-end py-5 ${styles.sidebar_container}`}>
-                <HiOutlineUser />
-                <Notification/>
-                <IoIosHeartEmpty />
-                <LiaWalletSolid />
-                <IoSettingsOutline />
+        !isMobileChatContent && <div className={`min-w-[50px] flex flex-col items-center justify-end py-5 ${styles.sidebar_container}`}>
+                <HiOutlineUser onClick={handleAddBackground}/>
+                <Notification />
+                <IoIosHeartEmpty onClick={handleAddBackground}/>
+                <LiaWalletSolid onClick={handleAddBackground}/>
+                <IoSettingsOutline onClick={handleAddBackground}/>
                 <IoLogOutOutline onClick={handleLogout} />
             <div>
                 <label className="inline-flex items-center cursor-pointer">

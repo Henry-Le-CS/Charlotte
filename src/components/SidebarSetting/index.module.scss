@@ -1,4 +1,31 @@
+// breakpoints
+$mobile: 576px;
+$tablet: 768px;
+$desktop: 992px;
+$large-desktop: 1200px;
+
+@mixin respond-to($breakpoints) {
+    @media only screen and (max-width: $breakpoints) {
+        @content;
+    }
+}
+
 .sidebar_container {
+
+    @include respond-to($mobile) {
+        position: absolute;
+        bottom: 0;
+        flex-direction: row;
+        width: 100%;
+        padding: 0;
+        background-color: #333030;
+        max-height: 50px;
+        justify-content: space-evenly;
+        align-items: center;
+        & > div {
+            display: none;
+        }
+    }
     svg {
         color: #fff;
         width: 40px;
@@ -7,6 +34,9 @@
         margin-bottom: 10px;
         border-radius: 5px;
         transition: background-color .5s ease;
+        @include respond-to($mobile) {
+            margin-bottom: 0;
+        }
         &:hover {
             cursor: pointer;
             background-color: var(--navbar-dark-secondary);

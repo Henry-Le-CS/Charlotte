@@ -49,7 +49,7 @@ const Chat = () => {
     
     return (
         status && (
-            <div className='flex static justify-center h-screen sticky'>
+            <div className={`flex justify-center h-screen sticky ${styles.chat_background}`}>
                 <div className={styles.area}>
                     <ul className={styles.circles}>
                         <li></li>

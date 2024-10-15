@@ -3,6 +3,7 @@ import { sendFriendRequest } from '$/services/notification';
 import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
+import styles from './index.module.scss';
 const defaultBio = 'Vấn đề không phải là bạn có bị hạ gục hay không, mà là bạn có đứng dậy hay không.'
 const Modal = ({ user, status, isRequestSent }) => {
     const [isApear, setIsApear] = useState(true);
@@ -37,7 +38,7 @@ const Modal = ({ user, status, isRequestSent }) => {
     }
     return (
         isApear && user && (
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[999] backdrop-blur-sm">
+            <div className={`fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[999] backdrop-blur-sm ${styles.modal_mobile}`}>
                 <div className="flex justify-center items-end text-center min-h-screen sm:block">
                     <div className="bg-gray-500 transition-opacity bg-opacity-75"></div>
                     <span className="hidden sm:inline-block sm:align-middle sm:h-screen"></span>

@@ -5,6 +5,7 @@ import { FaTelegramPlane } from "react-icons/fa";
 import { FaRegFaceAngry } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import useSendMessage from "../hooks/useSendMessage";
+import styles from './index.module.scss';
 
 const ChatInput = () => {
     const { send } = useSendMessage();
@@ -74,7 +75,7 @@ const ChatInput = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="w-full h-[10vh] absolute bottom-0 flex items-center">
+    <form onSubmit={handleSubmit(onSubmit)} className={`w-full h-[10vh] absolute bottom-0 flex items-center ${styles.input_container}`}>
       <div className="relative w-full h-full">
         <FaRegFaceAngry className="w-10 h-10 absolute mt-10 ml-[10px] z-10 text-[var(--icon-color)]" />
         <label htmlFor="message"></label>
@@ -90,7 +91,7 @@ const ChatInput = () => {
       <div className="absolute right-0 mt-6">
         <button
           type="submit"
-          className="w-[40px] h-[40px] text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          className="w-[40px] h-[40px] text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
           <FaTelegramPlane className="w-[25px] h-[25px]" />
         </button>

@@ -2,25 +2,39 @@ import defaultDog from '$/assets/default-dog.jpg';
 import { acceptFriendRequest } from '$/services/notification';
 import { loadUser } from '$/services/user';
 import PropTypes from 'prop-types';
+import { useEffect } from 'react';
+import { FaArrowLeft } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { saveNotis, setLoading } from "../../features/notifications.slice";
 import { setRequestedUser } from '../../features/requested.user';
-import { setUser } from '../../features/user.slice';
+import { setIsMobile, setUser } from '../../features/user.slice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import Messages from '../Chat/Messages';
 import ChatHeader from './../ChatHeader/index';
 import ChatInput from './../ChatInput/index';
+import styles from './index.module.scss';
 const ChatContent = () => {
+    const isMobile = useAppSelector(state => state.user.isMobile)
     const isNotisLoading = useAppSelector(state => state.notis.isLoading)
     const requestedUser = useAppSelector(state => state.requestedUser.user)
     const notisData = useAppSelector(state => state.notis.data?.metadata?.notisWithSender)
-
     const disPatch = useAppDispatch()
+
+    useEffect(() => {
+      const container = document.querySelector(`.${styles.chat_content}`)
+      if (isMobile) {
+        container.style.display = 'block'
+      } else {
+        container.style.display = ''
+      }
+    }, [isMobile])
     const handleRenderContainer = () => {
       if (isNotisLoading) {
         return (
           requestedUser && 
-          <div className="w-[60%] h-[70%] mx-auto items-center justify-center flex flex-col bg-transparent dark:bg-gray-900 rounded-lg overflow-hidden shadow-2xl">
+          
+          <div className={`w-[60%] h-[70%] mx-auto items-center justify-center flex flex-col bg-transparent dark:bg-gray-900 rounded-lg overflow-hidden shadow-2xl ${styles.user_request_detail}`}>
+            {isMobile && <FaArrowLeft className='text-white w-[40px] h-[40px] p-[10px] self-start mx-[40px]' onClick={() => disPatch(setIsMobile(false))} />}
           <div className="w-[80%] border-b px-4 pb-6">
             <div className="text-center my-4">
               <img
@@ -117,7 +131,7 @@ const ChatContent = () => {
         )
       } else {
         return (
-          <div className='absolute bottom-0 right-0 flex flex-col h-screen w-full'>
+          <div className={`absolute bottom-0 right-0 flex flex-col h-screen w-full`}>
             <ChatHeader />
             <Messages />
             <ChatInput />
@@ -128,6 +142,7 @@ const ChatContent = () => {
 
     const handleAcceptFriendRequest = async (userId) => {
       try {
+        disPatch(setIsMobile(false))
         await acceptFriendRequest(userId)
         disPatch(setLoading(false))
         disPatch(setRequestedUser(null))
@@ -141,14 +156,14 @@ const ChatContent = () => {
       }
     }
     return (
-      <div className="w-full relative">
+      <div className={styles.chat_content}>
         {handleRenderContainer()}
       </div>
     );
   };
   
   ChatContent.propTypes = {
-    socket: PropTypes.object
+    socket: PropTypes.object.isRequired
   }
   
   export default ChatContent;

@@ -12,11 +12,11 @@ import { toast } from 'react-toastify';
 import { setFriends } from '../../features/friends.slice';
 import { setLoading } from '../../features/notifications.slice';
 import { setRequestedUser } from '../../features/requested.user';
-import { setUser } from '../../features/user.slice';
+import { setIsMobile, setUser } from '../../features/user.slice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { getRandomEmoji } from '../../utils/emojis';
 import { Conversation } from '../Conversation';
-import Modal from '../Modal';
+import Modal from '../Modal/Modal';
 import UserStatus from '../UserStatus';
 import styles from "./index.module.scss";
 const ChatSideBar = () => {
@@ -35,6 +35,28 @@ const ChatSideBar = () => {
     const notisData = useAppSelector(state => state.notis.data?.metadata?.notisWithSender)
     const isNotisLoading = useAppSelector(state => state.notis.isLoading)
     const userData = useAppSelector(state => state.user.data)
+    const isMobileChatContent = useAppSelector(state => state.user.isMobile)
+    const [width, setWidth] = useState(window.innerWidth);
+
+    function handleWindowSizeChange() {
+        setWidth(window.innerWidth);
+    }
+    useEffect(() => {
+        window.addEventListener('resize', handleWindowSizeChange);
+        return () => {
+            window.removeEventListener('resize', handleWindowSizeChange);
+        }
+    }, []);
+
+    const isMobile = width <= 768;
+    useEffect(() => {
+        const container = document.querySelector(`.${styles.container}`)
+        if (isMobileChatContent && isMobile) {
+            container.style.display = 'none'
+        } else {
+            container.style.display = 'flex'
+        }
+    }, [isMobileChatContent])
     useEffect(() => {
         if (userData) {
             setUserData(userData)
@@ -48,6 +70,7 @@ const ChatSideBar = () => {
                 listFriends.push(friends.metadata)
             })
             setListFriends(listFriends)
+            setIsApear(false)
         }
     }, [user?.friends])
     useEffect(() => {
@@ -143,7 +166,7 @@ const ChatSideBar = () => {
                                     <h6>{user.username}</h6>
                                     <time dateTime={user.updatedAt}>{new Date(user.updatedAt).toLocaleDateString()}</time>
                                 </div>
-                                <p className="max-h-[20px] pr-[10px] overflow-hidden text-ellipsis">{user.email}</p>
+                                <p className="max-h-[20px] pr-[10px] overflow-hidden text-ellipsis w-full text-start">{user.email}</p>
                             </div>
                         </li>
                     </ul>
@@ -152,13 +175,18 @@ const ChatSideBar = () => {
         } else {
             return (
                 friends.length > 0 && friends.map((friend, idx) => (
-                    <Conversation key={friend._id} friend={friend} lastIdx={idx === friends.length - 1} emoji={getRandomEmoji()} />
+                    <Conversation
+                    key={friend._id}
+                    friend={friend} 
+                    lastIdx={idx === friends.length - 1} 
+                    emoji={getRandomEmoji()} />
                 ))
             )
         }
     }
     const handleRequestedUser = (user) => {
         disPatch(setRequestedUser(user))
+        disPatch(setIsMobile(true))
     }
     const handleData = (metadata) => {
         setSearchData(metadata)
@@ -186,32 +214,22 @@ const ChatSideBar = () => {
         disPatch(setFriends(friends))
         setIsApear(false)
         return (
-            friends.length > 0 && friends.map(friend => (
-                <ul key={friend._id} className="w-full mb-4">
-                    <li className="w-[60px] flex justify-center items-center">
-                        <div className='relative size-[60px] pt-[10px]'>
-                            <img src={friend.avatar || defaultAvatar} alt="avatar" className="size-[40px] rounded-full object-cover" />
-                            <UserStatus status={friend.status === 'offline' ? 'inactive' : 'active'} />
-                        </div>
-                        <div className="w-full flex items-center justify-center flex-col px-4">
-                            <div className="w-full flex items-center justify-between">
-                                <h6>{friend.username}</h6>
-                                <time dateTime={friend.createdAt}>{new Date(friend.createdAt).toLocaleDateString()}</time>
-                            </div>
-                            <p className="max-h-[20px] pr-[10px] overflow-hidden text-ellipsis">{friend.email}</p>
-                        </div>
-                    </li>
-                </ul>
+            friends.length > 0 && friends.map((friend, idx) => (
+                <Conversation 
+                key={friend._id} 
+                friend={friend} 
+                lastIdx={idx === friends.length - 1} 
+                emoji={getRandomEmoji()} />
             ))
         )
     }
     return (
         <div className={`${styles.container}`}>
                 {/* Sidebar Header */}
-                {user && <div className="w-full h-[150px] bubble-shadow p-3">
+                {user && <div className={`w-full h-[150px] bubble-shadow ${styles.container_header}`}>
                     {/* Top Sidebar Header: Profile */}
-                    <div className="flex h-[60px] justify-between items-center">
-                        <div className="flex items-center">
+                    <div className={`flex h-[60px] justify-between items-center ${styles.user_header}`}>
+                        <div className={`flex items-center`}>
                             <div className='relative size-[50px] pt-[5px]'>
                                 <img src={user.avatar || defaultAvatar} alt="avatar" className="size-[40px] rounded-full object-cover" />
                                 <UserStatus status='active' />
@@ -223,7 +241,7 @@ const ChatSideBar = () => {
                         </div>
                     </div>
                     {/* Middle Sidebar Header: Tools */}
-                    <div className="flex justify-center items-center">
+                    <div className={`flex justify-center items-center ${styles.container_tools}`}>
                         <Search location={'users'} status={handleApear} data={handleData} />
                         <TbUserPlus/>
                         <TbUsersPlus />
@@ -236,7 +254,7 @@ const ChatSideBar = () => {
                         <div className={styles.header_links_line} style={{ left: lineLeft, width: lineWidth }}></div>
                     </div>
                 </div>}
-                <div className="h-full w-[305px] bubble-shadow overflow-scroll">
+                <div className={`h-full w-[305px] bubble-shadow overflow-scroll ${styles.container_content_list}`}>
                 {handleApear()}
 
                 </div>

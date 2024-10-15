@@ -18,7 +18,28 @@ $large-desktop: 1200px;
     flex-direction: column;
     padding-bottom: 0 !important;
     @include respond-to($mobile) {
-        display: none;
+        width: 100%;
+    }
+    &_header {
+        @include respond-to($mobile) {
+            height: 100px;
+            background-color: #201e1e;
+        }
+    }
+    // &_tools {
+    //     @include respond-to($mobile) {
+    //         border-bottom: 1px solid white;
+    //     }
+    // }
+    & .user_header {
+        @include respond-to($mobile) {
+            display: none;
+        }
+    }
+    &_content_list {
+        @include respond-to($mobile) {
+            width: 100%;
+        }
     }
     ul li {
         width: 250px;
@@ -32,6 +53,13 @@ $large-desktop: 1200px;
         position: relative;
         color: white;
         border-radius: 5px;
+        
+        @include respond-to($mobile) {
+            width: 100%;
+            background: unset;
+            margin: 0;
+            border-bottom: 1px solid #ccc;
+        }
     }
     ul li::before,
     ul li::after {
@@ -46,6 +74,10 @@ $large-desktop: 1200px;
         left: 0%;
         height: 130%;
         background: linear-gradient(to right, #021B79, #0575E6);
+
+        @include respond-to($mobile) {
+            background: unset;
+        }
     }
     ul li::after {
         left: -10%;
@@ -53,6 +85,9 @@ $large-desktop: 1200px;
         background: #ffffff56;
         backdrop-filter: blur(10px);
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.164);
+        @include respond-to($mobile) {
+            background: unset;
+        }
     }
     ul li:hover::before {
         transform: translateX(-2.5%);
@@ -148,6 +183,8 @@ $large-desktop: 1200px;
 }
 
 .header_links {
+
+    
         margin-top: 15px;
         width: auto;
         display: flex;
@@ -211,4 +248,11 @@ $large-desktop: 1200px;
 	to {
 		background-position: 200% center;
 	}
+}
+
+
+.sidebar_footer {
+    @include respond-to($mobile) {
+        overflow: hidden;
+    }
 }

@@ -1,15 +1,20 @@
 import defaultAvatar from '$/assets/default-dog.jpg';
 import Search from '$/components/Search';
 import { AiOutlinePhone, AiOutlineStar, AiOutlineVideoCamera } from "react-icons/ai";
-import { useAppSelector } from '../../redux/hooks';
+import { FaArrowLeft } from "react-icons/fa";
+import { setIsMobile } from '../../features/user.slice';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import UserStatus from '../UserStatus';
 import styles from './index.module.scss';
 const ChatHeader = ( ) => {
+    const disPatch = useAppDispatch()
+    const isMobile = useAppSelector(state => state.user.isMobile)
     const { selectedFriend } = useAppSelector(state => state.friend)
     return (
       selectedFriend && <header className="bg-transparent bubble-shadow p-5 text-gray-700 min-h-[60px] w-full mb-[5px] flex">
                 {/* Left Side Chat Header */}
-              <div className="flex items-center justify-start min-w-[50%] pl-10">
+              <div className={`flex items-center justify-start min-w-[50%] pl-10 ${styles.mobile_chat_header}`}>
+                {isMobile && <FaArrowLeft className='text-white w-[40px] h-[40px] p-[10px] mr-[10px]' onClick={() => disPatch(setIsMobile(false))} />}
                 <div className="relative w-[50px] h-[50px] pt-[5px]">
                   <img src={selectedFriend.avatar || defaultAvatar} alt="" className="size-[40px] rounded-full object-cover" />
                   <UserStatus status={selectedFriend.status === 'online' ? 'active' : 'inactive'} />
