@@ -11,21 +11,26 @@ $large-desktop: 1200px;
 }
 .container {
     @include respond-to($mobile) {
-        padding: 2rem;
+        max-width: 100%;
+        height: 100%;
+        padding: 0;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         min-height: 100vh;
         background-color: #f9fafb;
+    & > div {
+      width: 100%;
+    }    
     img {
         display: none;
     }
     h1 {
         margin-top: 10px;
-      font-size: 2.5rem;
-      text-align: center;
-      margin-bottom: 1rem;
+        font-size: 2.5rem;
+        text-align: center;
+        margin-bottom: 1rem;
     }
   
     p {
