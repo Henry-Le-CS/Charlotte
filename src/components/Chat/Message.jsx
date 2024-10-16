@@ -5,7 +5,7 @@ import { extractTime } from "../../utils/extractTime";
 
 const Message = ({ message }) => {
 	const user = useAppSelector(state => state.user.data);
-	const { selectedFriend } = useAppSelector(state => state.friend);
+	const { selectedFriend } = useAppSelector(state => state.friends);
 	const fromMe = message.sender === user._id;
 	const formattedTime = extractTime(message.createdAt);
 	const chatClassName = fromMe ? "chat-end" : "chat-start";

@@ -16,11 +16,8 @@ import { ThemeProvider } from 'styled-components';
 import { useTheme } from '$/contexts/themeContext';
 import { useLocation } from 'react-router-dom';
 
-// components
-import ScrollToTop from '$/components/ScrollToTop';
-import { ToastContainer } from 'react-toastify';
-
 // Router
+import { ToastContainer } from 'react-toastify';
 import RouterController from './router';
 
 const App = () => {
@@ -39,7 +36,6 @@ const App = () => {
                 <ThemeStyles />
                 <ToastContainer theme={theme} autoClose={2000} style={{ padding: '20px' }} />
                 <div className={`app ${!withSidebar ? 'fluid' : ''}`} ref={appRef}>
-                    <ScrollToTop />
                     <div className="app_content">
                         <RouterController />
                     </div>

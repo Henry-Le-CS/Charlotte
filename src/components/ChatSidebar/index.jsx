@@ -68,8 +68,6 @@ const ChatSideBar = () => {
     
         fetchFriends();
     }, [userData?.friends]);
-    
-    
 
     useEffect(() => {
         const container = document.querySelector(`.${styles.container}`)
