@@ -9,7 +9,6 @@ import { IoEllipsisHorizontal } from "react-icons/io5";
 import { TbUserPlus, TbUsersPlus } from "react-icons/tb";
 import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { setFriends } from '../../features/friends.slice';
 import { setLoading } from '../../features/notifications.slice';
 import { setRequestedUser } from '../../features/requested.user';
 import { setIsMobile, setUser } from '../../features/user.slice';
@@ -23,14 +22,13 @@ const ChatSideBar = () => {
     // const inputRef = useRef(null);
     const [isModal, setIsModal] = useState(false)
     const location = useLocation()
-    const [isApear, setIsApear] = useState(false)
+    const [isApear, setIsApear] = useState(true)
     const [lineLeft, setLineLeft] = useState('0');
     const [lineWidth, setLineWidth] = useState('0');
     const [searchData, setSearchData] = useState([])
     const [modalUser, setModalUser] = useState(null)
     const [requestSent, setRequestSent] = useState(false)
     const [friends, setListFriends] = useState([])
-    const [user, setUserData] = useState(null)
     const disPatch = useAppDispatch()
     const notisData = useAppSelector(state => state.notis.data?.metadata?.notisWithSender)
     const isNotisLoading = useAppSelector(state => state.notis.isLoading)
@@ -49,6 +47,30 @@ const ChatSideBar = () => {
     }, []);
 
     const isMobile = width <= 768;
+
+
+    useEffect(() => {
+        // use asynchronous function
+        const fetchFriends = async () => {
+            if (userData?.friends?.length) {
+                try {
+                    const friendsData = await Promise.all(
+                        userData.friends.map(friend => getFriends(friend))
+                    );
+                    const listFriends = friendsData.map(friend => friend.metadata);
+                    setListFriends(listFriends);
+                    setIsApear(false);
+                } catch (error) {
+                    toast.error("Error fetching friends:", error);
+                }
+            }
+        };
+    
+        fetchFriends();
+    }, [userData?.friends]);
+    
+    
+
     useEffect(() => {
         const container = document.querySelector(`.${styles.container}`)
         if (isMobileChatContent && isMobile) {
@@ -57,22 +79,7 @@ const ChatSideBar = () => {
             container.style.display = 'flex'
         }
     }, [isMobileChatContent])
-    useEffect(() => {
-        if (userData) {
-            setUserData(userData)
-        }
-    }, [userData])
-    useEffect(() => {
-        if (user?.friends?.length) {
-            let listFriends = []
-            user.friends.forEach(async friend => {
-                const friends = await getFriends(friend)
-                listFriends.push(friends.metadata)
-            })
-            setListFriends(listFriends)
-            setIsApear(false)
-        }
-    }, [user?.friends])
+
     useEffect(() => {
         const headerLinks = document.querySelector(`.${styles.header_links}`);
         const activeElement = document.querySelector('#active');
@@ -119,7 +126,6 @@ const ChatSideBar = () => {
             try {
                 const results = await loadUser();
                 disPatch(setUser(results?.metadata))
-                setUserData(results?.metadata)
             } catch (error) {
                 toast.error('User not found! ' + error?.response?.data?.message || error.message || error);
             }
@@ -127,7 +133,20 @@ const ChatSideBar = () => {
 
         myProfile();
     }, []);
+
     const handleApear = () => {
+        if (!isNotisLoading && !isApear) {
+            return (
+                friends?.length > 0 && friends?.map((friend, idx) => (
+                    <Conversation
+                    key={friend._id}
+                    friend={friend}
+                    lastIdx={idx === friends.length - 1}
+                    emoji={getRandomEmoji()} />
+                ))
+            )
+        }
+        
         if (isNotisLoading) {
             return (
                 <>
@@ -152,6 +171,7 @@ const ChatSideBar = () => {
                 </>
             )
         }
+
         if (isApear) {
             return (
                 searchData.length > 0 && searchData.map(user => (
@@ -170,16 +190,6 @@ const ChatSideBar = () => {
                             </div>
                         </li>
                     </ul>
-                ))
-            )
-        } else {
-            return (
-                friends.length > 0 && friends.map((friend, idx) => (
-                    <Conversation
-                    key={friend._id}
-                    friend={friend} 
-                    lastIdx={idx === friends.length - 1} 
-                    emoji={getRandomEmoji()} />
                 ))
             )
         }
@@ -209,14 +219,15 @@ const ChatSideBar = () => {
             setIsModal(false)
         }
     }
+
     const handleRenderFriends = () => {
         disPatch(setLoading(false))
-        disPatch(setFriends(friends))
         setIsApear(false)
+        
         return (
-            friends.length > 0 && friends.map((friend, idx) => (
-                <Conversation 
-                key={friend._id} 
+            friends?.length > 0 && friends?.map((friend, idx) => (
+                <Conversation
+                key={friend._id}
                 friend={friend} 
                 lastIdx={idx === friends.length - 1} 
                 emoji={getRandomEmoji()} />
@@ -226,15 +237,15 @@ const ChatSideBar = () => {
     return (
         <div className={`${styles.container}`}>
                 {/* Sidebar Header */}
-                {user && <div className={`w-full h-[150px] bubble-shadow ${styles.container_header}`}>
+                {userData && <div className={`w-full h-[150px] bubble-shadow ${styles.container_header}`}>
                     {/* Top Sidebar Header: Profile */}
                     <div className={`flex h-[60px] justify-between items-center ${styles.user_header}`}>
                         <div className={`flex items-center`}>
                             <div className='relative size-[50px] pt-[5px]'>
-                                <img src={user.avatar || defaultAvatar} alt="avatar" className="size-[40px] rounded-full object-cover" />
+                                <img src={userData.avatar || defaultAvatar} alt="avatar" className="size-[40px] rounded-full object-cover" />
                                 <UserStatus status='active' />
                             </div>
-                            <h5 className="text-white font-mono min-w-[100px]">{user.username}</h5>
+                            <h5 className="text-white font-mono min-w-[100px]">{userData.username}</h5>
                         </div>
                         <div className="flex items-center">
                             <IoEllipsisHorizontal />

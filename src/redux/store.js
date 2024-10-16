@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import friendReducer from '../features/friends.slice';
+import friendsReducer from '../features/friends.slice';
 import notisReducer, { notiApiSlice } from '../features/notifications.slice';
 import requestedUserReducer from "../features/requested.user";
 import socketReducer from "../features/socket.slice";
@@ -10,7 +10,7 @@ export const store = configureStore({
         [notiApiSlice.reducerPath]: notiApiSlice.reducer,
         requestedUser: requestedUserReducer,
         user: userReducer,
-        friend: friendReducer,
+        friends: friendsReducer,
         socket: socketReducer
     },
     middleware: (getDefaultMiddleware) => {

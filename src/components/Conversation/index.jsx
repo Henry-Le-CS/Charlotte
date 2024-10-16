@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import UserStatus from '../UserStatus';
 import styles from './index.module.scss';
 export const Conversation = ({friend, lastIdx, emoji }) => {
-    const selectedFriend = useAppSelector(state => state.friend.selectedFriend)
+    const selectedFriend = useAppSelector(state => state.friends.selectedFriend)
     const disPatch = useAppDispatch()
     const handleSelectedFriend = () => {
         disPatch(setIsMobile(true))
@@ -39,6 +39,6 @@ export const Conversation = ({friend, lastIdx, emoji }) => {
 
 Conversation.propTypes = {
     friend: PropTypes.object.isRequired,
-    lastIdx: PropTypes.number,
+    lastIdx: PropTypes.bool,
     emoji: PropTypes.string,
 }

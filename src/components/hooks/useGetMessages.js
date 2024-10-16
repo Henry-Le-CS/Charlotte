@@ -6,7 +6,7 @@ import { getMessages } from "../../services/message";
 
 const useGetMessages = () => {
     const [loading, setLoading] = useState(false);
-    const { messages, selectedFriend } = useAppSelector(state => state.friend);
+    const { messages, selectedFriend } = useAppSelector(state => state.friends);
     const disPatch = useAppDispatch();
 
     useEffect(() => {

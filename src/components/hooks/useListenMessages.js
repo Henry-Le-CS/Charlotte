@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 
 const useListenMessages = () => {
 	const { socket } = useSocketContext();
-	const { messages, selectedFriend } = useAppSelector(state => state.friend);
+	const { messages, selectedFriend } = useAppSelector(state => state.friends);
 	const disPatch = useAppDispatch()
 
 	useEffect(() => {

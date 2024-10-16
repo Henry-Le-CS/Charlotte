@@ -6,8 +6,8 @@ const initialState = {
     messages: []
 }
 
-const friendSlice = createSlice({
-    name: 'friend',
+const friendsSlice = createSlice({
+    name: 'friends',
     initialState,
     reducers: {
         setFriends(state, action) {
@@ -22,5 +22,5 @@ const friendSlice = createSlice({
     }
 })
 
-export const { setFriends, setSelectedFriend, setMessages } = friendSlice.actions
-export default friendSlice.reducer
+export const { setFriends, setSelectedFriend, setMessages } = friendsSlice.actions
+export default friendsSlice.reducer

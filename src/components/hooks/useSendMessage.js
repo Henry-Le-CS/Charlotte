@@ -6,7 +6,7 @@ import { sendMessages } from "../../services/message"
 
 const useSendMessage = () => {
     const [loading, setLoading] = useState(false)
-    const { messages, selectedFriend } = useAppSelector(state => state.friend)
+    const { messages, selectedFriend } = useAppSelector(state => state.friends)
     const disPatch = useAppDispatch()
     const send = async (message) => {
         setLoading(true)

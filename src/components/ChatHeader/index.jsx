@@ -9,7 +9,7 @@ import styles from './index.module.scss';
 const ChatHeader = ( ) => {
     const disPatch = useAppDispatch()
     const isMobile = useAppSelector(state => state.user.isMobile)
-    const { selectedFriend } = useAppSelector(state => state.friend)
+    const { selectedFriend } = useAppSelector(state => state.friends)
     return (
       selectedFriend && <header className="bg-transparent bubble-shadow p-5 text-gray-700 min-h-[60px] w-full mb-[5px] flex">
                 {/* Left Side Chat Header */}
