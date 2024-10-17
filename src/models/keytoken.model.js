@@ -31,5 +31,6 @@ const TokenSchema = new Schema({
     collection: COLLECTION_NAME
 });
 
+TokenSchema.index({ userId: 1, refreshToken: 1, privateKey: 1, publicKey: 1})
 export default mongoose.model(DOCUMENT_NAME, TokenSchema);
 

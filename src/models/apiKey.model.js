@@ -24,5 +24,6 @@ const apiKeySchema = new Schema({
     collection: COLLECTION_NAME,
 });
 apiKeySchema.index({ _id: 1, permissions: 1, userId: 1 });
+apiKeySchema.index({ key: 1})
 
 export default mongoose.model(DOCUMENT_NAME, apiKeySchema);

@@ -17,14 +17,7 @@ const UserSchema = new Schema({
     timestamps: true,
     collection: COLLECTION_NAME
 });
-UserSchema.index({ username: 1, email: 1 });
-UserSchema.on('index', function(err) {
-    if (err) {
-        console.error('User index error: %s', err);
-    } else {
-        console.info('User indexing complete');
-    }
-});
-mongoose.set('debug', true);
+
+UserSchema.index({ email: 1, username: 1 });
 
 export default mongoose.model(DOCUMENT_NAME, UserSchema);

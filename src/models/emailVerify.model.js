@@ -27,4 +27,5 @@ const emailVerifySchema = new Schema({
     collection: COLLECTION_NAME,
 });
 
+emailVerifySchema.index({ userId: 1, verificationToken: 1})
 export default mongoose.model(DOCUMENT_NAME, emailVerifySchema);

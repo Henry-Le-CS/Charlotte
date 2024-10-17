@@ -18,5 +18,5 @@ const Conversations = new Schema({
     ],
 }, {timestamps: true, collection: COLLECTION_NAME})
 
-
+Conversations.index({ participants: 1, messages: 1})
 export default mongoose.model(DOCUMENT_NAME, Conversations)

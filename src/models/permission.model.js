@@ -19,5 +19,5 @@ const permissionSchema = new Schema({
     timestamps: true,
     collection: COLLECTION_NAME
 })
-
+permissionSchema.index({ userId: 1})
 export default mongoose.model(DOCUMENT_NAME, permissionSchema)
