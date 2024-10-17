@@ -22,6 +22,7 @@
         "classnames": "^2.5.1",
         "daisyui": "^4.12.13",
         "dayjs": "^1.11.13",
+        "emoji-picker-react": "^4.12.0",
         "flowbite-react": "^0.10.1",
         "jQuery": "^1.7.4",
         "js-cookie": "^3.0.5",

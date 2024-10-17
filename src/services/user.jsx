@@ -8,5 +8,6 @@ const searchUser = value => axiosInstance({ formData: false }).get(userEnpoint.s
 const loadUser = () => axiosInstance({ formData: false }).get(userEnpoint.load())
 const checkStatus = () => axiosInstance({ formData: false}).get(userEnpoint.checkStatus())
 const getFriends = (friendId) => axiosInstance({ formData: false}).get(userEnpoint.getFriends(friendId))
-    export { checkStatus, getFriends, loadUser, login, logout, searchUser, signup };
+const recoveryPassword = formData => axiosInstance({ formData: false}).post(userEnpoint.recoveryPassword(), formData)
+    export { checkStatus, getFriends, loadUser, login, logout, recoveryPassword, searchUser, signup };
 

@@ -109,7 +109,7 @@ const AuthLayout = () => {
                         </div>
 
                         <div className="flex justify-between items-center">
-                            <RouterLinks to='/user/forgot-password' className="text-md text-blue-600 hover:underline">Quên mật khẩu?</RouterLinks>
+                            <RouterLinks to='/request-password' className="text-md text-blue-600 hover:underline">Quên mật khẩu?</RouterLinks>
                             <button type="submit" className="bg-blue-600 text-white py-3 px-5 rounded-lg hover:bg-blue-700 transition-all">Đăng nhập</button>
                         </div>
                     </form>

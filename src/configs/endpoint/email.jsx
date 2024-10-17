@@ -1,6 +1,6 @@
 
 const emailEndpoint = {
-    sendEmail: ({ email, userId }) => `/email/send-email?email=${email}&userId=${userId}`,
+    sendEmail: ({ email, options }) => `/email/send-email?email=${email}&options=${options}`,
 }
 
 export default emailEndpoint

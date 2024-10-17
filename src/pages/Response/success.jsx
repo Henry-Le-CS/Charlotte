@@ -3,30 +3,45 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const Success = () => {
-    const [drawn, setDrawn] = useState(false);
-    const location = useLocation()
-    const navigate = useNavigate()
+  const [drawn, setDrawn] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
-    useEffect(() => {
-      setTimeout(() => {
-        setDrawn(true);
-      }, 500);
-    }, []);
+  useEffect(() => {
+    // Set animation state
+    const timer = setTimeout(() => {
+      setDrawn(true);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
     try {
       const params = new URLSearchParams(location.search);
-      const success = params.get('success') === 'true';
-      const message = params.get('message');
-      const status = parseInt(params.get('status'), 10);
+      const success = params.get("success") === "true";
+      const userId = params.get("userId");
+      const message = params.get("message");
+      const options = params.get("options");
+      const status = parseInt(params.get("status"), 10);
 
       if (status === 200 && success) {
-          toast.success(message);
-          setTimeout(() => navigate('/user/login'), 3000);
+        toast.success(message);
+        setTimeout(() => {
+          if (options === "register") {
+            navigate("/user/login");
+          } else {
+            navigate("/recovery-password", { state: { userId: userId, status: success } });
+          }
+        }, 2000);
       } else {
-          toast.error(message);
+        toast.error(message);
       }
-  } catch (error) {
-      throw new Error(error.message || error);
-  }
+    } catch (error) {
+      toast.error("An error occurred while processing the request.");
+    }
+  }, [location, navigate]);
+
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="relative w-4/5 max-w-3xl p-8 text-center bg-white rounded-md shadow-xl sm:w-4/5 md:w-3/4 lg:w-2/3 xl:w-1/2">
@@ -64,9 +79,7 @@ const Success = () => {
         </div>
 
         <div className="mt-6 text-teal-800">
-          <p className="mb-2">
-            You have successfully booked an appointment with us.
-          </p>
+          <p className="mb-2">You have successfully booked an appointment with us.</p>
           <p>
             <strong>Date:</strong> 12.12.12 <br />
             <strong>Time:</strong> 11am <br />

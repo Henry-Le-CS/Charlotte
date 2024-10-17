@@ -9,6 +9,7 @@ const userEnpoint = {
     getFriends: (friendId) => `/user/getFriends?friendId=${friendId}`,
     search: (value) => `/user/search?${value}`,
     checkStatus: () => `/user/checkStatus`,
+    recoveryPassword: () => '/user/recoveryPassword'
 }
 
 export default userEnpoint
