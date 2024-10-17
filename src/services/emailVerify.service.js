@@ -5,8 +5,9 @@ import { BadRequestError } from '../core/error.response.js';
 import emailVerifyModel from '../models/emailVerify.model.js';
 import userRepo from '../repositories/user.repo.js';
 import { convertToObjectIdMongodb } from './../utils/index.js';
+import userService from './user.service.js';
 export async function sendEmail(req, res){
-    const { email, userId } = req.query
+    const { email, options } = req.query
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 465,
@@ -16,16 +17,15 @@ export async function sendEmail(req, res){
             pass: process.env.GOOGLE_APP_PASSWORD
         }
     })
-    
+    const { _id } = await userService.findUserByEmail(email)
     const verificationToken = crypto.randomBytes(32).toString('hex');
     await emailVerifyModel.create({
         verificationToken,
         verificationExpires: Date.now() + 3600000,
-        type: 'registration',
-        userId: convertToObjectIdMongodb(userId)
+        type: options === 'register' ? 'registration' : 'reset_password',
+        userId: convertToObjectIdMongodb(_id)
     });
-
-    const verificationLink = `${process.env.SERVER_URI}/api/email/signup-verify-email?email=${email}&token=${verificationToken}`;
+    const verificationLink = `${process.env.SERVER_URI}/api/email/${options}?options=${options}&email=${email}&token=${verificationToken}`;
     const mailOptions = ({
         from: '"Charlotte" <charlotte.webapp@gmail.com>',
         to: email,
@@ -63,16 +63,15 @@ export async function sendEmail(req, res){
         }
     });
 }
-export async function emailVerifyForRegistration(req, res, next) {
+export async function emailVerified(req, res, next) {
     try {
-        const email = req.query.email;
-        const token = req.query.token;
-        
+        const { email, token, options } = req.query
         if (!email || !token) {
             return res.redirect(`${process.env.FRONTEND_URI}/page-not-found?success=false&message=Missing email or token&status=404`);
         }
 
         const userId = await userRepo.findUserByEmail({ email, select: ['_id'] });
+
         if (!userId) {
             return res.redirect(`${process.env.FRONTEND_URI}/page-not-found?success=false&message=User Not Found&status=404`);
         }
@@ -82,12 +81,13 @@ export async function emailVerifyForRegistration(req, res, next) {
             return res.redirect(`${process.env.FRONTEND_URI}/page-not-found?success=false&message=Invalid token&status=404`);
         }
 
-        await userRepo.verified({ userId, isVerified: true });
+        if (options === 'register') await userRepo.verified({ userId, isVerified: true });
         emailVerify.verificationToken = undefined;
         emailVerify.verificationExpired = Date.now();
         await emailVerify.save();
 
-        return res.redirect(`${process.env.FRONTEND_URI}/email-verification/success?success=true&message=Email verification successful&status=200`);
+        const _id = userId._id.toString();
+        return res.redirect(`${process.env.FRONTEND_URI}/email-verification/success?success=true&userId=${_id}&options=${options}&message=Email verification successful&status=200`);
     } catch (error) {
         res.redirect(`${process.env.FRONTEND_URI}/page-not-found?success=false&message=Error verifying email&status=500`);
         throw new BadRequestError(error.message);

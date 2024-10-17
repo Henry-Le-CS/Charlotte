@@ -28,7 +28,7 @@ class UserRepository {
         return await UserModel.findByIdAndUpdate(userId, { isVerified }, { new: true });
     }
     async deleteUserByUserId(userId) {
-        return await UserModel.deleteOne({ userId })
+        await UserModel.deleteOne({ userId })
     }
     async addFriend({ userId, friendId }) {
         try {
@@ -45,6 +45,9 @@ class UserRepository {
         } catch (error) {
             throw new BadRequestError('Failed to add friend:: ', error.message);
         }
+    }
+    async updatePassword(hashedPassword, userId) {
+        await UserModel.findByIdAndUpdate(userId, { $set: { password_hash: hashedPassword } });
     }
 }
 

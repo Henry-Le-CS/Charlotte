@@ -10,7 +10,8 @@ const router = express.Router();
 
 router.post('/user/register', userController.register);
 router.use('/email', emailRouter)
-
+router.post('/recover', userController.recover)
+router.post('/user/recoveryPassword', userController.recoveryPassword)
 
 // router.use('/', proxyService.getApiKey, proxyService.createHeaderForApiKey()); // DOWN DIFFICULT LEVEL
 router.get('/user/checkStatus', check.status)

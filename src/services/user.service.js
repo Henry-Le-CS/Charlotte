@@ -68,8 +68,6 @@ class UserService {
         }
     }
     
-    
-
     async loginUser({ email, password }) {
         const user = await UserRepository.findUserByEmail({email});
         if (!user || !await bcrypt.compare(password, user.password_hash)) {
@@ -84,18 +82,18 @@ class UserService {
         // get apiKey
         const apiKey = await ApikeyService.findByUserId(userId);
         if (!apiKey) throw new NotFoundError('API key not found')
-        // Update user status
-        await UserRepository.updateUserStatus({userId, status: 'online'});
 
         return { user, tokens: { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken }, apiKey };
     }
 
     async logoutUser(userId) {
         await KeyTokenService.removeTokensByUserId(userId);
-        await UserRepository.updateUserStatus({ userId, status: 'offline'});
     }
     async offlineUser(userId) {
         await UserRepository.updateUserStatus({ userId, status: 'offline'});
+    }
+    async onlineUser(userId) {
+        await UserRepository.updateUserStatus({ userId, status: 'online'});
     }
     async findUserById({ userId, select = []}) {
         return await UserRepository.findUserById({ userId, select })
@@ -160,11 +158,17 @@ class UserService {
             throw new BadRequestError(`Failed to add friends ${error.message}`);
         }
     }
-    
-    
-    
-    async updateUserStatus({ userId, status }) {
-        return await UserRepository.updateUserStatus({ userId, status });
+    async updatePassword(password, userId) {
+        try {
+           if (userId) {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            await UserRepository.updatePassword(hashedPassword, userId)
+           } else {
+            throw new NotFoundError('User not found', error.message)
+           }
+        } catch (error) {
+            throw new NotFoundError('User not found', error.message)
+        }
     }
 }
 

@@ -15,17 +15,18 @@ const io = new Server(server, {
 });
 export const userSocketMap = {}; // {userId: socketId}
 
-io.on("connection", (socket) => {
+io.on("connection", async (socket) => {
     const userId = socket.handshake.query.userId;
-    if (userId != "undefined") userSocketMap[userId] = socket.id;
-    // Listen for custom events
-
+    if (userId != "undefined") {
+        userSocketMap[userId] = socket.id;
+        await userService.onlineUser(userId)
+    }
     // io.emit() is used to send events to all the connected clients
 	io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
     // Handle disconnections
     socket.on("disconnect", async () => {
-		await userService.offlineUser(userId)
+		if (userId != "undefined") await userService.offlineUser(userId)
 		delete userSocketMap[userId];
 		io.emit("getOnlineUsers", Object.keys(userSocketMap));
 	});

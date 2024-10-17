@@ -121,5 +121,35 @@ export default new class UserController {
             })
         }
     }
+    recover = async (req, res, next) => {
+        try {
+            new SuccessResponse({
+                message: 'Recovery email sent successfully',
+                metadata: await userService.recoverPassword(req.query.email)
+            }).send(res)
+        } catch (error) {
+            return res.status(404).json({
+                code: 404,
+                message: 'User Not Found: ' + error.message,
+                status: '404 Not Found'
+            })
+        }
+    }
+
+    recoveryPassword = async (req, res, next) => {
+        try {
+            const { password, userId } = req.body
+            new SuccessResponse({
+                message: 'Password updated successfully',
+                metadata: await userService.updatePassword(password, userId)
+            }).send(res)
+        } catch (error) {
+            res.status(500).json({
+                cod: 500,
+                message: error.message,
+                status: 'Error Recovery Password'
+            })
+        }
+    }
 }
 

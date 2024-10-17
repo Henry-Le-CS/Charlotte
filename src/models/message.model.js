@@ -13,4 +13,5 @@ const MessageSchema = new Schema({
     status: { type: String, default: 'sent' }  // sent, delivered, read
 }, {timestamps: true, collection: COLLECTION_NAME});
 
+MessageSchema.index({ message: 'text' });
 export default mongoose.model(DOCUMENT_NAME, MessageSchema);
