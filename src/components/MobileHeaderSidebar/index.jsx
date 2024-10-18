@@ -24,7 +24,6 @@ export default function MobileHeaderSidebar() {
                 <RouterLinks to='/'>Trang Chủ</RouterLinks>
                 <RouterLinks to='/about'>Giới Thiệu</RouterLinks>
                 <RouterLinks to='/blog'>Blog</RouterLinks>
-                <RouterLinks to='/pages'>Trang</RouterLinks>
                 <RouterLinks to='/contact'>Liên Hệ</RouterLinks>
             </div>
         </>

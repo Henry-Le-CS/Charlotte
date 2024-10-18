@@ -35,7 +35,7 @@ const Contact = () => {
                           />
                         </svg>
                         <h5 className="text-black text-base font-normal leading-6 ml-5">
-                          470-601-1911
+                          077-359-8329
                         </h5>
                       </a>
                       <a

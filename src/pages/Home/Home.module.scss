@@ -1,13 +1,24 @@
+// breakpoints
+$mobile: 576px;
+$tablet: 768px;
+$desktop: 992px;
+$large-desktop: 1200px;
 
+@mixin respond-to($breakpoints) {
+    @media only screen and (max-width: $breakpoints) {
+        @content;
+    }
+}
 .home {
     margin-top: 80px;
-
+    height: auto;
     &_container {
         display: flex;
         justify-content: space-between;
         align-items: center;
         max-width: 80vw;
         margin: auto;
+
         &_leftside {
             max-width: 40%;
             text-align: left;
@@ -19,13 +30,40 @@
                 font-size: 2rem;
             }
         }
+
         &_rightside {
             max-width: 55%;
             & > img {
                 width: 100%;
             }
         }
+
+        // Mobile responsive adjustments
+        @include respond-to($mobile) {
+            flex-direction: column;
+            margin-top: 100px;
+            &_leftside {
+                max-width: 100%;
+                & > h1 {
+                    font-size: 2rem;
+                    text-align: center;
+                }
+                & > p {
+                    font-size: 1.5rem;
+                    text-align: center;
+                }
+            }
+            &_rightside {
+                max-width: 100%;
+                margin-top: 20px;
+                & > img {
+                    width: 80%;
+                    margin: auto;
+                }
+            }
+        }
     }
+
     &_start_button {
         margin-top: 30px;
         display: flex;
@@ -42,24 +80,19 @@
             margin-right: 10px;
             color: #fff;
             transition: all .2s linear;
-            &:hover {
-                // color: #000;
-            }
         }
         & > svg {
             position: relative;
         }
-        &:hover {
-            cursor: pointer;
-            box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-            // background-color: rgb(143,199,247);
-            color: #91bee4;
-            & > svg {
-                transform: translateX(5px);
-                transition: all .2s linear;
-            }
+
+        @include respond-to($mobile) {
+            width: 200px;
+            height: 40px;
+            line-height: 30px;
+            margin: auto;
         }
     }
+
     &_footer {
         margin-top: 30px;
         padding-top: 50px;
@@ -75,6 +108,7 @@
             margin: 20px auto 0 auto;
             display: flex;
             justify-content: space-around;
+
             &_card {
                 width: 30%;
                 padding: 15px;
@@ -98,12 +132,7 @@
                     color: #91cbfc;
                     border-radius: 50%;
                 }
-                &:nth-child(2) {
-                    & > svg {
-                        background-color: #daeddb;
-                        color: #4ca44d;
-                    }
-                }
+
                 &_text {
                     display: flex;
                     flex-direction: column;
@@ -120,7 +149,19 @@
                         text-align: start;
                         max-width: 300px;
                     }
-    
+                }
+            }
+
+            // Mobile responsive adjustments
+            @include respond-to($mobile) {
+                flex-direction: column;
+                &_card {
+                    width: 100%;
+                    margin-bottom: 20px;
+                    &_text {
+                        padding-left: 0;
+                        text-align: center;
+                    }
                 }
             }
         }
