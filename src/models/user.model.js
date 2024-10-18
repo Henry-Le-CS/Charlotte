@@ -3,8 +3,8 @@ import mongoose, { Schema } from 'mongoose';
 const DOCUMENT_NAME ='User'
 const COLLECTION_NAME = 'Users'
 const UserSchema = new Schema({
-    username: { type: String, required: true, autoIndex: true },
-    email: { type: String, required: true, unique: true, autoIndex: true },
+    username: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
     password_hash: { type: String, required: true },
     status: { type: String, default: 'offline' },  // online, offline, busy, etc.
     friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', default: [] }],
